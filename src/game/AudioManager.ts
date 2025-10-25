@@ -6,11 +6,14 @@ class AudioManager {
   private bgMusic: HTMLAudioElement | null = null
   private musicVolume = 0.3
   private sfxVolume = 0.5
+  private isAudioEnabled = true
   
   /**
    * Initialize and play background music
    */
   playBackgroundMusic() {
+    if (!this.isAudioEnabled) return
+    
     try {
       if (!this.bgMusic) {
         this.bgMusic = new Audio('/horror-halloween-dark-piano-film-video-background-cinematic-257663.mp3')
@@ -50,9 +53,34 @@ class AudioManager {
   }
   
   /**
+   * Toggle audio on/off
+   */
+  toggleAudio() {
+    this.isAudioEnabled = !this.isAudioEnabled
+    
+    if (!this.isAudioEnabled) {
+      this.stopBackgroundMusic()
+    } else {
+      this.playBackgroundMusic()
+    }
+    
+    console.log(`🔊 Audio ${this.isAudioEnabled ? 'ENABLED' : 'DISABLED'}`)
+    return this.isAudioEnabled
+  }
+
+  /**
+   * Get audio enabled state
+   */
+  getAudioEnabled() {
+    return this.isAudioEnabled
+  }
+
+  /**
    * Play sound effect
    */
   playSoundEffect(type: 'jump' | 'fall' | 'correct' | 'wrong' | 'land') {
+    if (!this.isAudioEnabled) return
+    
     // Create simple synthesized sounds using Web Audio API
     const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
     const oscillator = audioContext.createOscillator()

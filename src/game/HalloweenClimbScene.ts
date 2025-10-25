@@ -614,43 +614,85 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   }
   
   private requestQuestion() {
-    const calculusQ = getQuestionByHeight(this.currentHeightMeters)
-    const chapter = getChapterByHeight(this.currentHeightMeters)
-    
-    const adventureQ: AdventureQuestion = {
-      id: calculusQ.id,
-      text: calculusQ.question,
-      options: calculusQ.options.map(opt => ({
-        text: opt.text,
-        correct: opt.correct,
-        action: 'web' as const
-      })),
-      hint: calculusQ.hint,
-      concept: calculusQ.concept,
-      storyContext: `${chapter.description} | ${Math.floor(this.currentHeightMeters)}m`
+    try {
+      const calculusQ = getQuestionByHeight(this.currentHeightMeters)
+      const chapter = getChapterByHeight(this.currentHeightMeters)
+      
+      // Validate question has required fields
+      if (!calculusQ || !calculusQ.question || !calculusQ.options || calculusQ.options.length === 0) {
+        console.error('Invalid question received:', calculusQ)
+        this.requestQuestion() // Retry
+        return
+      }
+      
+      const adventureQ: AdventureQuestion = {
+        id: calculusQ.id,
+        text: calculusQ.question,
+        options: calculusQ.options.map(opt => ({
+          text: opt.text,
+          correct: opt.correct,
+          action: 'web' as const
+        })),
+        hint: calculusQ.hint,
+        concept: calculusQ.concept,
+        storyContext: `${chapter.description} | ${Math.floor(this.currentHeightMeters)}m`
+      }
+      
+      const store = useGameStore.getState()
+      store.setCurrentAdventureQuestion(adventureQ)
+      
+      this.waitingForAnswer = true
+      console.log(`📝 Question loaded: ${calculusQ.topic} (${calculusQ.difficulty}) at ${Math.floor(this.currentHeightMeters)}m`)
+    } catch (error) {
+      console.error('Error loading question:', error)
+      // Fallback to a simple question
+      const fallbackQ: AdventureQuestion = {
+        id: 'fallback',
+        text: 'What is 2 + 2?',
+        options: [
+          { text: 'A) 4', correct: true, action: 'web' },
+          { text: 'B) 3', correct: false, action: 'web' },
+          { text: 'C) 5', correct: false, action: 'web' },
+          { text: 'D) 6', correct: false, action: 'web' }
+        ],
+        hint: 'Basic arithmetic',
+        concept: 'Addition',
+        storyContext: 'Fallback question'
+      }
+      
+      const store = useGameStore.getState()
+      store.setCurrentAdventureQuestion(fallbackQ)
+      this.waitingForAnswer = true
     }
-    
-    const store = useGameStore.getState()
-    store.setCurrentAdventureQuestion(adventureQ)
-    
-    this.waitingForAnswer = true
   }
   
   private handleAnswer = (e: Event) => {
     // Don't accept answers if game is over
     if (!this.waitingForAnswer || this.isAnimating || this.isGameOver) return
     
-    const event = e as CustomEvent
-    const { correct } = event.detail
-    
-    this.waitingForAnswer = false
-    
-    console.log(`Answer: ${correct ? 'CORRECT ✅' : 'WRONG ❌'}`)
-    
-    if (correct) {
-      this.onCorrectAnswer()
-    } else {
-      this.onWrongAnswer()
+    try {
+      const event = e as CustomEvent
+      const { correct } = event.detail
+      
+      // Validate answer data
+      if (typeof correct !== 'boolean') {
+        console.error('Invalid answer data:', event.detail)
+        return
+      }
+      
+      this.waitingForAnswer = false
+      
+      console.log(`Answer: ${correct ? 'CORRECT ✅' : 'WRONG ❌'}`)
+      
+      if (correct) {
+        this.onCorrectAnswer()
+      } else {
+        this.onWrongAnswer()
+      }
+    } catch (error) {
+      console.error('Error handling answer:', error)
+      // Reset state on error
+      this.waitingForAnswer = false
     }
   }
   

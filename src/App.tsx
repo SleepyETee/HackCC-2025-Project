@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { HUD } from './ui/HUD'
 import { EquationPanel } from './ui/EquationPanel'
 import { QuestionPanel } from './ui/QuestionPanel'
@@ -9,11 +9,19 @@ import { AdventureCanvas } from './ui/AdventureCanvas'
 import { AdventureQuestionPanel } from './ui/AdventureQuestionPanel'
 import { StoryPanel } from './ui/StoryPanel'
 import { useGameStore } from './state/store'
+import { audioManager } from './game/AudioManager'
 
 export default function App() {
   const gameMode = useGameStore(s => s.gameMode)
   const setGameMode = useGameStore(s => s.setGameMode)
   const score = useGameStore(s => s.score)
+  const [audioEnabled, setAudioEnabled] = useState(audioManager.getAudioEnabled())
+  
+  // Audio toggle handler
+  const handleAudioToggle = () => {
+    const newState = audioManager.toggleAudio()
+    setAudioEnabled(newState)
+  }
   
   // Keyboard accessibility
   useEffect(() => {
@@ -54,8 +62,8 @@ export default function App() {
             : 'Learn Derivatives & Integrals through Spooky Graph Exploration!'}
         </p>
         
-        {/* Mode Switcher */}
-        <div style={{ marginTop: 12, display: 'flex', justifyContent: 'center', gap: 12 }}>
+        {/* Mode Switcher & Audio Toggle */}
+        <div style={{ marginTop: 12, display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
           <button
             onClick={() => setGameMode('adventure')}
             style={{
@@ -91,6 +99,24 @@ export default function App() {
             }}
           >
             📊 Classic Mode
+          </button>
+          <button
+            onClick={handleAudioToggle}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 8,
+              border: '2px solid',
+              borderColor: audioEnabled ? '#10b981' : '#ef4444',
+              background: audioEnabled ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #ef4444, #dc2626)',
+              color: '#fff',
+              fontWeight: 700,
+              fontSize: 14,
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              boxShadow: audioEnabled ? '0 0 20px rgba(16, 185, 129, 0.5)' : '0 0 20px rgba(239, 68, 68, 0.5)'
+            }}
+          >
+            {audioEnabled ? '🔊 Audio ON' : '🔇 Audio OFF'}
           </button>
         </div>
         
