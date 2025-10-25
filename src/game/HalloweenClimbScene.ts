@@ -45,8 +45,11 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   
   // Environment
   sun!: Phaser.GameObjects.Arc
+  moon!: Phaser.GameObjects.Arc
   clouds: Phaser.GameObjects.Container[] = []
   beanstalk: Phaser.GameObjects.Graphics[] = []
+  trees: Phaser.GameObjects.Graphics[] = []
+  bats: Phaser.GameObjects.Container[] = []
   
   // Audio button
   audioButton!: Phaser.GameObjects.Container
@@ -82,6 +85,11 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     this.createSun()
     this.createClouds()
     this.createBeanstalk()
+    
+    // Also create Halloween elements for variety
+    this.createMoon()
+    this.createTrees()
+    this.createBats()
     
     // Create leaf platforms going upward
     this.generateLeafPlatforms()
@@ -124,6 +132,17 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       // Keep clouds in bounds
       if (cloud.x < -100) cloud.x = this.scale.width + 100
       if (cloud.x > this.scale.width + 100) cloud.x = -100
+    })
+    
+    // Animate bats
+    this.bats.forEach((bat, idx) => {
+      // Bats fly in sine wave pattern
+      bat.x += Math.sin(this.time.now * 0.001 + idx) * 0.5
+      bat.y += Math.cos(this.time.now * 0.0008 + idx) * 0.3
+      
+      // Keep bats in bounds
+      if (bat.x < -50) bat.x = this.scale.width + 50
+      if (bat.x > this.scale.width + 50) bat.x = -50
     })
   }
   
@@ -266,13 +285,51 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   }
   
   private createMoon() {
-    // This method is now replaced by createSun()
-    // Keeping for compatibility but not used
+    const W = this.scale.width
+    
+    this.moon = this.add.circle(W - 100, 80, 50, 0xffffee, 0.9)
+    this.moon.setScrollFactor(0.3) // Parallax effect
+    
+    // Pulsing glow
+    this.tweens.add({
+      targets: this.moon,
+      alpha: 0.7,
+      scale: 1.05,
+      duration: 3000,
+      yoyo: true,
+      repeat: -1
+    })
+    
+    // Moon glow
+    const glow = this.add.circle(W - 100, 80, 70, 0xffffcc, 0.2)
+    glow.setScrollFactor(0.3)
+    
+    this.tweens.add({
+      targets: glow,
+      alpha: 0.1,
+      duration: 3000,
+      yoyo: true,
+      repeat: -1
+    })
   }
   
   private createTrees() {
-    // This method is now replaced by createBeanstalk()
-    // Keeping for compatibility but not used
+    const positions = [
+      { x: 50, baseY: 0 },
+      { x: 150, baseY: -400 },
+      { x: 700, baseY: -200 },
+      { x: 80, baseY: -800 },
+      { x: 650, baseY: -1200 },
+      { x: 120, baseY: -1600 },
+      { x: 720, baseY: -2000 },
+      { x: 100, baseY: -2400 },
+      { x: 680, baseY: -2800 }
+    ]
+    
+    positions.forEach(pos => {
+      const tree = this.createTree(pos.x, pos.baseY)
+      this.trees.push(tree)
+    })
   }
   
   private createTree(x: number, baseY: number): Phaser.GameObjects.Graphics {
@@ -307,8 +364,13 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   }
   
   private createBats() {
-    // This method is now replaced by createClouds()
-    // Keeping for compatibility but not used
+    for (let i = 0; i < 8; i++) {
+      const bat = this.createBat(
+        Phaser.Math.Between(100, 700),
+        Phaser.Math.Between(-2000, 200)
+      )
+      this.bats.push(bat)
+    }
   }
   
   private createBat(x: number, y: number): Phaser.GameObjects.Container {
