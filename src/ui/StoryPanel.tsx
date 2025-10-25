@@ -35,7 +35,7 @@ export function StoryPanel() {
         WebkitTextFillColor: 'transparent',
         textShadow: '0 0 20px rgba(136, 204, 255, 0.3)'
       }}>
-        🕷️ The Cave Ascent
+        🌱 Jack & the Beanstalk
       </h2>
       
       {/* Narration */}
@@ -47,11 +47,11 @@ export function StoryPanel() {
         fontStyle: 'italic',
         textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
       }}>
-        You are a mathematical spider deep in the <strong>Calculus Caverns</strong>. 
-        The legendary <strong>Derivative Crown</strong> awaits at the surface, 3000 meters above. 
-        Crawl from rock to rock, climbing through the dark cave! Answer calculus questions 
-        correctly to ascend higher. Wrong answers make you fall deeper into the darkness. 
-        Can you escape the caverns and reach the light?
+        You are a mathematical spider climbing the <strong>Magical Beanstalk</strong>. 
+        The legendary <strong>Golden Goose</strong> awaits at the top, 3000 meters in the sky! 
+        Jump from leaf to leaf, climbing higher and higher! Answer calculus questions 
+        correctly to leap between leaves. Wrong answers make you fall down the beanstalk. 
+        Can you reach the clouds and find the golden treasure?
       </p>
       
       {/* Mission box */}
@@ -65,13 +65,13 @@ export function StoryPanel() {
         alignItems: 'center',
         gap: 10
       }}>
-        <span style={{ fontSize: 24 }}>👑</span>
+        <span style={{ fontSize: 24 }}>🦆</span>
         <div>
           <div style={{ fontSize: 12, color: '#00ff00', fontWeight: 600 }}>
             MISSION
           </div>
           <div style={{ fontSize: 13, color: '#b3ffb3' }}>
-            Escape the caverns! Climb 3000m to reach the surface!
+            Climb 3000m up the beanstalk to reach the golden goose!
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@ export function StoryPanel() {
             MECHANICS
           </div>
           <div style={{ fontSize: 11, color: '#c4b5fd' }}>
-            Web Swing Physics
+            Leaf Jump Physics
           </div>
         </div>
       </div>

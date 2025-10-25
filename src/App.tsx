@@ -54,15 +54,15 @@ export default function App() {
       {/* Header with mode switcher */}
       <div style={{ textAlign:'center', marginBottom:16 }}>
         <h1 style={{ fontSize:36, fontWeight:800, background:'linear-gradient(135deg, #ff6b35, #8b5cf6, #10b981)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', margin:0, textShadow:'0 0 30px rgba(139, 92, 246, 0.5)' }}>
-          🕷️ SpiderCalc: {gameMode === 'adventure' ? 'Calculus Chronicles' : 'Halloween Calculus'} 🎃
+          🕷️ SpiderCalc: {gameMode === 'adventure' ? 'Jack & the Beanstalk' : 'Halloween Calculus'} 🌱
         </h1>
         <p style={{ color:'#ff6b35', fontSize:16, margin:'8px 0 0', fontWeight:'bold' }}>
           {gameMode === 'adventure' 
-            ? 'Adventure through the Haunted Mansion solving calculus puzzles!' 
+            ? 'Climb the magical beanstalk to reach the sky! Answer calculus questions to jump between leaves!' 
             : 'Learn Derivatives & Integrals through Spooky Graph Exploration!'}
         </p>
         
-        {/* Mode Switcher & Audio Toggle */}
+        {/* Mode Switcher */}
         <div style={{ marginTop: 12, display: 'flex', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
           <button
             onClick={() => setGameMode('adventure')}
@@ -99,24 +99,6 @@ export default function App() {
             }}
           >
             📊 Classic Mode
-          </button>
-          <button
-            onClick={handleAudioToggle}
-            style={{
-              padding: '10px 20px',
-              borderRadius: 8,
-              border: '2px solid',
-              borderColor: audioEnabled ? '#10b981' : '#ef4444',
-              background: audioEnabled ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #ef4444, #dc2626)',
-              color: '#fff',
-              fontWeight: 700,
-              fontSize: 14,
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              boxShadow: audioEnabled ? '0 0 20px rgba(16, 185, 129, 0.5)' : '0 0 20px rgba(239, 68, 68, 0.5)'
-            }}
-          >
-            {audioEnabled ? '🔊 Audio ON' : '🔇 Audio OFF'}
           </button>
         </div>
         

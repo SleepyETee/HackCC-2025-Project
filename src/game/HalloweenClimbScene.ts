@@ -5,12 +5,12 @@ import type { AdventureQuestion } from './gameTypes'
 import { audioManager } from './AudioManager'
 
 /**
- * HALLOWEEN OUTDOOR CLIMBING SCENE
- * Beautiful outdoor Halloween setting with pumpkins, trees, moon, bats
- * Spider jumps from pumpkin to pumpkin going upward
+ * JACK & THE BEANSTALK CLIMBING SCENE
+ * Magical beanstalk setting with leaves, clouds, and sky
+ * Spider jumps from leaf to leaf climbing upward
  */
 
-type PumpkinPlatform = {
+type LeafPlatform = {
   x: number
   y: number
   container: Phaser.GameObjects.Container
@@ -30,9 +30,9 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   // Spider
   spider!: Phaser.GameObjects.Container
   
-  // Pumpkins
-  pumpkins: PumpkinPlatform[] = []
-  currentPumpkin: PumpkinPlatform | null = null
+  // Leaves
+  leaves: LeafPlatform[] = []
+  currentLeaf: LeafPlatform | null = null
   
   // Game state
   currentHeightMeters = 0
@@ -44,9 +44,13 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   isGameOver = false
   
   // Environment
-  moon!: Phaser.GameObjects.Arc
-  bats: Phaser.GameObjects.Container[] = []
-  trees: Phaser.GameObjects.Graphics[] = []
+  sun!: Phaser.GameObjects.Arc
+  clouds: Phaser.GameObjects.Container[] = []
+  beanstalk: Phaser.GameObjects.Graphics[] = []
+  
+  // Audio button
+  audioButton!: Phaser.GameObjects.Container
+  audioEnabled = true
   
   // Camera
   cameraFollowY = 0
@@ -57,7 +61,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   feedbackText!: Phaser.GameObjects.Text
   
   create() {
-    console.log('🎃 HalloweenClimbScene - Beautiful outdoor Halloween!')
+    console.log('🌱 Jack & Beanstalk Scene - Magical climbing adventure!')
     
     const W = this.scale.width
     const H = this.scale.height
@@ -73,20 +77,23 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     const store = useGameStore.getState()
     store.addScore(-store.score)
     
-    // Create beautiful Halloween environment
-    this.createHalloweenBackground()
-    this.createMoon()
-    this.createTrees()
-    this.createBats()
+    // Create magical beanstalk environment
+    this.createBeanstalkBackground()
+    this.createSun()
+    this.createClouds()
+    this.createBeanstalk()
     
-    // Create pumpkin platforms going upward
-    this.generatePumpkinPlatforms()
+    // Create leaf platforms going upward
+    this.generateLeafPlatforms()
     
-    // Create spider on first pumpkin
+    // Create spider on first leaf
     this.createSpider()
     
     // Create lives display (hearts with spiders)
     this.createLivesDisplay()
+    
+    // Create audio button
+    this.createAudioButton()
     
     // Create UI
     this.createUI()
@@ -108,15 +115,15 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   }
   
   update() {
-    // Animate bats
-    this.bats.forEach((bat, idx) => {
-      // Bats fly in sine wave pattern
-      bat.x += Math.sin(this.time.now * 0.001 + idx) * 0.5
-      bat.y += Math.cos(this.time.now * 0.0008 + idx) * 0.3
+    // Animate clouds
+    this.clouds.forEach((cloud, idx) => {
+      // Clouds drift slowly
+      cloud.x += Math.sin(this.time.now * 0.0005 + idx) * 0.3
+      cloud.y += Math.cos(this.time.now * 0.001 + idx) * 0.2
       
-      // Keep bats in bounds
-      if (bat.x < -50) bat.x = this.scale.width + 50
-      if (bat.x > this.scale.width + 50) bat.x = -50
+      // Keep clouds in bounds
+      if (cloud.x < -100) cloud.x = this.scale.width + 100
+      if (cloud.x > this.scale.width + 100) cloud.x = -100
     })
   }
   
@@ -177,53 +184,95 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       yoyo: true
     })
   }
+
+  // NEW JACK & BEANSTALK METHODS
+  private createBeanstalkBackground() {
+    const W = this.scale.width
+    const H = 5000 // Tall background for climbing
+    
+    // Create a large single background that covers entire play area
+    const bg = this.add.graphics()
+    bg.fillGradientStyle(0x87CEEB, 0x87CEEB, 0x4682B4, 0x4682B4, 1) // Sky blue gradient
+    bg.fillRect(0, -H, W, H + 1000)
+    bg.setScrollFactor(1)
+  }
+
+  private createSun() {
+    const W = this.scale.width
+    const H = this.scale.height
+    
+    // Create sun in top right
+    this.sun = this.add.circle(W - 100, 100, 60, 0xFFD700, 0.9)
+    this.sun.setScrollFactor(0, 0.3) // Parallax effect
+    this.sun.setDepth(-500)
+    
+    // Sun rays
+    const rays = this.add.graphics()
+    rays.lineStyle(3, 0xFFD700, 0.6)
+    for (let i = 0; i < 8; i++) {
+      const angle = (i * Math.PI) / 4
+      const x1 = W - 100 + Math.cos(angle) * 70
+      const y1 = 100 + Math.sin(angle) * 70
+      const x2 = W - 100 + Math.cos(angle) * 90
+      const y2 = 100 + Math.sin(angle) * 90
+      rays.lineBetween(x1, y1, x2, y2)
+    }
+    rays.setScrollFactor(0, 0.3)
+    rays.setDepth(-500)
+  }
+
+  private createClouds() {
+    const W = this.scale.width
+    const H = 5000
+    
+    // Create floating clouds
+    for (let i = 0; i < 15; i++) {
+      const cloud = this.add.container(
+        Phaser.Math.Between(0, W),
+        Phaser.Math.Between(0, H)
+      )
+      
+      // Cloud body
+      const cloudBody = this.add.ellipse(0, 0, 80, 40, 0xFFFFFF, 0.8)
+      const cloudLeft = this.add.ellipse(-30, -10, 50, 30, 0xFFFFFF, 0.8)
+      const cloudRight = this.add.ellipse(30, -10, 50, 30, 0xFFFFFF, 0.8)
+      
+      cloud.add([cloudBody, cloudLeft, cloudRight])
+      cloud.setScrollFactor(0, 0.5) // Parallax effect
+      cloud.setDepth(-400)
+      
+      this.clouds.push(cloud)
+    }
+  }
+
+  private createBeanstalk() {
+    const W = this.scale.width
+    const H = 5000
+    
+    // Create the main beanstalk trunk
+    const beanstalk = this.add.graphics()
+    beanstalk.fillStyle(0x228B22, 0.8) // Forest green
+    beanstalk.fillRect(W / 2 - 20, -H, 40, H + 1000)
+    beanstalk.setScrollFactor(1)
+    beanstalk.setDepth(-300)
+    
+    // Add some texture to the beanstalk
+    beanstalk.lineStyle(2, 0x006400, 0.6)
+    for (let y = -H; y < 1000; y += 100) {
+      beanstalk.lineBetween(W / 2 - 25, y, W / 2 + 25, y)
+    }
+    
+    this.beanstalk.push(beanstalk)
+  }
   
   private createMoon() {
-    const W = this.scale.width
-    
-    this.moon = this.add.circle(W - 100, 80, 50, 0xffffee, 0.9)
-    this.moon.setScrollFactor(0.3) // Parallax effect
-    
-    // Pulsing glow
-    this.tweens.add({
-      targets: this.moon,
-      alpha: 0.7,
-      scale: 1.05,
-      duration: 3000,
-      yoyo: true,
-      repeat: -1
-    })
-    
-    // Moon glow
-    const glow = this.add.circle(W - 100, 80, 70, 0xffffcc, 0.2)
-    glow.setScrollFactor(0.3)
-    
-    this.tweens.add({
-      targets: glow,
-      alpha: 0.1,
-      duration: 3000,
-      yoyo: true,
-      repeat: -1
-    })
+    // This method is now replaced by createSun()
+    // Keeping for compatibility but not used
   }
   
   private createTrees() {
-    const positions = [
-      { x: 50, baseY: 0 },
-      { x: 150, baseY: -400 },
-      { x: 700, baseY: -200 },
-      { x: 80, baseY: -800 },
-      { x: 650, baseY: -1200 },
-      { x: 120, baseY: -1600 },
-      { x: 720, baseY: -2000 },
-      { x: 100, baseY: -2400 },
-      { x: 680, baseY: -2800 }
-    ]
-    
-    positions.forEach(pos => {
-      const tree = this.createTree(pos.x, pos.baseY)
-      this.trees.push(tree)
-    })
+    // This method is now replaced by createBeanstalk()
+    // Keeping for compatibility but not used
   }
   
   private createTree(x: number, baseY: number): Phaser.GameObjects.Graphics {
@@ -258,13 +307,8 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   }
   
   private createBats() {
-    for (let i = 0; i < 8; i++) {
-      const bat = this.createBat(
-        Phaser.Math.Between(100, 700),
-        Phaser.Math.Between(-2000, 200)
-      )
-      this.bats.push(bat)
-    }
+    // This method is now replaced by createClouds()
+    // Keeping for compatibility but not used
   }
   
   private createBat(x: number, y: number): Phaser.GameObjects.Container {
@@ -294,6 +338,26 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     return bat
   }
   
+  private generateLeafPlatforms() {
+    const W = this.scale.width
+    
+    // Generate leaves going upward
+    let currentY = this.scale.height - 100
+    const totalLeaves = 30
+    
+    for (let i = 0; i < totalLeaves; i++) {
+      const x = Phaser.Math.Between(150, W - 150)
+      currentY -= Phaser.Math.Between(120, 180)
+      
+      const heightMeters = i * 100
+      const leaf = this.createLeaf(x, currentY, heightMeters)
+      
+      this.leaves.push({
+        x, y: currentY, container: leaf, heightMeters
+      })
+    }
+  }
+
   private generatePumpkinPlatforms() {
     const W = this.scale.width
     
@@ -308,7 +372,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       const heightMeters = i * 100
       const pumpkin = this.createPumpkin(x, currentY, heightMeters)
       
-      this.pumpkins.push({
+      this.leaves.push({
         x, y: currentY, container: pumpkin, heightMeters
       })
     }
@@ -467,13 +531,118 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     
     return container
   }
+
+  private createLeaf(x: number, y: number, heightMeters: number): Phaser.GameObjects.Container {
+    const container = this.add.container(x, y)
+    
+    // ========== 3D SHADOW (depth effect) ==========
+    const shadow = this.add.ellipse(3, 25, 60, 15, 0x000000, 0.3)
+    shadow.setDepth(-1)
+    container.add(shadow)
+    
+    const leaf = this.add.graphics()
+    
+    // ========== 3D LEAF BODY ==========
+    // Base green color
+    leaf.fillStyle(0x228B22, 1)
+    leaf.fillEllipse(0, 0, 60, 40)
+    
+    // Dark shadow on right side (3D shading)
+    leaf.fillStyle(0x1a5f1a, 0.6)
+    leaf.fillEllipse(15, 5, 25, 30)
+    
+    // Bright highlight on left (3D lighting)
+    leaf.fillStyle(0x32cd32, 0.8)
+    leaf.fillEllipse(-15, -8, 20, 20)
+    
+    // Top highlight (light from above)
+    leaf.fillStyle(0x90ee90, 0.7)
+    leaf.fillEllipse(0, -15, 30, 12)
+    
+    // ========== LEAF VEINS ==========
+    leaf.lineStyle(2, 0x006400, 0.8)
+    // Main vein
+    leaf.beginPath()
+    leaf.moveTo(0, -20)
+    leaf.lineTo(0, 20)
+    leaf.strokePath()
+    
+    // Side veins
+    for (let i = -1; i <= 1; i += 2) {
+      leaf.beginPath()
+      leaf.moveTo(0, -10)
+      leaf.lineTo(i * 20, 0)
+      leaf.strokePath()
+      
+      leaf.beginPath()
+      leaf.moveTo(0, 0)
+      leaf.lineTo(i * 25, 10)
+      leaf.strokePath()
+    }
+    
+    // ========== LEAF EDGE TEXTURE ==========
+    leaf.lineStyle(1, 0x006400, 0.6)
+    leaf.beginPath()
+    leaf.arc(0, 0, 30, 0, Math.PI * 2)
+    leaf.strokePath()
+    
+    container.add(leaf)
+    
+    // ========== 3D GLOW EFFECT ==========
+    const glow = this.add.circle(0, 0, 35, 0x32cd32, 0.1)
+    glow.setBlendMode(Phaser.BlendModes.ADD)
+    container.add(glow)
+    
+    // Gentle swaying animation
+    this.tweens.add({
+      targets: container,
+      rotation: 0.1,
+      duration: 3000,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    })
+    
+    // Height label (meters)
+    if (heightMeters % 500 === 0 && heightMeters > 0) {
+      const label = this.add.text(0, -50, `${heightMeters}m`, {
+        fontSize: '16px',
+        color: '#ffd700',
+        fontFamily: 'Arial Black',
+        stroke: '#000000',
+        strokeThickness: 3
+      })
+      label.setOrigin(0.5)
+      container.add(label)
+    }
+    
+    // Make clickable
+    container.setInteractive(new Phaser.Geom.Ellipse(0, 0, 60, 40), Phaser.Geom.Ellipse.Contains)
+    container.on('pointerdown', () => {
+      if (!this.waitingForAnswer || this.isAnimating || this.isGameOver) return
+      
+      // Check if this is a valid target
+      const distance = Phaser.Math.Distance.Between(
+        this.spider.x, this.spider.y, 
+        container.x, container.y
+      )
+      
+      if (distance < 200) {
+        this.currentLeaf = this.leaves.find(l => l.container === container) || null
+        container.setScale(1.15)
+        this.showMessage('📝 Now answer the question!', 0xffd700, this.scale.height / 2 - 100)
+      }
+    })
+    
+    return container
+  }
   
   private createSpider() {
-    // Start on first pumpkin
-    const firstPumpkin = this.pumpkins[0]
-    this.currentPumpkin = firstPumpkin
+    // Start on first leaf
+    const firstLeaf = this.leaves[0]
+    this.currentLeaf = firstLeaf
     
-    this.spider = this.add.container(firstPumpkin.x, firstPumpkin.y - 50)
+    this.spider = this.add.container(firstLeaf.x, firstLeaf.y - 50)
     
     // ========== 3D SPIDER SHADOW ==========
     const spiderShadow = this.add.ellipse(3, 25, 55, 15, 0x000000, 0.5)
@@ -587,6 +756,50 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     }
   }
   
+  private createAudioButton() {
+    const W = this.scale.width
+    const H = this.scale.height
+    
+    // Audio button container
+    this.audioButton = this.add.container(W - 80, 20)
+    
+    // Button background
+    const buttonBg = this.add.rectangle(0, 0, 60, 40, 0x000000, 0.7)
+    buttonBg.setStrokeStyle(2, this.audioEnabled ? 0x00ff00 : 0xff0000)
+    buttonBg.setScrollFactor(0)
+    
+    // Button text
+    const buttonText = this.add.text(0, 0, this.audioEnabled ? '🔊' : '🔇', {
+      fontSize: '20px',
+      fontFamily: 'Arial, sans-serif',
+      color: '#ffffff'
+    })
+    buttonText.setOrigin(0.5)
+    buttonText.setScrollFactor(0)
+    
+    // Make interactive
+    buttonBg.setInteractive()
+    buttonBg.on('pointerdown', () => {
+      this.toggleAudio()
+    })
+    
+    // Add to container
+    this.audioButton.add([buttonBg, buttonText])
+    this.audioButton.setScrollFactor(0)
+    this.audioButton.setDepth(1000)
+  }
+
+  private toggleAudio() {
+    this.audioEnabled = audioManager.toggleAudio()
+    
+    // Update button appearance
+    const buttonBg = this.audioButton.list[0] as Phaser.GameObjects.Rectangle
+    const buttonText = this.audioButton.list[1] as Phaser.GameObjects.Text
+    
+    buttonBg.setStrokeStyle(2, this.audioEnabled ? 0x00ff00 : 0xff0000)
+    buttonText.setText(this.audioEnabled ? '🔊' : '🔇')
+  }
+
   private createUI() {
     const W = this.scale.width
     
@@ -707,12 +920,12 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     // Show CORRECT feedback
     this.showFeedback('CORRECT!', 0x00ff00)
     
-    // Find next pumpkin above
-    const nextPumpkin = this.findNextPumpkinAbove()
+    // Find next leaf above
+    const nextLeaf = this.findNextLeafAbove()
     
-    if (nextPumpkin) {
-      // JUMP TO PUMPKIN!
-      this.jumpToPumpkin(nextPumpkin)
+    if (nextLeaf) {
+      // JUMP TO LEAF!
+      this.jumpToLeaf(nextLeaf)
     } else {
       // Reached the end!
       this.onVictory()
@@ -741,11 +954,11 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       return // Stop here, don't continue
     }
     
-    // Still have lives - fall to previous pumpkin
-    const previousPumpkin = this.findPreviousPumpkin()
+    // Still have lives - fall to previous leaf
+    const previousLeaf = this.findPreviousLeaf()
     
-    if (previousPumpkin) {
-      this.fallToPumpkin(previousPumpkin)
+    if (previousLeaf) {
+      this.fallToLeaf(previousLeaf)
     } else {
       // At first pumpkin, just stay there
       this.time.delayedCall(1500, () => {
@@ -754,8 +967,8 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     }
   }
   
-  private jumpToPumpkin(targetPumpkin: PumpkinPlatform) {
-    console.log('🦘 JUMPING to pumpkin!')
+  private jumpToLeaf(targetLeaf: LeafPlatform) {
+    console.log('🦘 JUMPING to leaf!')
     
     // Play jump sound
     audioManager.playSoundEffect('jump')
@@ -770,7 +983,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       onComplete: () => {
         // JUMP! - Parabolic arc
         const jumpDuration = 1000
-        const peakY = (this.spider.y + targetPumpkin.y - 50) / 2 - 80
+        const peakY = (this.spider.y + targetLeaf.y - 50) / 2 - 80
         
         // ========== 3D MOTION BLUR EFFECT ==========
         // Create motion trail particles
@@ -789,7 +1002,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
         this.tweens.add({
           targets: this.spider,
           y: peakY,
-          x: (this.spider.x + targetPumpkin.x) / 2,
+          x: (this.spider.x + targetLeaf.x) / 2,
           duration: jumpDuration / 2,
           ease: 'Quad.easeOut'
         })
@@ -797,8 +1010,8 @@ export default class HalloweenClimbScene extends Phaser.Scene {
         // Arc to target
         this.tweens.add({
           targets: this.spider,
-          y: targetPumpkin.y - 50,
-          x: targetPumpkin.x,
+          y: targetLeaf.y - 50,
+          x: targetLeaf.x,
           duration: jumpDuration / 2,
           delay: jumpDuration / 2,
           ease: 'Quad.easeIn',
@@ -818,11 +1031,11 @@ export default class HalloweenClimbScene extends Phaser.Scene {
             this.time.delayedCall(500, () => motionTrail.destroy())
             
             // Land effect
-            this.landEffect(targetPumpkin)
+            this.landEffect(targetLeaf)
             
             // Update state
-            this.currentPumpkin = targetPumpkin
-            this.currentHeightMeters = targetPumpkin.heightMeters
+            this.currentLeaf = targetLeaf
+            this.currentHeightMeters = targetLeaf.heightMeters
             this.updateUI()
             
             // Check victory
@@ -837,7 +1050,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     })
   }
   
-  private fallToPumpkin(targetPumpkin: PumpkinPlatform) {
+  private fallToLeaf(targetLeaf: LeafPlatform) {
     console.log('💔 FALLING down!')
     
     // Play fall sound
@@ -846,8 +1059,8 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     // Fall animation
     this.tweens.add({
       targets: this.spider,
-      y: targetPumpkin.y - 50,
-      x: targetPumpkin.x,
+      y: targetLeaf.y - 50,
+      x: targetLeaf.x,
       rotation: -Math.PI,
       duration: 800,
       ease: 'Quad.easeIn',
@@ -855,11 +1068,11 @@ export default class HalloweenClimbScene extends Phaser.Scene {
         this.spider.rotation = 0
         
         // Land effect
-        this.landEffect(targetPumpkin)
+        this.landEffect(targetLeaf)
         
         // Update state
-        this.currentPumpkin = targetPumpkin
-        this.currentHeightMeters = targetPumpkin.heightMeters
+        this.currentLeaf = targetLeaf
+        this.currentHeightMeters = targetLeaf.heightMeters
         this.updateUI()
         
         this.showMessage(`Lives remaining: ${this.lives}`, 0xff0000, this.scale.height / 2)
@@ -869,13 +1082,13 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     })
   }
   
-  private landEffect(pumpkin: PumpkinPlatform) {
+  private landEffect(leaf: LeafPlatform) {
     // Play land sound
     audioManager.playSoundEffect('land')
     
-    // ========== 3D PUMPKIN SQUASH ==========
+    // ========== 3D LEAF SQUASH ==========
     this.tweens.add({
-      targets: pumpkin.container,
+      targets: leaf.container,
       scaleY: 0.85,
       scaleX: 1.1,
       duration: 100,
@@ -883,7 +1096,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     })
     
     // ========== 3D DUST EXPLOSION (particles with depth) ==========
-    const dustEmitter = this.add.particles(pumpkin.x, pumpkin.y + 30, 'white', {
+    const dustEmitter = this.add.particles(leaf.x, leaf.y + 30, 'white', {
       speed: { min: 50, max: 150 },
       angle: { min: -110, max: -70 },
       scale: { start: 0.6, end: 0 },
@@ -903,7 +1116,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     this.cameras.main.shake(150, 0.003)
     
     // ========== IMPACT RING (3D shockwave) ==========
-    const impactRing = this.add.circle(pumpkin.x, pumpkin.y + 30, 10, 0xffffff, 0.6)
+    const impactRing = this.add.circle(leaf.x, leaf.y + 30, 10, 0xffffff, 0.6)
     this.tweens.add({
       targets: impactRing,
       scale: 4,
@@ -953,34 +1166,34 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     })
   }
   
-  private findNextPumpkinAbove(): PumpkinPlatform | null {
-    if (!this.currentPumpkin) return this.pumpkins[0]
+  private findNextLeafAbove(): LeafPlatform | null {
+    if (!this.currentLeaf) return this.leaves[0]
     
-    // Find closest pumpkin above current one
-    const pumpkinsAbove = this.pumpkins.filter(p => 
-      p.heightMeters > this.currentPumpkin!.heightMeters
+    // Find closest leaf above current one
+    const leavesAbove = this.leaves.filter(p => 
+      p.heightMeters > this.currentLeaf!.heightMeters
     )
     
-    if (pumpkinsAbove.length === 0) return null
+    if (leavesAbove.length === 0) return null
     
     // Get closest one
-    pumpkinsAbove.sort((a, b) => a.heightMeters - b.heightMeters)
-    return pumpkinsAbove[0]
+    leavesAbove.sort((a, b) => a.heightMeters - b.heightMeters)
+    return leavesAbove[0]
   }
   
-  private findPreviousPumpkin(): PumpkinPlatform | null {
-    if (!this.currentPumpkin) return null
+  private findPreviousLeaf(): LeafPlatform | null {
+    if (!this.currentLeaf) return null
     
-    // Find closest pumpkin below current one
-    const pumpkinsBelow = this.pumpkins.filter(p => 
-      p.heightMeters < this.currentPumpkin!.heightMeters
+    // Find closest leaf below current one
+    const leavesBelow = this.leaves.filter(p => 
+      p.heightMeters < this.currentLeaf!.heightMeters
     )
     
-    if (pumpkinsBelow.length === 0) return null
+    if (leavesBelow.length === 0) return null
     
     // Get closest one (highest of the below ones)
-    pumpkinsBelow.sort((a, b) => b.heightMeters - a.heightMeters)
-    return pumpkinsBelow[0]
+    leavesBelow.sort((a, b) => b.heightMeters - a.heightMeters)
+    return leavesBelow[0]
   }
   
   private continueGame() {
