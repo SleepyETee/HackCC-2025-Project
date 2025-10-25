@@ -13,7 +13,21 @@ An interactive educational game that teaches algebra, calculus, and probability 
 
 ## 🎮 What is SpiderCalc?
 
-You are a **spider** perched on a web. Each turn you:
+**SpiderCalc now features TWO exciting game modes:**
+
+### 🎮 Adventure Mode (NEW!)
+Embark on **"The Calculus Chronicles"** - a story-driven platformer adventure! You are a brave spider mathematician navigating through the Haunted Mansion of Functions to recover the legendary Derivative Crown.
+
+- **Story-driven gameplay** with 7 unique scenes across 4 chapters
+- **Answer calculus questions** to control your spider's actions:
+  - 🦘 **Jump questions** make the spider leap forward
+  - 🕸️ **Web questions** make the spider shoot web and swing
+- **Correct answers** = More powerful actions!
+- **Platformer physics** with real gravity, jumps, and web swinging
+- **Educational narrative** that makes calculus concepts feel like part of an epic quest
+
+### 📊 Classic Mode (Original)
+The strategic probability-based gameplay:
 1. ✏️ **Adjust an equation** (line or curve) to control which anchors are reachable
 2. 📝 **Answer a math question** that reshapes a probability field over visible targets
 3. 🎯 **Fire a grapple** — your web samples one anchor based on the probability distribution
