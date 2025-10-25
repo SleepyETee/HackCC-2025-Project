@@ -3,8 +3,14 @@ import { create } from 'zustand'
 import type { Line } from '../game/types'
 import type { Anchor } from '../game/types'
 import type { Question } from '../game/questions'
+import type { AdventureQuestion } from '../game/adventure'
 
 type UIState = {
+  // Game mode
+  gameMode: 'classic' | 'adventure'
+  setGameMode: (mode: 'classic' | 'adventure') => void
+  
+  // Classic mode state
   line: Line
   curveFunc: ((x: number) => number) | null
   curveMode: 'line' | 'quadratic' | 'sin' | 'exp'
@@ -30,9 +36,22 @@ type UIState = {
   setCurrentQuestion: (q: Question | null)=>void
   addUsedQuestionId: (id: string)=>void
   resetUsedQuestions: ()=>void
+  
+  // Adventure mode state
+  currentSceneId: string
+  currentAdventureQuestion: AdventureQuestion | null
+  adventureAction: 'jump' | 'web' | null
+  setCurrentSceneId: (id: string) => void
+  setCurrentAdventureQuestion: (q: AdventureQuestion | null) => void
+  setAdventureAction: (action: 'jump' | 'web', correct: boolean) => void
 }
 
 export const useGameStore = create<UIState>((set) => ({
+  // Game mode
+  gameMode: 'adventure',
+  setGameMode: (mode) => set({ gameMode: mode }),
+  
+  // Classic mode state
   line: { m: 0.5, b: 2 },
   curveFunc: null,
   curveMode: 'line',
@@ -68,4 +87,22 @@ export const useGameStore = create<UIState>((set) => ({
   setCurrentQuestion: (q)=> set({ currentQuestion: q, selectedAnswer: null, answerCorrect: null }),
   addUsedQuestionId: (id)=> set(s => ({ usedQuestionIds: [...s.usedQuestionIds, id] })),
   resetUsedQuestions: ()=> set({ usedQuestionIds: [] }),
+  
+  // Adventure mode state
+  currentSceneId: 'ch1-s1',
+  currentAdventureQuestion: null,
+  adventureAction: null,
+  setCurrentSceneId: (id) => set({ currentSceneId: id, currentAdventureQuestion: null }),
+  setCurrentAdventureQuestion: (q) => set({ currentAdventureQuestion: q }),
+  setAdventureAction: (action, correct) => {
+    set({ adventureAction: action })
+    // Dispatch event to game scene
+    window.dispatchEvent(new CustomEvent('spidercalc-action', { 
+      detail: { action, correct } 
+    }))
+    // Reset after action
+    setTimeout(() => {
+      set({ currentAdventureQuestion: null, adventureAction: null })
+    }, 100)
+  }
 }))
