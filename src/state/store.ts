@@ -3,7 +3,7 @@ import { create } from 'zustand'
 import type { Line } from '../game/types'
 import type { Anchor } from '../game/types'
 import type { Question } from '../game/questions'
-import type { AdventureQuestion } from '../game/adventure'
+import type { AdventureQuestion } from '../game/gameTypes'
 
 type UIState = {
   // Game mode

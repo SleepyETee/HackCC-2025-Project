@@ -152,12 +152,27 @@ export default function App() {
             border: '2px solid rgba(255, 107, 53, 0.3)'
           }}>
             <div style={{ fontSize: 16, marginBottom: 8, color: '#ffd700' }}>
-              🎮 HOW TO PLAY
+              🎮 HOW TO PLAY - VERTICAL CLIMBING
             </div>
-            <div style={{ color: '#e0e7ff', fontSize: 13 }}>
-              🦘 <strong>JUMP</strong> answers make the spider leap forward | 
-              🕸️ <strong>WEB</strong> answers make the spider shoot web and swing | 
-              ✅ <strong>Correct</strong> answers = more powerful actions!
+            <div style={{ color: '#e0e7ff', fontSize: 13, lineHeight: 1.6 }}>
+              <div style={{ marginBottom: 4 }}>
+                🎯 <strong>Hover & Click</strong> golden anchor points above to shoot web
+              </div>
+              <div style={{ marginBottom: 4 }}>
+                ⏱️ <strong>Answer questions</strong> while swinging to control release timing
+              </div>
+              <div style={{ marginBottom: 4 }}>
+                ✅ <strong>Correct</strong> = Perfect release (1.5s) + Strong boost upward!
+              </div>
+              <div style={{ marginBottom: 4 }}>
+                ❌ <strong>Wrong</strong> = Early release (0.8s) + Weak boost
+              </div>
+              <div style={{ marginBottom: 4 }}>
+                ⚠️ <strong>Avoid hazards</strong> (saws, cutters) that break your web
+              </div>
+              <div>
+                💾 <strong>Checkpoints</strong> every 500m | ❤️ <strong>3 Lives</strong> | 🎯 <strong>Goal: 3000m</strong>
+              </div>
             </div>
           </div>
         </>

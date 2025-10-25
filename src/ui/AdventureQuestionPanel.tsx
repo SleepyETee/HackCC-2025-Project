@@ -1,27 +1,11 @@
 import { useEffect } from 'react'
 import { useGameStore } from '../state/store'
-import { getQuestionsForScene, getScene } from '../game/adventure'
 
 export function AdventureQuestionPanel() {
-  const currentSceneId = useGameStore(s => s.currentSceneId)
   const currentQuestion = useGameStore(s => s.currentAdventureQuestion)
-  const setCurrentQuestion = useGameStore(s => s.setCurrentAdventureQuestion)
   const setAdventureAction = useGameStore(s => s.setAdventureAction)
   
-  const scene = getScene(currentSceneId)
-  
-  // Load a question when component mounts or when scene changes
-  useEffect(() => {
-    if (!currentQuestion && scene) {
-      const questions = getQuestionsForScene(scene.id)
-      if (questions.length > 0) {
-        const randomQ = questions[Math.floor(Math.random() * questions.length)]
-        setCurrentQuestion(randomQ)
-      }
-    }
-  }, [currentQuestion, scene, setCurrentQuestion])
-  
-  if (!currentQuestion || !scene) {
+  if (!currentQuestion) {
     return (
       <div className="panel" style={{ 
         background: 'linear-gradient(135deg, #1a0033, #0a001a)', 
@@ -82,8 +66,8 @@ export function AdventureQuestionPanel() {
       {/* Answer options */}
       <div className="stack" style={{ gap: 8 }}>
         {currentQuestion.options.map((option, i) => {
-          const actionIcon = option.action === 'jump' ? '🦘' : '🕸️'
-          const actionColor = option.action === 'jump' ? '#00ff00' : '#00e5ff'
+          const isCorrect = option.correct
+          const borderColor = isCorrect ? '#00ff00' : '#8b5cf6'
           
           return (
             <button 
@@ -91,8 +75,7 @@ export function AdventureQuestionPanel() {
               onClick={() => handleAnswer(option, i)}
               style={{
                 background: 'linear-gradient(135deg, #2a2a4a, #1a1a3a)',
-                borderColor: actionColor,
-                borderWidth: 2,
+                border: `2px solid ${borderColor}`,
                 padding: 12,
                 borderRadius: 8,
                 color: '#ffffff',
@@ -106,7 +89,7 @@ export function AdventureQuestionPanel() {
                 gap: 8
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = `linear-gradient(135deg, ${actionColor}33, ${actionColor}22)`
+                e.currentTarget.style.background = `linear-gradient(135deg, ${borderColor}33, ${borderColor}22)`
                 e.currentTarget.style.transform = 'translateX(5px)'
               }}
               onMouseLeave={(e) => {
@@ -114,7 +97,7 @@ export function AdventureQuestionPanel() {
                 e.currentTarget.style.transform = 'translateX(0)'
               }}
             >
-              <span style={{ fontSize: 18 }}>{actionIcon}</span>
+              <span style={{ fontSize: 18 }}>⏱️</span>
               <span>{option.text}</span>
             </button>
           )
@@ -150,7 +133,7 @@ export function AdventureQuestionPanel() {
         📚 Concept: {currentQuestion.concept}
       </div>
       
-      {/* Action legend */}
+      {/* Timing legend */}
       <div style={{ 
         fontSize: 10, 
         marginTop: 10,
@@ -160,10 +143,13 @@ export function AdventureQuestionPanel() {
         color: '#999'
       }}>
         <div style={{ marginBottom: 4 }}>
-          🦘 = JUMP forward • 🕸️ = SHOOT WEB to swing
+          ⏱️ Your answer affects web release timing!
         </div>
         <div>
-          ✅ Correct = Better action • ❌ Wrong = Weaker action
+          ✅ Correct = Perfect timing (1.5s) + STRONG boost (18) ⬆️
+        </div>
+        <div>
+          ❌ Wrong = Early release (0.8s) + Weak boost (10) ⬆️
         </div>
       </div>
     </div>

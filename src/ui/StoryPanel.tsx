@@ -1,16 +1,7 @@
 import { useGameStore } from '../state/store'
-import { getScene, ADVENTURE_STORY } from '../game/adventure'
 
 export function StoryPanel() {
-  const currentSceneId = useGameStore(s => s.currentSceneId)
-  const scene = getScene(currentSceneId)
-  
-  if (!scene) return null
-  
-  // Find which chapter we're in
-  const chapterMatch = scene.id.match(/^ch(\d+)/)
-  const chapterNum = chapterMatch ? parseInt(chapterMatch[1]) : 1
-  const chapter = ADVENTURE_STORY.chapters[chapterNum - 1]
+  const score = useGameStore(s => s.score)
   
   return (
     <div style={{ 
@@ -34,32 +25,17 @@ export function StoryPanel() {
         pointerEvents: 'none'
       }} />
       
-      {/* Chapter badge */}
-      <div style={{
-        display: 'inline-block',
-        background: 'linear-gradient(135deg, #ff6b35, #8b5cf6)',
-        padding: '6px 16px',
-        borderRadius: 20,
-        fontSize: 12,
-        fontWeight: 700,
-        marginBottom: 12,
-        color: '#ffffff',
-        boxShadow: '0 2px 10px rgba(139, 92, 246, 0.5)'
-      }}>
-        {chapter.name}
-      </div>
-      
-      {/* Scene title */}
+      {/* Title */}
       <h2 style={{ 
         margin: '0 0 12px 0',
-        fontSize: 24,
+        fontSize: 28,
         fontWeight: 800,
-        background: 'linear-gradient(135deg, #ffd700, #ffaa00)',
+        background: 'linear-gradient(135deg, #88ccff, #4466aa)',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
-        textShadow: '0 0 20px rgba(255, 215, 0, 0.3)'
+        textShadow: '0 0 20px rgba(136, 204, 255, 0.3)'
       }}>
-        📜 {scene.title}
+        🕷️ The Cave Ascent
       </h2>
       
       {/* Narration */}
@@ -71,10 +47,14 @@ export function StoryPanel() {
         fontStyle: 'italic',
         textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
       }}>
-        {scene.narration}
+        You are a mathematical spider deep in the <strong>Calculus Caverns</strong>. 
+        The legendary <strong>Derivative Crown</strong> awaits at the surface, 3000 meters above. 
+        Crawl from rock to rock, climbing through the dark cave! Answer calculus questions 
+        correctly to ascend higher. Wrong answers make you fall deeper into the darkness. 
+        Can you escape the caverns and reach the light?
       </p>
       
-      {/* Goal indicator */}
+      {/* Mission box */}
       <div style={{
         marginTop: 16,
         padding: 12,
@@ -85,13 +65,48 @@ export function StoryPanel() {
         alignItems: 'center',
         gap: 10
       }}>
-        <span style={{ fontSize: 24 }}>🎯</span>
+        <span style={{ fontSize: 24 }}>👑</span>
         <div>
           <div style={{ fontSize: 12, color: '#00ff00', fontWeight: 600 }}>
-            GOAL
+            MISSION
           </div>
           <div style={{ fontSize: 13, color: '#b3ffb3' }}>
-            {scene.goal.description}
+            Escape the caverns! Climb 3000m to reach the surface!
+          </div>
+        </div>
+      </div>
+      
+      {/* Stats */}
+      <div style={{
+        marginTop: 12,
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: 8
+      }}>
+        <div style={{
+          padding: 8,
+          background: 'rgba(255, 107, 53, 0.2)',
+          borderRadius: 6,
+          border: '1px solid rgba(255, 107, 53, 0.5)'
+        }}>
+          <div style={{ fontSize: 10, color: '#ff6b35', fontWeight: 600 }}>
+            SCORE
+          </div>
+          <div style={{ fontSize: 18, color: '#ffd700', fontWeight: 700 }}>
+            {score}
+          </div>
+        </div>
+        <div style={{
+          padding: 8,
+          background: 'rgba(139, 92, 246, 0.2)',
+          borderRadius: 6,
+          border: '1px solid rgba(139, 92, 246, 0.5)'
+        }}>
+          <div style={{ fontSize: 10, color: '#8b5cf6', fontWeight: 600 }}>
+            MECHANICS
+          </div>
+          <div style={{ fontSize: 11, color: '#c4b5fd' }}>
+            Web Swing Physics
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import Phaser from 'phaser'
-import AdventureScene from '../game/AdventureScene'
+import MainMenuScene from '../game/MainMenuScene'
+import HalloweenClimbScene from '../game/HalloweenClimbScene'
 
 export function AdventureCanvas() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -14,8 +15,8 @@ export function AdventureCanvas() {
       width: 800,
       height: 600,
       parent: containerRef.current,
-      backgroundColor: '#0a0a0f',
-      scene: [AdventureScene],
+      backgroundColor: '#2a3f54',
+      scene: [MainMenuScene, HalloweenClimbScene], // Menu first, then game
       physics: {
         default: 'arcade',
         arcade: {
