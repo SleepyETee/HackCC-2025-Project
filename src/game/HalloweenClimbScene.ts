@@ -45,11 +45,9 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   
   // Environment
   sun!: Phaser.GameObjects.Arc
-  moon!: Phaser.GameObjects.Arc
   clouds: Phaser.GameObjects.Container[] = []
   beanstalk: Phaser.GameObjects.Graphics[] = []
-  trees: Phaser.GameObjects.Graphics[] = []
-  bats: Phaser.GameObjects.Container[] = []
+  magicalParticles: Phaser.GameObjects.Container[] = []
   
   // Audio button
   audioButton!: Phaser.GameObjects.Container
@@ -85,11 +83,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     this.createSun()
     this.createClouds()
     this.createBeanstalk()
-    
-    // Also create Halloween elements for variety
-    this.createMoon()
-    this.createTrees()
-    this.createBats()
+    this.createMagicalParticles()
     
     // Create leaf platforms going upward
     this.generateLeafPlatforms()
@@ -134,15 +128,16 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       if (cloud.x > this.scale.width + 100) cloud.x = -100
     })
     
-    // Animate bats
-    this.bats.forEach((bat, idx) => {
-      // Bats fly in sine wave pattern
-      bat.x += Math.sin(this.time.now * 0.001 + idx) * 0.5
-      bat.y += Math.cos(this.time.now * 0.0008 + idx) * 0.3
+    // Animate magical particles
+    this.magicalParticles.forEach((particle, idx) => {
+      particle.x += Math.sin(this.time.now * 0.002 + idx) * 0.2
+      particle.y += Math.cos(this.time.now * 0.0015 + idx) * 0.1
       
-      // Keep bats in bounds
-      if (bat.x < -50) bat.x = this.scale.width + 50
-      if (bat.x > this.scale.width + 50) bat.x = -50
+      // Keep particles in bounds
+      if (particle.x < -50) particle.x = this.scale.width + 50
+      if (particle.x > this.scale.width + 50) particle.x = -50
+      if (particle.y < -50) particle.y = this.scale.height + 50
+      if (particle.y > this.scale.height + 50) particle.y = -50
     })
   }
   
@@ -209,11 +204,24 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     const W = this.scale.width
     const H = 5000 // Tall background for climbing
     
-    // Create a large single background that covers entire play area
+    // Create a beautiful sky gradient
     const bg = this.add.graphics()
-    bg.fillGradientStyle(0x87CEEB, 0x87CEEB, 0x4682B4, 0x4682B4, 1) // Sky blue gradient
-    bg.fillRect(0, -H, W, H + 1000)
+    
+    // Multi-layer sky gradient for depth
+    // Top layer - light blue
+    bg.fillGradientStyle(0x87CEEB, 0x87CEEB, 0x87CEEB, 0x87CEEB, 1)
+    bg.fillRect(0, -H, W, H * 0.3)
+    
+    // Middle layer - medium blue
+    bg.fillGradientStyle(0x87CEEB, 0x87CEEB, 0x4682B4, 0x4682B4, 1)
+    bg.fillRect(0, -H + H * 0.3, W, H * 0.4)
+    
+    // Bottom layer - deeper blue
+    bg.fillGradientStyle(0x4682B4, 0x4682B4, 0x2E4A6B, 0x2E4A6B, 1)
+    bg.fillRect(0, -H + H * 0.7, W, H * 0.3 + 1000)
+    
     bg.setScrollFactor(1)
+    bg.setDepth(-1000)
   }
 
   private createSun() {
@@ -225,40 +233,80 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     this.sun.setScrollFactor(0, 0.3) // Parallax effect
     this.sun.setDepth(-500)
     
-    // Sun rays
+    // Sun glow
+    const glow = this.add.circle(W - 100, 100, 80, 0xFFD700, 0.3)
+    glow.setScrollFactor(0, 0.3)
+    glow.setDepth(-501)
+    
+    // Animated sun rays
     const rays = this.add.graphics()
-    rays.lineStyle(3, 0xFFD700, 0.6)
-    for (let i = 0; i < 8; i++) {
-      const angle = (i * Math.PI) / 4
+    rays.lineStyle(4, 0xFFD700, 0.8)
+    for (let i = 0; i < 12; i++) {
+      const angle = (i * Math.PI) / 6
       const x1 = W - 100 + Math.cos(angle) * 70
       const y1 = 100 + Math.sin(angle) * 70
-      const x2 = W - 100 + Math.cos(angle) * 90
-      const y2 = 100 + Math.sin(angle) * 90
+      const x2 = W - 100 + Math.cos(angle) * 100
+      const y2 = 100 + Math.sin(angle) * 100
       rays.lineBetween(x1, y1, x2, y2)
     }
     rays.setScrollFactor(0, 0.3)
     rays.setDepth(-500)
+    
+    // Pulsing sun animation
+    this.tweens.add({
+      targets: this.sun,
+      scale: 1.1,
+      duration: 4000,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    })
+    
+    this.tweens.add({
+      targets: glow,
+      alpha: 0.5,
+      scale: 1.2,
+      duration: 3000,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    })
   }
 
   private createClouds() {
     const W = this.scale.width
     const H = 5000
     
-    // Create floating clouds
-    for (let i = 0; i < 15; i++) {
+    // Create beautiful floating clouds
+    for (let i = 0; i < 20; i++) {
       const cloud = this.add.container(
         Phaser.Math.Between(0, W),
-        Phaser.Math.Between(0, H)
+        Phaser.Math.Between(-H, 0)
       )
       
-      // Cloud body
-      const cloudBody = this.add.ellipse(0, 0, 80, 40, 0xFFFFFF, 0.8)
-      const cloudLeft = this.add.ellipse(-30, -10, 50, 30, 0xFFFFFF, 0.8)
-      const cloudRight = this.add.ellipse(30, -10, 50, 30, 0xFFFFFF, 0.8)
+      // Main cloud body
+      const cloudBody = this.add.ellipse(0, 0, 100, 50, 0xFFFFFF, 0.9)
+      const cloudLeft = this.add.ellipse(-40, -15, 60, 35, 0xFFFFFF, 0.9)
+      const cloudRight = this.add.ellipse(40, -15, 60, 35, 0xFFFFFF, 0.9)
+      const cloudTop = this.add.ellipse(0, -25, 70, 30, 0xFFFFFF, 0.9)
       
-      cloud.add([cloudBody, cloudLeft, cloudRight])
-      cloud.setScrollFactor(0, 0.5) // Parallax effect
+      // Cloud shadows for depth
+      const shadow = this.add.ellipse(5, 5, 100, 50, 0x000000, 0.1)
+      shadow.setDepth(-1)
+      
+      cloud.add([shadow, cloudBody, cloudLeft, cloudRight, cloudTop])
+      cloud.setScrollFactor(0, 0.3) // Parallax effect
       cloud.setDepth(-400)
+      
+      // Gentle floating animation
+      this.tweens.add({
+        targets: cloud,
+        y: cloud.y + Phaser.Math.Between(-10, 10),
+        duration: Phaser.Math.Between(3000, 6000),
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut'
+      })
       
       this.clouds.push(cloud)
     }
@@ -268,68 +316,82 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     const W = this.scale.width
     const H = 5000
     
-    // Create the main beanstalk trunk
+    // Create the main beanstalk trunk with 3D effect
     const beanstalk = this.add.graphics()
-    beanstalk.fillStyle(0x228B22, 0.8) // Forest green
-    beanstalk.fillRect(W / 2 - 20, -H, 40, H + 1000)
+    
+    // Main trunk with gradient
+    beanstalk.fillGradientStyle(0x32CD32, 0x32CD32, 0x228B22, 0x228B22, 1)
+    beanstalk.fillRect(W / 2 - 25, -H, 50, H + 1000)
+    
+    // Left shadow for 3D effect
+    beanstalk.fillStyle(0x1a5f1a, 0.8)
+    beanstalk.fillRect(W / 2 - 25, -H, 15, H + 1000)
+    
+    // Right highlight for 3D effect
+    beanstalk.fillStyle(0x90EE90, 0.6)
+    beanstalk.fillRect(W / 2 + 10, -H, 15, H + 1000)
+    
+    // Texture lines
+    beanstalk.lineStyle(3, 0x006400, 0.8)
+    for (let y = -H; y < 1000; y += 80) {
+      beanstalk.lineBetween(W / 2 - 20, y, W / 2 + 20, y)
+    }
+    
+    // Vertical texture lines
+    beanstalk.lineStyle(2, 0x006400, 0.6)
+    for (let x = W / 2 - 20; x <= W / 2 + 20; x += 10) {
+      beanstalk.lineBetween(x, -H, x, 1000)
+    }
+    
     beanstalk.setScrollFactor(1)
     beanstalk.setDepth(-300)
     
-    // Add some texture to the beanstalk
-    beanstalk.lineStyle(2, 0x006400, 0.6)
-    for (let y = -H; y < 1000; y += 100) {
-      beanstalk.lineBetween(W / 2 - 25, y, W / 2 + 25, y)
-    }
-    
     this.beanstalk.push(beanstalk)
+  }
+
+  private createMagicalParticles() {
+    const W = this.scale.width
+    const H = 5000
+    
+    // Create magical sparkles
+    for (let i = 0; i < 30; i++) {
+      const particle = this.add.container(
+        Phaser.Math.Between(0, W),
+        Phaser.Math.Between(-H, 0)
+      )
+      
+      // Magical sparkle
+      const sparkle = this.add.graphics()
+      sparkle.fillStyle(0xFFD700, 0.8)
+      sparkle.fillCircle(0, 0, 3)
+      sparkle.fillStyle(0xFFFFFF, 0.9)
+      sparkle.fillCircle(0, 0, 1)
+      
+      particle.add(sparkle)
+      particle.setScrollFactor(0, 0.5)
+      particle.setDepth(-200)
+      
+      // Twinkling animation
+      this.tweens.add({
+        targets: particle,
+        alpha: 0.3,
+        scale: 1.5,
+        duration: Phaser.Math.Between(1000, 3000),
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut'
+      })
+      
+      this.magicalParticles.push(particle)
+    }
   }
   
   private createMoon() {
-    const W = this.scale.width
-    
-    this.moon = this.add.circle(W - 100, 80, 50, 0xffffee, 0.9)
-    this.moon.setScrollFactor(0.3) // Parallax effect
-    
-    // Pulsing glow
-    this.tweens.add({
-      targets: this.moon,
-      alpha: 0.7,
-      scale: 1.05,
-      duration: 3000,
-      yoyo: true,
-      repeat: -1
-    })
-    
-    // Moon glow
-    const glow = this.add.circle(W - 100, 80, 70, 0xffffcc, 0.2)
-    glow.setScrollFactor(0.3)
-    
-    this.tweens.add({
-      targets: glow,
-      alpha: 0.1,
-      duration: 3000,
-      yoyo: true,
-      repeat: -1
-    })
+    // Removed - using sun instead for Jack & Beanstalk theme
   }
   
   private createTrees() {
-    const positions = [
-      { x: 50, baseY: 0 },
-      { x: 150, baseY: -400 },
-      { x: 700, baseY: -200 },
-      { x: 80, baseY: -800 },
-      { x: 650, baseY: -1200 },
-      { x: 120, baseY: -1600 },
-      { x: 720, baseY: -2000 },
-      { x: 100, baseY: -2400 },
-      { x: 680, baseY: -2800 }
-    ]
-    
-    positions.forEach(pos => {
-      const tree = this.createTree(pos.x, pos.baseY)
-      this.trees.push(tree)
-    })
+    // Removed - using beanstalk instead for Jack & Beanstalk theme
   }
   
   private createTree(x: number, baseY: number): Phaser.GameObjects.Graphics {
@@ -364,13 +426,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   }
   
   private createBats() {
-    for (let i = 0; i < 8; i++) {
-      const bat = this.createBat(
-        Phaser.Math.Between(100, 700),
-        Phaser.Math.Between(-2000, 200)
-      )
-      this.bats.push(bat)
-    }
+    // Removed - using magical particles instead for Jack & Beanstalk theme
   }
   
   private createBat(x: number, y: number): Phaser.GameObjects.Container {
