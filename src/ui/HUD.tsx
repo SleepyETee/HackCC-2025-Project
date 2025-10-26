@@ -14,14 +14,14 @@ export function HUD(){
   return (
     <div style={{ 
       position: 'absolute',
-      left: 12,
-      bottom: 30,
+      left: 11,
+      bottom: 10,
       pointerEvents: 'auto',
       zIndex: 100
     }}>
       <div style={{ 
         background: 'linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(15, 15, 26, 0.95))',
-        padding: '10px 14px',
+        padding: '10px 12px',
         borderRadius: 10,
         border: '2px solid #8b5cf6',
         backdropFilter: 'blur(10px)',

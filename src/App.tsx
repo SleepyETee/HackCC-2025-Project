@@ -131,25 +131,21 @@ export default function App() {
               🎃 Classic Adventure
             </button>
             <button
-              onClick={() => setAdventureMode('story')}
-              className={`btn ${adventureMode === 'story' ? 'btn--adventure-active' : ''}`}
+              disabled
+              className="btn btn--inactive"
               style={{ 
                 fontSize: '14px', 
                 padding: '8px 16px',
-                background: adventureMode === 'story' 
-                  ? 'linear-gradient(135deg, #8b5cf6, #7c3aed)' 
-                  : 'linear-gradient(135deg, #374151, #1f2937)',
-                color: '#fff',
-                border: adventureMode === 'story' 
-                  ? '2px solid #ffd700' 
-                  : '2px solid #4b5563',
-                fontWeight: adventureMode === 'story' ? 700 : 500,
-                boxShadow: adventureMode === 'story' 
-                  ? '0 0 15px rgba(139, 92, 246, 0.6)' 
-                  : 'none'
+                background: 'linear-gradient(135deg, #666666, #444444)', // Dimmed gray
+                color: '#999999', // Dimmed text
+                border: '2px solid #555555', // Dimmed border
+                fontWeight: 500,
+                boxShadow: 'none',
+                cursor: 'not-allowed', // Show disabled cursor
+                opacity: 0.6 // Overall dimmed appearance
               }}
             >
-              🕷️ Web-Swinging Adventure
+              🕷️ Web-Swinging Adventure (Coming Soon)
             </button>
           </div>
         )}

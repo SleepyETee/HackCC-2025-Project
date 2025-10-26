@@ -364,13 +364,13 @@ export default class MainMenuScene extends Phaser.Scene {
     // Dark, ominous background panel with consistent orange border
     const titlePanel = this.add.graphics()
     titlePanel.fillStyle(0x000000, 0.95) // More opaque background
-    titlePanel.fillRoundedRect(W / 2 - 380, 45, 760, 120, 12)
+    titlePanel.fillRoundedRect(W / 2 - 390, 45, 760, 120, 12)
     titlePanel.lineStyle(4, 0xff4400, 1) // Consistent orange border
-    titlePanel.strokeRoundedRect(W / 2 - 380, 45, 760, 120, 12)
+    titlePanel.strokeRoundedRect(W / 2 - 390, 45, 760, 120, 12)
     
-    // Inner orange glow
+    // Inner orange glow - properly centered accounting for stroke width
     titlePanel.lineStyle(2, 0xff6600, 0.6) // Consistent inner glow
-    titlePanel.strokeRoundedRect(W / 2 - 375, 50, 750, 110, 10)
+    titlePanel.strokeRoundedRect(W / 2 - 385, 50, 750, 110, 10)
     
     titlePanel.setScrollFactor(0, 0)
     titlePanel.setDepth(10)
@@ -411,7 +411,7 @@ export default class MainMenuScene extends Phaser.Scene {
     bloodDrip.setDepth(11)
     
     // Large shadow for depth (blood red tint)
-    const titleShadow = this.add.text(W / 2 + 5, 92, ' SPIDER-CALC 🎃', {
+    const titleShadow = this.add.text(W / 2 + 5, 93, '🎃 SPIDER-CALC 🎃', {
       fontSize: '64px',
       fontFamily: 'Impact, Arial Black, sans-serif',
       color: '#330000'
@@ -422,7 +422,7 @@ export default class MainMenuScene extends Phaser.Scene {
     titleShadow.setDepth(9.5)
     
     // Main title text with blood red to orange gradient effect
-    const title = this.add.text(W / 2, 87, '🎃 SPIDER-CALC 🎃', {
+    const title = this.add.text(W / 2, 85, '🎃 SPIDER-CALC 🎃', {
       fontSize: '64px',
       fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
       color: '#ff4400',
@@ -445,7 +445,7 @@ export default class MainMenuScene extends Phaser.Scene {
     
     // Subtitle with sinister styling
     const subtitle = this.add.text(W / 2, 138, '⚠️ Climb 3000m... If You Dare! ☠️', {
-      fontSize: '18px',
+      fontSize: '20px',
       fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
       color: '#ff6600',
       stroke: '#000000',
@@ -775,43 +775,174 @@ export default class MainMenuScene extends Phaser.Scene {
     const W = this.scale.width
     const H = this.scale.height
     
-    // Top-left web using spider web.jpg - better positioned and scaled
+    console.log('🕸️ Creating web decorations...')
+    
+    // ========== CORNER WEBS ==========
+    // Top-left web using spider web.jpg - more visible
     const webLeft = this.add.image(60, 60, 'spider-web-left')
     webLeft.setOrigin(0, 0) // Anchor to top-left corner
-    webLeft.setScale(0.25) // Smaller, more subtle scale
+    webLeft.setScale(0.4) // Increased scale for better visibility
     webLeft.setScrollFactor(0, 0) // Keep fixed
     webLeft.setDepth(5) // Behind title elements
-    webLeft.setAlpha(0.5) // More subtle transparency
-    webLeft.setBlendMode(Phaser.BlendModes.MULTIPLY) // Blend better with background
+    webLeft.setAlpha(0.8) // More visible transparency
+    webLeft.setBlendMode(Phaser.BlendModes.NORMAL) // Normal blend for better visibility
+    webLeft.setAngle(-15) // Slight rotation for natural look
     
-    // Top-right web using web 2.jpg - better positioned and scaled
+    console.log('🕸️ Top-left web created:', webLeft)
+    
+    // Top-right web using web 2.jpg - more visible
     const webRight = this.add.image(W - 60, 60, 'spider-web-right')
     webRight.setOrigin(1, 0) // Anchor to top-right corner
-    webRight.setScale(0.25) // Smaller, more subtle scale
+    webRight.setScale(0.4) // Increased scale for better visibility
     webRight.setScrollFactor(0, 0) // Keep fixed
     webRight.setDepth(5) // Behind title elements
-    webRight.setAlpha(0.5) // More subtle transparency
-    webRight.setBlendMode(Phaser.BlendModes.MULTIPLY) // Blend better with background
+    webRight.setAlpha(0.8) // More visible transparency
+    webRight.setBlendMode(Phaser.BlendModes.NORMAL) // Normal blend for better visibility
+    webRight.setAngle(15) // Slight rotation for natural look
     
-    // Bottom-left web (mirrored spider web.jpg)
+    console.log('🕸️ Top-right web created:', webRight)
+    
+    // Bottom-left web (mirrored spider web.jpg) - more visible
     const webBottomLeft = this.add.image(60, H - 60, 'spider-web-left')
     webBottomLeft.setOrigin(0, 1) // Anchor to bottom-left corner
-    webBottomLeft.setScale(0.25) // Smaller, more subtle scale
+    webBottomLeft.setScale(0.4) // Increased scale for better visibility
     webBottomLeft.setScrollFactor(0, 0) // Keep fixed
     webBottomLeft.setDepth(5) // Behind instruction elements
-    webBottomLeft.setAlpha(0.5) // More subtle transparency
+    webBottomLeft.setAlpha(0.8) // More visible transparency
     webBottomLeft.setFlipY(true) // Flip vertically for bottom corner
-    webBottomLeft.setBlendMode(Phaser.BlendModes.MULTIPLY) // Blend better with background
+    webBottomLeft.setBlendMode(Phaser.BlendModes.NORMAL) // Normal blend for better visibility
+    webBottomLeft.setAngle(-20) // Different rotation
     
-    // Bottom-right web (mirrored web 2.jpg)
+    console.log('🕸️ Bottom-left web created:', webBottomLeft)
+    
+    // Bottom-right web (mirrored web 2.jpg) - more visible
     const webBottomRight = this.add.image(W - 60, H - 60, 'spider-web-right')
     webBottomRight.setOrigin(1, 1) // Anchor to bottom-right corner
-    webBottomRight.setScale(0.25) // Smaller, more subtle scale
+    webBottomRight.setScale(0.4) // Increased scale for better visibility
     webBottomRight.setScrollFactor(0, 0) // Keep fixed
     webBottomRight.setDepth(5) // Behind instruction elements
-    webBottomRight.setAlpha(0.5) // More subtle transparency
+    webBottomRight.setAlpha(0.8) // More visible transparency
     webBottomRight.setFlipY(true) // Flip vertically for bottom corner
-    webBottomRight.setBlendMode(Phaser.BlendModes.MULTIPLY) // Blend better with background
+    webBottomRight.setBlendMode(Phaser.BlendModes.NORMAL) // Normal blend for better visibility
+    webBottomRight.setAngle(20) // Different rotation
+    
+    console.log('🕸️ Bottom-right web created:', webBottomRight)
+    
+    // ========== SIDE WEBS ==========
+    // Left side web (middle)
+    const webLeftSide = this.add.image(40, H / 2, 'spider-web-left')
+    webLeftSide.setOrigin(0, 0.5) // Anchor to left center
+    webLeftSide.setScale(0.3) // Smaller for side placement
+    webLeftSide.setScrollFactor(0, 0) // Keep fixed
+    webLeftSide.setDepth(4) // Behind UI elements
+    webLeftSide.setAlpha(0.6) // More subtle
+    webLeftSide.setBlendMode(Phaser.BlendModes.NORMAL)
+    webLeftSide.setAngle(90) // Rotated 90 degrees for vertical placement
+    
+    // Right side web (middle)
+    const webRightSide = this.add.image(W - 40, H / 2, 'spider-web-right')
+    webRightSide.setOrigin(1, 0.5) // Anchor to right center
+    webRightSide.setScale(0.3) // Smaller for side placement
+    webRightSide.setScrollFactor(0, 0) // Keep fixed
+    webRightSide.setDepth(4) // Behind UI elements
+    webRightSide.setAlpha(0.6) // More subtle
+    webRightSide.setBlendMode(Phaser.BlendModes.NORMAL)
+    webRightSide.setAngle(-90) // Rotated -90 degrees for vertical placement
+    
+    // ========== CENTER AREA WEBS ==========
+    // Top center web (above title) - BOLDER VERSION
+    const webTopCenter = this.add.image(W / 2, 25, 'spider-web-left')
+    webTopCenter.setOrigin(0.5, 0) // Anchor to top center
+    webTopCenter.setScale(0.4) // Larger for more visibility
+    webTopCenter.setScrollFactor(0, 0) // Keep fixed
+    webTopCenter.setDepth(3) // Behind title
+    webTopCenter.setAlpha(0.7) // Much more visible
+    webTopCenter.setBlendMode(Phaser.BlendModes.NORMAL)
+    webTopCenter.setAngle(45) // Diagonal rotation
+    
+    // Bottom center web (below instructions)
+    const webBottomCenter = this.add.image(W / 2, H - 30, 'spider-web-right')
+    webBottomCenter.setOrigin(0.5, 1) // Anchor to bottom center
+    webBottomCenter.setScale(0.25) // Smaller for subtle effect
+    webBottomCenter.setScrollFactor(0, 0) // Keep fixed
+    webBottomCenter.setDepth(3) // Behind instructions
+    webBottomCenter.setAlpha(0.4) // Very subtle
+    webBottomCenter.setBlendMode(Phaser.BlendModes.NORMAL)
+    webBottomCenter.setAngle(-45) // Diagonal rotation
+    
+    // ========== DIAGONAL CORNER WEBS ==========
+    // Top-left diagonal web
+    const webTopLeftDiag = this.add.image(120, 120, 'spider-web-left')
+    webTopLeftDiag.setOrigin(0.5, 0.5) // Center anchor
+    webTopLeftDiag.setScale(0.2) // Small and subtle
+    webTopLeftDiag.setScrollFactor(0, 0) // Keep fixed
+    webTopLeftDiag.setDepth(2) // Very behind
+    webTopLeftDiag.setAlpha(0.3) // Very subtle
+    webTopLeftDiag.setBlendMode(Phaser.BlendModes.NORMAL)
+    webTopLeftDiag.setAngle(30) // Diagonal angle
+    
+    // Top-right diagonal web
+    const webTopRightDiag = this.add.image(W - 120, 120, 'spider-web-right')
+    webTopRightDiag.setOrigin(0.5, 0.5) // Center anchor
+    webTopRightDiag.setScale(0.2) // Small and subtle
+    webTopRightDiag.setScrollFactor(0, 0) // Keep fixed
+    webTopRightDiag.setDepth(2) // Very behind
+    webTopRightDiag.setAlpha(0.3) // Very subtle
+    webTopRightDiag.setBlendMode(Phaser.BlendModes.NORMAL)
+    webTopRightDiag.setAngle(-30) // Diagonal angle
+    
+    // Bottom-left diagonal web
+    const webBottomLeftDiag = this.add.image(120, H - 120, 'spider-web-left')
+    webBottomLeftDiag.setOrigin(0.5, 0.5) // Center anchor
+    webBottomLeftDiag.setScale(0.2) // Small and subtle
+    webBottomLeftDiag.setScrollFactor(0, 0) // Keep fixed
+    webBottomLeftDiag.setDepth(2) // Very behind
+    webBottomLeftDiag.setAlpha(0.3) // Very subtle
+    webBottomLeftDiag.setBlendMode(Phaser.BlendModes.NORMAL)
+    webBottomLeftDiag.setAngle(-30) // Diagonal angle
+    
+    // Bottom-right diagonal web
+    const webBottomRightDiag = this.add.image(W - 120, H - 120, 'spider-web-right')
+    webBottomRightDiag.setOrigin(0.5, 0.5) // Center anchor
+    webBottomRightDiag.setScale(0.2) // Small and subtle
+    webBottomRightDiag.setScrollFactor(0, 0) // Keep fixed
+    webBottomRightDiag.setDepth(2) // Very behind
+    webBottomRightDiag.setAlpha(0.3) // Very subtle
+    webBottomRightDiag.setBlendMode(Phaser.BlendModes.NORMAL)
+    webBottomRightDiag.setAngle(30) // Diagonal angle
+    
+    // ========== ADDITIONAL TOP-RIGHT WEBS ==========
+    // Additional top-right web 1 (closer to corner)
+    const webTopRightExtra1 = this.add.image(W - 100, 100, 'spider-web-left')
+    webTopRightExtra1.setOrigin(0.5, 0.5) // Center anchor
+    webTopRightExtra1.setScale(0.25) // Medium size
+    webTopRightExtra1.setScrollFactor(0, 0) // Keep fixed
+    webTopRightExtra1.setDepth(4) // Behind UI elements
+    webTopRightExtra1.setAlpha(0.5) // Medium visibility
+    webTopRightExtra1.setBlendMode(Phaser.BlendModes.NORMAL)
+    webTopRightExtra1.setAngle(-25) // Different angle for variety
+    
+    // Additional top-right web 2 (further out)
+    const webTopRightExtra2 = this.add.image(W - 80, 140, 'spider-web-right')
+    webTopRightExtra2.setOrigin(0.5, 0.5) // Center anchor
+    webTopRightExtra2.setScale(0.3) // Slightly larger
+    webTopRightExtra2.setScrollFactor(0, 0) // Keep fixed
+    webTopRightExtra2.setDepth(3) // Behind content
+    webTopRightExtra2.setAlpha(0.4) // Subtle visibility
+    webTopRightExtra2.setBlendMode(Phaser.BlendModes.NORMAL)
+    webTopRightExtra2.setAngle(35) // Different angle for variety
+    
+    // Additional top-right web 3 (even more variety)
+    const webTopRightExtra3 = this.add.image(W - 140, 80, 'spider-web-left')
+    webTopRightExtra3.setOrigin(0.5, 0.5) // Center anchor
+    webTopRightExtra3.setScale(0.22) // Small and subtle
+    webTopRightExtra3.setScrollFactor(0, 0) // Keep fixed
+    webTopRightExtra3.setDepth(2) // Very behind
+    webTopRightExtra3.setAlpha(0.35) // Very subtle
+    webTopRightExtra3.setBlendMode(Phaser.BlendModes.NORMAL)
+    webTopRightExtra3.setAngle(-40) // Different angle for variety
+    
+    console.log('🕸️ All web decorations created successfully!')
   }
   
   private createInstructions() {
@@ -821,29 +952,29 @@ export default class MainMenuScene extends Phaser.Scene {
     // Dark, ominous instructions panel with blood red accent
     const instructionsBg = this.add.graphics()
     instructionsBg.fillStyle(0x000000, 0.95) // More opaque background
-    instructionsBg.fillRoundedRect(W / 2 - 385, H - 112, 770, 105, 12)
+    instructionsBg.fillRoundedRect(W / 2 - 395, H - 112, 770, 105, 12)
     instructionsBg.lineStyle(4, 0xff4400, 1) // Brighter orange border
-    instructionsBg.strokeRoundedRect(W / 2 - 385, H - 112, 770, 105, 12)
+    instructionsBg.strokeRoundedRect(W / 2 - 395, H - 112, 770, 105, 12)
     
-    // Inner warning glow
+    // Inner warning glow - properly centered accounting for stroke width
     instructionsBg.lineStyle(2, 0xff6600, 0.6) // Brighter inner glow
-    instructionsBg.strokeRoundedRect(W / 2 - 380, H - 107, 760, 95, 10)
+    instructionsBg.strokeRoundedRect(W / 2 - 390, H - 107, 760, 95, 10)
     
     instructionsBg.setScrollFactor(0, 0)
     instructionsBg.setDepth(50)
     
     // Warning skull icons in corners
-    const skullLeft = this.add.text(W / 2 - 360, H - 90, '☠️', {
+    const skullLeft = this.add.text(W / 2 - 370, H - 80, '☠️', {
       fontSize: '28px'
     })
     skullLeft.setOrigin(0.5)
     skullLeft.setScrollFactor(0, 0)
     skullLeft.setDepth(51)
     
-    const skullRight = this.add.text(W / 2 + 360, H - 90, '☠️', {
+    const skullRight = this.add.text(W / 2 + 355, H - 80, '☠️', {
       fontSize: '28px'
     })
-    skullRight.setOrigin(0.5)
+    skullRight.setOrigin(0.6)
     skullRight.setScrollFactor(0, 0)
     skullRight.setDepth(51)
     
@@ -851,7 +982,7 @@ export default class MainMenuScene extends Phaser.Scene {
     const instructions = this.add.text(W / 2, H - 77, 
       '⚠️ Answer Calculus to Climb... Or Perish! ⚠️',
       {
-        fontSize: '22px',
+        fontSize: '24px',
         fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
         color: '#ff6600',
         stroke: '#ffffff',
@@ -867,7 +998,7 @@ export default class MainMenuScene extends Phaser.Scene {
     const rules = this.add.text(W / 2, H - 50, 
       '✅ Correct = Survive & Climb  •  ❌ Wrong = Fall to Doom  •  💀 3 Lives  •  ⛰️ Summit: 3000m',
       {
-        fontSize: '12px',
+        fontSize: '14px',
         fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
         color: '#ffffff',
         stroke: '#000000',
@@ -883,7 +1014,7 @@ export default class MainMenuScene extends Phaser.Scene {
     const teaser = this.add.text(W / 2, H - 24, 
       '🐛 Legend Speaks of a Golden Bug at the Peak... Will You Find It? ✨',
       {
-        fontSize: '12px',
+        fontSize: '18px',
         fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
         color: '#ffff00',
         stroke: '#000000',

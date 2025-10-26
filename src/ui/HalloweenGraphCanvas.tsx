@@ -747,6 +747,28 @@ export function HalloweenGraphCanvas() {
     ctx.ellipse(1, 12, 28, 8, 0, 0, Math.PI * 2)
     ctx.fill()
     
+    // ========== 8 LEGS WITH CURVED DESIGN (BEHIND BODY) ==========
+    ctx.strokeStyle = '#000009' // Darker gray so legs are visible behind black body
+    ctx.lineWidth = 3 // Slightly thicker for better visibility
+    for (let i = 0; i < 8; i++) {
+      const side = i < 4 ? -1 : 1
+      const index = i % 4
+      
+      // Draw curved leg - extended further out so they're visible beyond body
+      const startX = side * 6
+      const startY = -1.5 + index * 1.5
+      const midX = side * 12 // Extended further out
+      const midY = -3 + index * 1.5 // More curved
+      const endX = side * 18 // Much further out to be visible
+      const endY = 2 + index * 1.5 // More spread out
+      
+      ctx.beginPath()
+      ctx.moveTo(startX, startY)
+      ctx.lineTo(midX, midY)
+      ctx.lineTo(endX, endY)
+      ctx.stroke()
+    }
+    
     // ========== SPIDER BODY ==========
     // Main body (smaller, more compact)
     ctx.fillStyle = '#000000'
@@ -792,28 +814,6 @@ export function HalloweenGraphCanvas() {
     ctx.beginPath()
     ctx.arc(6, -3, 1.5, 0, Math.PI * 2)
     ctx.fill()
-    
-    // ========== 8 LEGS WITH CURVED DESIGN ==========
-    ctx.strokeStyle = '#000000'
-    ctx.lineWidth = 2
-    for (let i = 0; i < 8; i++) {
-      const side = i < 4 ? -1 : 1
-      const index = i % 4
-      
-      // Draw curved leg
-      const startX = side * 6
-      const startY = -1.5 + index * 1.5
-      const midX = side * 9
-      const midY = -2 + index * 1
-      const endX = side * 12
-      const endY = 1 + index * 1
-      
-      ctx.beginPath()
-      ctx.moveTo(startX, startY)
-      ctx.lineTo(midX, midY)
-      ctx.lineTo(endX, endY)
-      ctx.stroke()
-    }
     
     ctx.restore()
     
