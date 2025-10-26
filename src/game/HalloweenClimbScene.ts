@@ -5,12 +5,12 @@ import type { AdventureQuestion } from './gameTypes'
 import { audioManager } from './AudioManager'
 
 /**
- * JACK & THE BEANSTALK CLIMBING SCENE
- * Magical beanstalk setting with leaves, clouds, and sky
- * Spider jumps from leaf to leaf climbing upward
+ * HALLOWEEN PUMPKIN CLIMBING SCENE
+ * Spooky Halloween outdoor setting with pumpkins as platforms
+ * Spider climbs from pumpkin to pumpkin
  */
 
-type LeafPlatform = {
+type PumpkinPlatform = {
   x: number
   y: number
   container: Phaser.GameObjects.Container
@@ -30,13 +30,14 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   // Spider
   spider!: Phaser.GameObjects.Container
   
-  // Leaves
-  leaves: LeafPlatform[] = []
-  currentLeaf: LeafPlatform | null = null
+  // Pumpkins
+  pumpkins: PumpkinPlatform[] = []
+  currentPumpkin: PumpkinPlatform | null = null
   
   // Game state
   currentHeightMeters = 0
-  targetHeight = 3000
+  targetHeight = 200  // Testing limit (Original: 3000m - uncomment for production)
+  // targetHeight = 3000  // Production target - Find the Golden Bug at the peak!
   lives = 3
   score = 0
   waitingForAnswer = false
@@ -44,14 +45,9 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   isGameOver = false
   
   // Environment
-  sun!: Phaser.GameObjects.Arc
-  clouds: Phaser.GameObjects.Container[] = []
-  beanstalk: Phaser.GameObjects.Graphics[] = []
-  magicalParticles: Phaser.GameObjects.Container[] = []
-  
-  // Audio button
-  audioButton!: Phaser.GameObjects.Container
-  audioEnabled = true
+  moon!: Phaser.GameObjects.Arc
+  bats: Phaser.GameObjects.Container[] = []
+  trees: Phaser.GameObjects.Graphics[] = []
   
   // Camera
   cameraFollowY = 0
@@ -62,7 +58,10 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   feedbackText!: Phaser.GameObjects.Text
   
   create() {
-    console.log('🌱 Jack & Beanstalk Scene - Magical climbing adventure!')
+    console.log('🎃 HalloweenClimbScene - Beautiful outdoor Halloween!')
+    
+    // ========== RESET ALL GAME STATE ==========
+    this.resetGameState()
     
     const W = this.scale.width
     const H = this.scale.height
@@ -74,28 +73,20 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     graphics.generateTexture('white', 4, 4)
     graphics.destroy()
     
-    // Reset score
-    const store = useGameStore.getState()
-    store.addScore(-store.score)
+    // Create beautiful Halloween environment
+    this.createHalloweenBackground()
+    this.createMoon()
+    this.createTrees()
+    this.createBats()
     
-    // Create magical beanstalk environment
-    this.createBeanstalkBackground()
-    this.createSun()
-    this.createClouds()
-    this.createBeanstalk()
-    this.createMagicalParticles()
+    // Create pumpkin platforms going upward
+    this.generatePumpkinPlatforms()
     
-    // Create leaf platforms going upward
-    this.generateLeafPlatforms()
-    
-    // Create spider on first leaf
+    // Create spider on first pumpkin
     this.createSpider()
     
     // Create lives display (hearts with spiders)
     this.createLivesDisplay()
-    
-    // Create audio button
-    this.createAudioButton()
     
     // Create UI
     this.createUI()
@@ -112,32 +103,40 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     console.log('✅ Halloween scene ready!')
   }
   
+  private resetGameState() {
+    // Reset all game state variables to initial values
+    this.currentHeightMeters = 0
+    this.lives = 3
+    this.score = 0
+    this.waitingForAnswer = false
+    this.isAnimating = false
+    this.isGameOver = false
+    this.currentPumpkin = null
+    this.pumpkins = []
+    this.bats = []
+    this.trees = []
+    
+    // Reset store score and clear question
+    const store = useGameStore.getState()
+    store.addScore(-store.score)
+    store.setCurrentAdventureQuestion(null)
+    
+    console.log('🔄 Game state reset: Lives=3, Score=0, Height=0m')
+  }
+  
   shutdown() {
     window.removeEventListener('spidercalc-action', this.handleAnswer)
   }
   
   update() {
-    // Animate clouds
-    this.clouds.forEach((cloud, idx) => {
-      // Clouds drift slowly
-      cloud.x += Math.sin(this.time.now * 0.0005 + idx) * 0.3
-      cloud.y += Math.cos(this.time.now * 0.001 + idx) * 0.2
+    // Animate bats
+    this.bats.forEach((bat, idx) => {
+      bat.x += Math.sin(this.time.now * 0.0005 + idx) * 0.3
+      bat.y += Math.cos(this.time.now * 0.001 + idx) * 0.2
       
-      // Keep clouds in bounds
-      if (cloud.x < -100) cloud.x = this.scale.width + 100
-      if (cloud.x > this.scale.width + 100) cloud.x = -100
-    })
-    
-    // Animate magical particles
-    this.magicalParticles.forEach((particle, idx) => {
-      particle.x += Math.sin(this.time.now * 0.002 + idx) * 0.2
-      particle.y += Math.cos(this.time.now * 0.0015 + idx) * 0.1
-      
-      // Keep particles in bounds
-      if (particle.x < -50) particle.x = this.scale.width + 50
-      if (particle.x > this.scale.width + 50) particle.x = -50
-      if (particle.y < -50) particle.y = this.scale.height + 50
-      if (particle.y > this.scale.height + 50) particle.y = -50
+      // Keep bats in bounds
+      if (bat.x < -100) bat.x = this.scale.width + 100
+      if (bat.x > this.scale.width + 100) bat.x = -100
     })
   }
   
@@ -148,18 +147,18 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     // Create a large single background that covers entire play area
     const bg = this.add.graphics()
     
-    // Sky gradient - spooky blue-gray (CONSISTENT throughout)
-    bg.fillGradientStyle(0x2a3f54, 0x2a3f54, 0x4a6f7c, 0x4a6f7c, 1)
+    // Halloween sky gradient - spooky orange to dark purple
+    bg.fillGradientStyle(0x2a1810, 0x2a1810, 0x4a3020, 0x4a3020, 1)
     bg.fillRect(0, -H, W, H + 1000)
     
     // Ground/grass platforms at regular intervals (CONSISTENT)
     for (let y = 0; y > -H; y -= 400) {
-      // Green grass layer
-      bg.fillStyle(0x3d5a3d, 0.8)
+      // Dark Halloween grass layer
+      bg.fillStyle(0x2d3a2d, 0.8)
       bg.fillRect(0, y, W, 60)
       
-      // Grass blades (consistent texture)
-      bg.lineStyle(2, 0x2d4a2d, 0.6)
+      // Spooky grass blades (consistent texture)
+      bg.lineStyle(2, 0x1d2a1d, 0.6)
       for (let x = 0; x < W; x += 10) {
         const grassH = Phaser.Math.Between(10, 20)
         bg.beginPath()
@@ -169,93 +168,40 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       }
     }
     
-    // Add misty clouds (evenly spaced)
-    for (let y = -200; y > -H; y -= 300) {
-      this.createCloud(150, y)
-      this.createCloud(500, y - 150)
-    }
-    
-    // Set scroll factor so background scrolls with camera
-    bg.setScrollFactor(1)
-  }
-  
-  private createCloud(x: number, y: number) {
-    const cloud = this.add.graphics()
-    cloud.fillStyle(0xe0e0e0, 0.3)
-    
-    // Fluffy cloud shape
-    cloud.fillCircle(x, y, 40)
-    cloud.fillCircle(x + 30, y, 35)
-    cloud.fillCircle(x + 60, y, 40)
-    cloud.fillCircle(x + 30, y - 20, 30)
-    
-    // Slowly drift
-    this.tweens.add({
-      targets: cloud,
-      x: x + 100,
-      duration: Phaser.Math.Between(20000, 30000),
-      repeat: -1,
-      yoyo: true
-    })
-  }
-
-  // NEW JACK & BEANSTALK METHODS
-  private createBeanstalkBackground() {
-    const W = this.scale.width
-    const H = 5000 // Tall background for climbing
-    
-    // Create a beautiful sky gradient
-    const bg = this.add.graphics()
-    
-    // Multi-layer sky gradient for depth
-    // Top layer - light blue
-    bg.fillGradientStyle(0x87CEEB, 0x87CEEB, 0x87CEEB, 0x87CEEB, 1)
-    bg.fillRect(0, -H, W, H * 0.3)
-    
-    // Middle layer - medium blue
-    bg.fillGradientStyle(0x87CEEB, 0x87CEEB, 0x4682B4, 0x4682B4, 1)
-    bg.fillRect(0, -H + H * 0.3, W, H * 0.4)
-    
-    // Bottom layer - deeper blue
-    bg.fillGradientStyle(0x4682B4, 0x4682B4, 0x2E4A6B, 0x2E4A6B, 1)
-    bg.fillRect(0, -H + H * 0.7, W, H * 0.3 + 1000)
-    
-    bg.setScrollFactor(1)
+    // Set scroll factor to 0 to prevent shifting (keep background fixed)
+    bg.setScrollFactor(0, 0)
     bg.setDepth(-1000)
   }
 
-  private createSun() {
+  private createMoon() {
     const W = this.scale.width
-    const H = this.scale.height
     
-    // Create sun in top right
-    this.sun = this.add.circle(W - 100, 100, 60, 0xFFD700, 0.9)
-    this.sun.setScrollFactor(0, 0.3) // Parallax effect
-    this.sun.setDepth(-500)
+    // Create spooky moon in top right
+    this.moon = this.add.circle(W - 100, 100, 50, 0xffffcc, 0.9)
+    this.moon.setScrollFactor(0, 0.3) // Parallax effect
+    this.moon.setDepth(-500)
     
-    // Sun glow
-    const glow = this.add.circle(W - 100, 100, 80, 0xFFD700, 0.3)
+    // Moon crater details
+    const crater1 = this.add.circle(W - 115, 90, 8, 0xccccaa, 0.5)
+    const crater2 = this.add.circle(W - 90, 110, 6, 0xccccaa, 0.5)
+    const crater3 = this.add.circle(W - 105, 115, 4, 0xccccaa, 0.5)
+    
+    crater1.setScrollFactor(0, 0.3)
+    crater2.setScrollFactor(0, 0.3)
+    crater3.setScrollFactor(0, 0.3)
+    crater1.setDepth(-499)
+    crater2.setDepth(-499)
+    crater3.setDepth(-499)
+    
+    // Moon glow
+    const glow = this.add.circle(W - 100, 100, 70, 0xffffcc, 0.2)
     glow.setScrollFactor(0, 0.3)
     glow.setDepth(-501)
     
-    // Animated sun rays
-    const rays = this.add.graphics()
-    rays.lineStyle(4, 0xFFD700, 0.8)
-    for (let i = 0; i < 12; i++) {
-      const angle = (i * Math.PI) / 6
-      const x1 = W - 100 + Math.cos(angle) * 70
-      const y1 = 100 + Math.sin(angle) * 70
-      const x2 = W - 100 + Math.cos(angle) * 100
-      const y2 = 100 + Math.sin(angle) * 100
-      rays.lineBetween(x1, y1, x2, y2)
-    }
-    rays.setScrollFactor(0, 0.3)
-    rays.setDepth(-500)
-    
-    // Pulsing sun animation
+    // Pulsing moon animation
     this.tweens.add({
-      targets: this.sun,
-      scale: 1.1,
+      targets: this.moon,
+      alpha: 0.7,
       duration: 4000,
       yoyo: true,
       repeat: -1,
@@ -264,7 +210,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     
     this.tweens.add({
       targets: glow,
-      alpha: 0.5,
+      alpha: 0.4,
       scale: 1.2,
       duration: 3000,
       yoyo: true,
@@ -273,135 +219,42 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     })
   }
 
-  private createClouds() {
-    const W = this.scale.width
-    const H = 5000
-    
-    // Create beautiful floating clouds
-    for (let i = 0; i < 20; i++) {
-      const cloud = this.add.container(
-        Phaser.Math.Between(0, W),
-        Phaser.Math.Between(-H, 0)
-      )
-      
-      // Main cloud body
-      const cloudBody = this.add.ellipse(0, 0, 100, 50, 0xFFFFFF, 0.9)
-      const cloudLeft = this.add.ellipse(-40, -15, 60, 35, 0xFFFFFF, 0.9)
-      const cloudRight = this.add.ellipse(40, -15, 60, 35, 0xFFFFFF, 0.9)
-      const cloudTop = this.add.ellipse(0, -25, 70, 30, 0xFFFFFF, 0.9)
-      
-      // Cloud shadows for depth
-      const shadow = this.add.ellipse(5, 5, 100, 50, 0x000000, 0.1)
-      shadow.setDepth(-1)
-      
-      cloud.add([shadow, cloudBody, cloudLeft, cloudRight, cloudTop])
-      cloud.setScrollFactor(0, 0.3) // Parallax effect
-      cloud.setDepth(-400)
-      
-      // Gentle floating animation
-      this.tweens.add({
-        targets: cloud,
-        y: cloud.y + Phaser.Math.Between(-10, 10),
-        duration: Phaser.Math.Between(3000, 6000),
-        yoyo: true,
-        repeat: -1,
-        ease: 'Sine.easeInOut'
-      })
-      
-      this.clouds.push(cloud)
-    }
-  }
-
-  private createBeanstalk() {
-    const W = this.scale.width
-    const H = 5000
-    
-    // Create the main beanstalk trunk with 3D effect
-    const beanstalk = this.add.graphics()
-    
-    // Main trunk with gradient
-    beanstalk.fillGradientStyle(0x32CD32, 0x32CD32, 0x228B22, 0x228B22, 1)
-    beanstalk.fillRect(W / 2 - 25, -H, 50, H + 1000)
-    
-    // Left shadow for 3D effect
-    beanstalk.fillStyle(0x1a5f1a, 0.8)
-    beanstalk.fillRect(W / 2 - 25, -H, 15, H + 1000)
-    
-    // Right highlight for 3D effect
-    beanstalk.fillStyle(0x90EE90, 0.6)
-    beanstalk.fillRect(W / 2 + 10, -H, 15, H + 1000)
-    
-    // Texture lines
-    beanstalk.lineStyle(3, 0x006400, 0.8)
-    for (let y = -H; y < 1000; y += 80) {
-      beanstalk.lineBetween(W / 2 - 20, y, W / 2 + 20, y)
-    }
-    
-    // Vertical texture lines
-    beanstalk.lineStyle(2, 0x006400, 0.6)
-    for (let x = W / 2 - 20; x <= W / 2 + 20; x += 10) {
-      beanstalk.lineBetween(x, -H, x, 1000)
-    }
-    
-    beanstalk.setScrollFactor(1)
-    beanstalk.setDepth(-300)
-    
-    this.beanstalk.push(beanstalk)
-  }
-
-  private createMagicalParticles() {
-    const W = this.scale.width
-    const H = 5000
-    
-    // Create magical sparkles
-    for (let i = 0; i < 30; i++) {
-      const particle = this.add.container(
-        Phaser.Math.Between(0, W),
-        Phaser.Math.Between(-H, 0)
-      )
-      
-      // Magical sparkle
-      const sparkle = this.add.graphics()
-      sparkle.fillStyle(0xFFD700, 0.8)
-      sparkle.fillCircle(0, 0, 3)
-      sparkle.fillStyle(0xFFFFFF, 0.9)
-      sparkle.fillCircle(0, 0, 1)
-      
-      particle.add(sparkle)
-      particle.setScrollFactor(0, 0.5)
-      particle.setDepth(-200)
-      
-      // Twinkling animation
-      this.tweens.add({
-        targets: particle,
-        alpha: 0.3,
-        scale: 1.5,
-        duration: Phaser.Math.Between(1000, 3000),
-        yoyo: true,
-        repeat: -1,
-        ease: 'Sine.easeInOut'
-      })
-      
-      this.magicalParticles.push(particle)
-    }
-  }
-  
-  private createMoon() {
-    // Removed - using sun instead for Jack & Beanstalk theme
-  }
-  
   private createTrees() {
-    // Removed - using beanstalk instead for Jack & Beanstalk theme
+    const W = this.scale.width
+    const H = 5000
+    
+    // Create spooky trees on both sides (parallax effect)
+    for (let y = 0; y > -H; y -= 800) {
+      // Left side trees
+      const leftTree = this.createTree(50, y)
+      leftTree.setScrollFactor(0, 0.2) // Slight parallax but mostly fixed
+      leftTree.setDepth(-300)
+      this.trees.push(leftTree)
+      
+      // Right side trees
+      const rightTree = this.createTree(W - 50, y - 400)
+      rightTree.setScrollFactor(0, 0.2) // Slight parallax but mostly fixed
+      rightTree.setDepth(-300)
+      this.trees.push(rightTree)
+    }
   }
-  
+
   private createTree(x: number, baseY: number): Phaser.GameObjects.Graphics {
     const tree = this.add.graphics()
     
-    // Tree trunk (brown)
+    // Tree trunk (brown) with 3D shading
     tree.fillStyle(0x4a3020, 1)
     tree.fillRect(x - 15, baseY - 150, 30, 150)
     
-    // Spooky branches
+    // Trunk shadow (left side)
+    tree.fillStyle(0x3a2010, 1)
+    tree.fillRect(x - 15, baseY - 150, 10, 150)
+    
+    // Trunk highlight (right side)
+    tree.fillStyle(0x6a5040, 0.7)
+    tree.fillRect(x + 5, baseY - 150, 10, 150)
+    
+    // Spooky branches with 3D effect
     tree.lineStyle(8, 0x4a3020, 1)
     const numBranches = 5
     for (let i = 0; i < numBranches; i++) {
@@ -409,9 +262,17 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       const branchLength = 40 - i * 5
       const side = i % 2 === 0 ? 1 : -1
       
+      // Main branch
       tree.beginPath()
       tree.moveTo(x, branchY)
       tree.lineTo(x + side * branchLength, branchY - 20)
+      tree.strokePath()
+      
+      // Branch shadow
+      tree.lineStyle(6, 0x3a2010, 0.6)
+      tree.beginPath()
+      tree.moveTo(x + 2, branchY + 2)
+      tree.lineTo(x + side * branchLength + 2, branchY - 18)
       tree.strokePath()
       
       // Sub-branches
@@ -420,68 +281,74 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       tree.moveTo(x + side * branchLength, branchY - 20)
       tree.lineTo(x + side * (branchLength + 15), branchY - 35)
       tree.strokePath()
+      
+      // Reset main line style
+      tree.lineStyle(8, 0x4a3020, 1)
     }
     
     return tree
   }
-  
+
   private createBats() {
-    // Removed - using magical particles instead for Jack & Beanstalk theme
+    const W = this.scale.width
+    const H = 5000
+    
+    // Create flying bats
+    for (let i = 0; i < 8; i++) {
+      const bat = this.createBat(
+        Phaser.Math.Between(50, W - 50),
+        Phaser.Math.Between(-H + 200, -200)
+      )
+      bat.setScrollFactor(0, 0.5) // Parallax effect
+      bat.setDepth(-400)
+      this.bats.push(bat)
+    }
   }
-  
+
   private createBat(x: number, y: number): Phaser.GameObjects.Container {
     const bat = this.add.container(x, y)
     
     const batGraphic = this.add.graphics()
-    batGraphic.fillStyle(0x000000, 1)
     
-    // Body
+    // Bat body with 3D shading
+    batGraphic.fillStyle(0x000000, 1)
     batGraphic.fillEllipse(0, 0, 12, 8)
     
-    // Wings
+    // Body highlight
+    batGraphic.fillStyle(0x333333, 0.6)
+    batGraphic.fillEllipse(-2, -2, 6, 4)
+    
+    // Wings with 3D effect
+    batGraphic.fillStyle(0x111111, 1)
     batGraphic.fillTriangle(-6, 0, -20, -8, -12, 4)
     batGraphic.fillTriangle(6, 0, 20, -8, 12, 4)
+    
+    // Wing highlights
+    batGraphic.fillStyle(0x333333, 0.4)
+    batGraphic.fillTriangle(-8, -2, -18, -6, -14, 2)
+    batGraphic.fillTriangle(8, -2, 18, -6, 14, 2)
     
     bat.add(batGraphic)
     
     // Flapping animation
     this.tweens.add({
       targets: batGraphic,
-      scaleX: 1.2,
-      duration: 300,
+      scaleX: 1.3,
+      duration: 200,
       yoyo: true,
-      repeat: -1
+      repeat: -1,
+      ease: 'Sine.easeInOut'
     })
     
     return bat
-  }
-  
-  private generateLeafPlatforms() {
-    const W = this.scale.width
-    
-    // Generate leaves going upward
-    let currentY = this.scale.height - 100
-    const totalLeaves = 30
-    
-    for (let i = 0; i < totalLeaves; i++) {
-      const x = Phaser.Math.Between(150, W - 150)
-      currentY -= Phaser.Math.Between(120, 180)
-      
-      const heightMeters = i * 100
-      const leaf = this.createLeaf(x, currentY, heightMeters)
-      
-      this.leaves.push({
-        x, y: currentY, container: leaf, heightMeters
-      })
-    }
   }
 
   private generatePumpkinPlatforms() {
     const W = this.scale.width
     
-    // Generate pumpkins going upward
+    // Generate pumpkins going upward (need 31 pumpkins to reach 3000m)
     let currentY = this.scale.height - 100
-    const totalPumpkins = 30
+    const totalPumpkins = 31 // 0m, 100m, 200m ... 3000m
     
     for (let i = 0; i < totalPumpkins; i++) {
       const x = Phaser.Math.Between(150, W - 150)
@@ -490,12 +357,12 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       const heightMeters = i * 100
       const pumpkin = this.createPumpkin(x, currentY, heightMeters)
       
-      this.leaves.push({
+      this.pumpkins.push({
         x, y: currentY, container: pumpkin, heightMeters
       })
     }
   }
-  
+
   private createPumpkin(x: number, y: number, heightMeters: number): Phaser.GameObjects.Container {
     const container = this.add.container(x, y)
     
@@ -650,117 +517,12 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     return container
   }
 
-  private createLeaf(x: number, y: number, heightMeters: number): Phaser.GameObjects.Container {
-    const container = this.add.container(x, y)
-    
-    // ========== 3D SHADOW (depth effect) ==========
-    const shadow = this.add.ellipse(3, 25, 60, 15, 0x000000, 0.3)
-    shadow.setDepth(-1)
-    container.add(shadow)
-    
-    const leaf = this.add.graphics()
-    
-    // ========== 3D LEAF BODY ==========
-    // Base green color
-    leaf.fillStyle(0x228B22, 1)
-    leaf.fillEllipse(0, 0, 60, 40)
-    
-    // Dark shadow on right side (3D shading)
-    leaf.fillStyle(0x1a5f1a, 0.6)
-    leaf.fillEllipse(15, 5, 25, 30)
-    
-    // Bright highlight on left (3D lighting)
-    leaf.fillStyle(0x32cd32, 0.8)
-    leaf.fillEllipse(-15, -8, 20, 20)
-    
-    // Top highlight (light from above)
-    leaf.fillStyle(0x90ee90, 0.7)
-    leaf.fillEllipse(0, -15, 30, 12)
-    
-    // ========== LEAF VEINS ==========
-    leaf.lineStyle(2, 0x006400, 0.8)
-    // Main vein
-    leaf.beginPath()
-    leaf.moveTo(0, -20)
-    leaf.lineTo(0, 20)
-    leaf.strokePath()
-    
-    // Side veins
-    for (let i = -1; i <= 1; i += 2) {
-      leaf.beginPath()
-      leaf.moveTo(0, -10)
-      leaf.lineTo(i * 20, 0)
-      leaf.strokePath()
-      
-      leaf.beginPath()
-      leaf.moveTo(0, 0)
-      leaf.lineTo(i * 25, 10)
-      leaf.strokePath()
-    }
-    
-    // ========== LEAF EDGE TEXTURE ==========
-    leaf.lineStyle(1, 0x006400, 0.6)
-    leaf.beginPath()
-    leaf.arc(0, 0, 30, 0, Math.PI * 2)
-    leaf.strokePath()
-    
-    container.add(leaf)
-    
-    // ========== 3D GLOW EFFECT ==========
-    const glow = this.add.circle(0, 0, 35, 0x32cd32, 0.1)
-    glow.setBlendMode(Phaser.BlendModes.ADD)
-    container.add(glow)
-    
-    // Gentle swaying animation
-    this.tweens.add({
-      targets: container,
-      rotation: 0.1,
-      duration: 3000,
-      yoyo: true,
-      repeat: -1,
-      ease: 'Sine.easeInOut'
-    })
-    
-    // Height label (meters)
-    if (heightMeters % 500 === 0 && heightMeters > 0) {
-      const label = this.add.text(0, -50, `${heightMeters}m`, {
-        fontSize: '16px',
-        color: '#ffd700',
-        fontFamily: 'Arial Black',
-        stroke: '#000000',
-        strokeThickness: 3
-      })
-      label.setOrigin(0.5)
-      container.add(label)
-    }
-    
-    // Make clickable
-    container.setInteractive(new Phaser.Geom.Ellipse(0, 0, 60, 40), Phaser.Geom.Ellipse.Contains)
-    container.on('pointerdown', () => {
-      if (!this.waitingForAnswer || this.isAnimating || this.isGameOver) return
-      
-      // Check if this is a valid target
-      const distance = Phaser.Math.Distance.Between(
-        this.spider.x, this.spider.y, 
-        container.x, container.y
-      )
-      
-      if (distance < 200) {
-        this.currentLeaf = this.leaves.find(l => l.container === container) || null
-        container.setScale(1.15)
-        this.showMessage('📝 Now answer the question!', 0xffd700, this.scale.height / 2 - 100)
-      }
-    })
-    
-    return container
-  }
-  
   private createSpider() {
-    // Start on first leaf
-    const firstLeaf = this.leaves[0]
-    this.currentLeaf = firstLeaf
+    // Start on first pumpkin
+    const firstPumpkin = this.pumpkins[0]
+    this.currentPumpkin = firstPumpkin
     
-    this.spider = this.add.container(firstLeaf.x, firstLeaf.y - 50)
+    this.spider = this.add.container(firstPumpkin.x, firstPumpkin.y - 50)
     
     // ========== 3D SPIDER SHADOW ==========
     const spiderShadow = this.add.ellipse(3, 25, 55, 15, 0x000000, 0.5)
@@ -819,6 +581,12 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       this.spider.add(leg)
     }
     
+    // ========== ENSURE SPIDER STARTS WITH NO ROTATION ==========
+    this.spider.rotation = 0
+    this.spider.angle = 0
+    this.spider.scaleX = 1
+    this.spider.scaleY = 1
+    
     // ========== IDLE ANIMATION ==========
     this.tweens.add({
       targets: this.spider,
@@ -834,7 +602,8 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   
   private createLivesDisplay() {
     this.livesDisplay = this.add.container(20, 20)
-    this.livesDisplay.setScrollFactor(0)
+    this.livesDisplay.setScrollFactor(0, 0) // Lock to screen
+    this.livesDisplay.setDepth(1000) // Always on top
     
     this.updateLivesDisplay()
   }
@@ -874,68 +643,34 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     }
   }
   
-  private createAudioButton() {
+  private createUI() {
     const W = this.scale.width
     const H = this.scale.height
     
-    // Audio button container
-    this.audioButton = this.add.container(W - 80, 20)
-    
-    // Button background
-    const buttonBg = this.add.rectangle(0, 0, 60, 40, 0x000000, 0.7)
-    buttonBg.setStrokeStyle(2, this.audioEnabled ? 0x00ff00 : 0xff0000)
-    buttonBg.setScrollFactor(0)
-    
-    // Button text
-    const buttonText = this.add.text(0, 0, this.audioEnabled ? '🔊' : '🔇', {
-      fontSize: '20px',
-      fontFamily: 'Arial, sans-serif',
-      color: '#ffffff'
-    })
-    buttonText.setOrigin(0.5)
-    buttonText.setScrollFactor(0)
-    
-    // Make interactive
-    buttonBg.setInteractive()
-    buttonBg.on('pointerdown', () => {
-      this.toggleAudio()
-    })
-    
-    // Add to container
-    this.audioButton.add([buttonBg, buttonText])
-    this.audioButton.setScrollFactor(0)
-    this.audioButton.setDepth(1000)
-  }
-
-  private toggleAudio() {
-    this.audioEnabled = audioManager.toggleAudio()
-    
-    // Update button appearance
-    const buttonBg = this.audioButton.list[0] as Phaser.GameObjects.Rectangle
-    const buttonText = this.audioButton.list[1] as Phaser.GameObjects.Text
-    
-    buttonBg.setStrokeStyle(2, this.audioEnabled ? 0x00ff00 : 0xff0000)
-    buttonText.setText(this.audioEnabled ? '🔊' : '🔇')
-  }
-
-  private createUI() {
-    const W = this.scale.width
-    
+    // Height/Progress text - top center, fixed to screen
     this.heightText = this.add.text(W / 2, 20, '', {
       fontSize: '24px',
-      fontFamily: 'Arial Black',
+      fontFamily: 'Impact, Arial Black',
       color: '#ffd700',
       stroke: '#000000',
-      strokeThickness: 4
-    }).setOrigin(0.5).setScrollFactor(0)
+      strokeThickness: 5
+    })
+    this.heightText.setOrigin(0.5)
+    this.heightText.setScrollFactor(0, 0) // Lock to screen
+    this.heightText.setDepth(1000) // Always on top
     
-    this.feedbackText = this.add.text(W / 2, this.scale.height / 2 - 100, '', {
-      fontSize: '64px',
-      fontFamily: 'Arial Black',
+    // Feedback text - center of screen, fixed
+    this.feedbackText = this.add.text(W / 2, H / 2 - 100, '', {
+      fontSize: '72px',
+      fontFamily: 'Impact, Arial Black',
       color: '#00ff00',
       stroke: '#000000',
       strokeThickness: 8
-    }).setOrigin(0.5).setAlpha(0).setScrollFactor(0)
+    })
+    this.feedbackText.setOrigin(0.5)
+    this.feedbackText.setAlpha(0)
+    this.feedbackText.setScrollFactor(0, 0) // Lock to screen
+    this.feedbackText.setDepth(2000) // Very high priority
     
     this.updateUI()
   }
@@ -1038,12 +773,12 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     // Show CORRECT feedback
     this.showFeedback('CORRECT!', 0x00ff00)
     
-    // Find next leaf above
-    const nextLeaf = this.findNextLeafAbove()
+    // Find next pumpkin above
+    const nextPumpkin = this.findNextPumpkinAbove()
     
-    if (nextLeaf) {
-      // JUMP TO LEAF!
-      this.jumpToLeaf(nextLeaf)
+    if (nextPumpkin) {
+      // JUMP TO PUMPKIN!
+      this.jumpToPumpkin(nextPumpkin)
     } else {
       // Reached the end!
       this.onVictory()
@@ -1072,11 +807,11 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       return // Stop here, don't continue
     }
     
-    // Still have lives - fall to previous leaf
-    const previousLeaf = this.findPreviousLeaf()
+    // Still have lives - fall to previous pumpkin
+    const previousPumpkin = this.findPreviousPumpkin()
     
-    if (previousLeaf) {
-      this.fallToLeaf(previousLeaf)
+    if (previousPumpkin) {
+      this.fallToPumpkin(previousPumpkin)
     } else {
       // At first pumpkin, just stay there
       this.time.delayedCall(1500, () => {
@@ -1085,75 +820,118 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     }
   }
   
-  private jumpToLeaf(targetLeaf: LeafPlatform) {
-    console.log('🦘 JUMPING to leaf!')
+  private jumpToPumpkin(targetPumpkin: PumpkinPlatform) {
+    console.log('🦘 JUMPING to pumpkin!')
     
     // Play jump sound
     audioManager.playSoundEffect('jump')
     
-    // Spider prepares to jump
+    // ========== ENHANCED JUMP PREPARATION ==========
+    // Create anticipation effect
+    const prepShadow = this.add.circle(this.spider.x, this.spider.y + 40, 40, 0x000000, 0.3)
+    prepShadow.setDepth(this.spider.depth - 1)
+    
+    this.tweens.add({
+      targets: prepShadow,
+      scaleX: 0.5,
+      scaleY: 0.3,
+      alpha: 0,
+      duration: 200,
+      onComplete: () => prepShadow.destroy()
+    })
+    
+    // Spider crouches and prepares to jump
     this.tweens.add({
       targets: this.spider,
-      scaleY: 0.8,
-      scaleX: 1.1,
+      scaleY: 0.7,
+      scaleX: 1.2,
+      y: this.spider.y + 10,
       duration: 200,
-      yoyo: true,
+      ease: 'Back.easeIn',
       onComplete: () => {
-        // JUMP! - Parabolic arc
-        const jumpDuration = 1000
-        const peakY = (this.spider.y + targetLeaf.y - 50) / 2 - 80
+        // ========== EXPLOSIVE JUMP! ==========
+        const jumpDuration = 1200
+        const peakY = (this.spider.y + targetPumpkin.y - 50) / 2 - 100
         
-        // ========== 3D MOTION BLUR EFFECT ==========
-        // Create motion trail particles
+        // Launch burst effect
+        const burstParticles = this.add.particles(this.spider.x, this.spider.y + 30, 'white', {
+          speed: { min: 50, max: 150 },
+          angle: { min: 60, max: 120 },
+          scale: { start: 0.8, end: 0 },
+          alpha: { start: 0.7, end: 0 },
+          lifespan: 600,
+          tint: [0xffd700, 0xffaa00, 0xffffff],
+          quantity: 15,
+          blendMode: Phaser.BlendModes.ADD,
+          gravityY: 100
+        })
+        burstParticles.explode(15)
+        this.time.delayedCall(700, () => burstParticles.destroy())
+        
+        // Motion trail particles during flight
         const motionTrail = this.add.particles(this.spider.x, this.spider.y, 'white', {
           speed: 0,
-          lifespan: 400,
-          scale: { start: 1.2, end: 0 },
-          alpha: { start: 0.6, end: 0 },
+          lifespan: 500,
+          scale: { start: 1.5, end: 0 },
+          alpha: { start: 0.7, end: 0 },
           tint: 0x000000,
-          frequency: 30,
+          frequency: 25,
           follow: this.spider,
           blendMode: Phaser.BlendModes.MULTIPLY
         })
         
-        // Arc to peak
+        // Ascending arc - smooth ease out
         this.tweens.add({
           targets: this.spider,
           y: peakY,
-          x: (this.spider.x + targetLeaf.x) / 2,
+          x: (this.spider.x + targetPumpkin.x) / 2,
+          scaleY: 1.05,
+          scaleX: 0.95,
           duration: jumpDuration / 2,
           ease: 'Quad.easeOut'
         })
         
-        // Arc to target
+        // Smooth single rotation for entire jump
         this.tweens.add({
           targets: this.spider,
-          y: targetLeaf.y - 50,
-          x: targetLeaf.x,
+          rotation: Math.PI * 2,
+          duration: jumpDuration,
+          ease: 'Linear'
+        })
+        
+        // Descending arc - smooth ease in
+        this.tweens.add({
+          targets: this.spider,
+          y: targetPumpkin.y - 50,
+          x: targetPumpkin.x,
+          scaleY: 1,
+          scaleX: 1,
           duration: jumpDuration / 2,
           delay: jumpDuration / 2,
           ease: 'Quad.easeIn',
-          onStart: () => {
-            // Rotate during jump
-            this.tweens.add({
-              targets: this.spider,
-              rotation: Math.PI * 2,
-              duration: jumpDuration
-            })
-          },
           onComplete: () => {
+            // CRITICAL: Reset all spider transformations
             this.spider.rotation = 0
+            this.spider.scaleX = 1
+            this.spider.scaleY = 1
+            this.spider.angle = 0 // Also reset angle
             
             // Stop motion trail
             motionTrail.stop()
             this.time.delayedCall(500, () => motionTrail.destroy())
             
-            // Land effect
-            this.landEffect(targetLeaf)
+            // Stop burst particles
+            if (burstParticles) {
+              burstParticles.stop()
+              this.time.delayedCall(300, () => burstParticles.destroy())
+            }
+            
+            // Enhanced land effect
+            this.landEffect(targetPumpkin)
             
             // Update state
-            this.currentLeaf = targetLeaf
-            this.currentHeightMeters = targetLeaf.heightMeters
+            this.currentPumpkin = targetPumpkin
+            this.currentHeightMeters = targetPumpkin.heightMeters
             this.updateUI()
             
             // Check victory
@@ -1168,45 +946,83 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     })
   }
   
-  private fallToLeaf(targetLeaf: LeafPlatform) {
+  private fallToPumpkin(targetPumpkin: PumpkinPlatform) {
     console.log('💔 FALLING down!')
     
     // Play fall sound
     audioManager.playSoundEffect('fall')
     
-    // Fall animation
+    // ========== DRAMATIC FALL ANIMATION ==========
+    // Spider loses control, tumbles down
     this.tweens.add({
       targets: this.spider,
-      y: targetLeaf.y - 50,
-      x: targetLeaf.x,
-      rotation: -Math.PI,
-      duration: 800,
-      ease: 'Quad.easeIn',
+      scaleX: 0.8,
+      scaleY: 1.2,
+      duration: 100
+    })
+    
+    // Create dizzy stars effect
+    const dizzyStars = this.add.particles(this.spider.x, this.spider.y - 30, 'white', {
+      speed: { min: 20, max: 50 },
+      scale: { start: 0.6, end: 0 },
+      alpha: { start: 1, end: 0 },
+      lifespan: 800,
+      tint: [0xffff00, 0xffffff],
+      quantity: 8,
+      blendMode: Phaser.BlendModes.ADD,
+      angle: { min: -180, max: 0 },
+      follow: this.spider
+    })
+    dizzyStars.explode(8)
+    
+    // Tumbling fall with rotation
+    this.tweens.add({
+      targets: this.spider,
+      y: targetPumpkin.y - 50,
+      x: targetPumpkin.x,
+      rotation: -Math.PI * 1.5, // More dramatic spin
+      scaleX: 1,
+      scaleY: 1,
+      duration: 900,
+      ease: 'Cubic.easeIn',
       onComplete: () => {
+        // CRITICAL: Reset all spider transformations
         this.spider.rotation = 0
+        this.spider.angle = 0
+        this.spider.scaleX = 1
+        this.spider.scaleY = 1
+        
+        // Stop dizzy effect
+        dizzyStars.stop()
+        this.time.delayedCall(300, () => dizzyStars.destroy())
         
         // Land effect
-        this.landEffect(targetLeaf)
+        this.landEffect(targetPumpkin)
         
         // Update state
-        this.currentLeaf = targetLeaf
-        this.currentHeightMeters = targetLeaf.heightMeters
+        this.currentPumpkin = targetPumpkin
+        this.currentHeightMeters = targetPumpkin.heightMeters
         this.updateUI()
         
-        this.showMessage(`Lives remaining: ${this.lives}`, 0xff0000, this.scale.height / 2)
+        // Show lives remaining with animation
+        this.showMessage(
+          `Lives: ${this.lives} ❤️`, 
+          0xff0000, 
+          this.scale.height / 2
+        )
         
         this.continueGame()
       }
     })
   }
   
-  private landEffect(leaf: LeafPlatform) {
+  private landEffect(pumpkin: PumpkinPlatform) {
     // Play land sound
     audioManager.playSoundEffect('land')
     
-    // ========== 3D LEAF SQUASH ==========
+    // ========== 3D PUMPKIN SQUASH ==========
     this.tweens.add({
-      targets: leaf.container,
+      targets: pumpkin.container,
       scaleY: 0.85,
       scaleX: 1.1,
       duration: 100,
@@ -1214,7 +1030,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     })
     
     // ========== 3D DUST EXPLOSION (particles with depth) ==========
-    const dustEmitter = this.add.particles(leaf.x, leaf.y + 30, 'white', {
+    const dustEmitter = this.add.particles(pumpkin.x, pumpkin.y + 30, 'white', {
       speed: { min: 50, max: 150 },
       angle: { min: -110, max: -70 },
       scale: { start: 0.6, end: 0 },
@@ -1234,7 +1050,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     this.cameras.main.shake(150, 0.003)
     
     // ========== IMPACT RING (3D shockwave) ==========
-    const impactRing = this.add.circle(leaf.x, leaf.y + 30, 10, 0xffffff, 0.6)
+    const impactRing = this.add.circle(pumpkin.x, pumpkin.y + 30, 10, 0xffffff, 0.6)
     this.tweens.add({
       targets: impactRing,
       scale: 4,
@@ -1284,34 +1100,34 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     })
   }
   
-  private findNextLeafAbove(): LeafPlatform | null {
-    if (!this.currentLeaf) return this.leaves[0]
+  private findNextPumpkinAbove(): PumpkinPlatform | null {
+    if (!this.currentPumpkin) return this.pumpkins[0]
     
-    // Find closest leaf above current one
-    const leavesAbove = this.leaves.filter(p => 
-      p.heightMeters > this.currentLeaf!.heightMeters
+    // Find closest pumpkin above current one
+    const pumpkinsAbove = this.pumpkins.filter(p => 
+      p.heightMeters > this.currentPumpkin!.heightMeters
     )
     
-    if (leavesAbove.length === 0) return null
+    if (pumpkinsAbove.length === 0) return null
     
     // Get closest one
-    leavesAbove.sort((a, b) => a.heightMeters - b.heightMeters)
-    return leavesAbove[0]
+    pumpkinsAbove.sort((a, b) => a.heightMeters - b.heightMeters)
+    return pumpkinsAbove[0]
   }
   
-  private findPreviousLeaf(): LeafPlatform | null {
-    if (!this.currentLeaf) return null
+  private findPreviousPumpkin(): PumpkinPlatform | null {
+    if (!this.currentPumpkin) return null
     
-    // Find closest leaf below current one
-    const leavesBelow = this.leaves.filter(p => 
-      p.heightMeters < this.currentLeaf!.heightMeters
+    // Find closest pumpkin below current one
+    const pumpkinsBelow = this.pumpkins.filter(p => 
+      p.heightMeters < this.currentPumpkin!.heightMeters
     )
     
-    if (leavesBelow.length === 0) return null
+    if (pumpkinsBelow.length === 0) return null
     
     // Get closest one (highest of the below ones)
-    leavesBelow.sort((a, b) => b.heightMeters - a.heightMeters)
-    return leavesBelow[0]
+    pumpkinsBelow.sort((a, b) => b.heightMeters - a.heightMeters)
+    return pumpkinsBelow[0]
   }
   
   private continueGame() {
@@ -1327,48 +1143,303 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     this.waitingForAnswer = false
     this.isAnimating = false
     
-    console.log('👑 VICTORY! Reached 3000m!')
+    console.log('👑 VICTORY! Reached target height!')
     
-    const W = this.scale.width / 2
-    const H = this.cameras.main.scrollY + this.scale.height / 2
+    // FIXED: Use actual screen center coordinates
+    const centerX = this.scale.width / 2
+    const centerY = this.scale.height / 2
     
     const store = useGameStore.getState()
     
-    const victory = this.add.text(W, H - 60, '👑 CROWN RECOVERED! 👑\nYou mastered Calculus!', {
-      fontSize: '40px',
-      fontFamily: 'Arial Black',
+    // ========== CREATE VICTORY SCENE OVERLAY ==========
+    const overlay = this.add.rectangle(centerX, centerY, this.scale.width, this.scale.height, 0x000000, 0)
+    overlay.setScrollFactor(0, 0)
+    overlay.setDepth(998)
+    
+    // Fade in dark overlay - SLOWER
+    this.tweens.add({
+      targets: overlay,
+      alpha: 0.85,
+      duration: 1500,
+      ease: 'Power2'
+    })
+
+    // ========== CONFETTI GIF OVERLAY (DOM) - DELAYED ==========
+    const confetti = this.add.dom(centerX, centerY).createFromHTML(
+      '<img src="/confetti.gif" style="width:800px;height:600px;object-fit:cover;opacity:0.7;pointer-events:none;" />'
+    )
+    confetti.setScrollFactor(0, 0)
+    confetti.setDepth(1001)
+    confetti.setAlpha(0)
+    this.tweens.add({
+      targets: confetti,
+      alpha: 1,
+      duration: 1500,
+      delay: 800,
+      ease: 'Sine.easeInOut'
+    })
+
+    // ========== GOLDEN SPIDER BUG (Spooky Halloween Trophy) ==========
+    const goldenBug = this.add.container(centerX, centerY - 120)
+    goldenBug.setScrollFactor(0, 0)
+    goldenBug.setDepth(1005)
+    goldenBug.setAlpha(0)
+    goldenBug.setScale(0.5)
+    
+    // Bug body (golden metallic)
+    const bugBody = this.add.ellipse(0, 0, 70, 50, 0xffd700)
+    const bugShine = this.add.ellipse(-12, -8, 25, 18, 0xffed4e, 0.9)
+    const bugShadow = this.add.ellipse(15, 10, 30, 20, 0xcc9900, 0.6)
+    
+    // Golden wings (beetle style)
+    const wingL = this.add.graphics()
+    wingL.fillStyle(0xffa500, 1)
+    wingL.fillEllipse(-25, -5, 30, 50)
+    wingL.lineStyle(2, 0xff8c00, 1)
+    wingL.strokeEllipse(-25, -5, 30, 50)
+    
+    const wingR = this.add.graphics()
+    wingR.fillStyle(0xffa500, 1)
+    wingR.fillEllipse(25, -5, 30, 50)
+    wingR.lineStyle(2, 0xff8c00, 1)
+    wingR.strokeEllipse(25, -5, 30, 50)
+    
+    // 6 legs (beetle style)
+    const legs = this.add.graphics()
+    legs.lineStyle(4, 0x000000, 1)
+    for (let i = 0; i < 6; i++) {
+      const side = i < 3 ? -1 : 1
+      const index = i % 3
+      const legY = -15 + index * 15
+      
+      legs.beginPath()
+      legs.moveTo(side * 25, legY)
+      legs.lineTo(side * 40, legY - 5)
+      legs.lineTo(side * 55, legY + 10)
+      legs.strokePath()
+    }
+    
+    // Antennae
+    const antennae = this.add.graphics()
+    antennae.lineStyle(3, 0x8b7355, 1)
+    antennae.beginPath()
+    antennae.moveTo(-8, -20)
+    antennae.lineTo(-15, -40)
+    antennae.strokePath()
+    antennae.beginPath()
+    antennae.moveTo(8, -20)
+    antennae.lineTo(15, -40)
+    antennae.strokePath()
+    
+    // Eyes (spooky red)
+    const eyeL = this.add.circle(-12, -8, 6, 0xff0000)
+    const eyeR = this.add.circle(12, -8, 6, 0xff0000)
+    const pupilL = this.add.circle(-12, -8, 3, 0x000000)
+    const pupilR = this.add.circle(12, -8, 3, 0x000000)
+    
+    // Glow effect
+    const glow = this.add.circle(0, 0, 80, 0xffd700, 0.3)
+    glow.setBlendMode(Phaser.BlendModes.ADD)
+    
+    goldenBug.add([glow, legs, antennae, wingL, wingR, bugShadow, bugBody, bugShine, eyeL, eyeR, pupilL, pupilR])
+    
+    // Animate golden bug entrance - SLOWER AND MORE DELAYED
+    this.tweens.add({
+      targets: goldenBug,
+      alpha: 1,
+      scale: 1.2,
+      duration: 1500,
+      ease: 'Back.easeOut',
+      delay: 1600
+    })
+    
+    // Floating animation
+    this.tweens.add({
+      targets: goldenBug,
+      y: centerY - 130,
+      duration: 1500,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+      delay: 1600
+    })
+    
+    // Rotating glow
+    this.tweens.add({
+      targets: glow,
+      scale: 1.5,
+      alpha: 0.5,
+      duration: 2000,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    })
+    
+    // Wing flap animation
+    this.tweens.add({
+      targets: [wingL, wingR],
+      scaleY: 1.2,
+      duration: 300,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    })
+    
+    // ========== TROPHY GIF (secondary decoration) - SLOWER ==========
+    const trophy = this.add.dom(centerX + 180, centerY - 60).createFromHTML(
+      '<img src="/trophy.gif" style="width:120px;height:120px;filter: drop-shadow(0 5px 10px rgba(0,0,0,0.4));" />'
+    )
+    trophy.setScrollFactor(0, 0)
+    trophy.setDepth(1003)
+    trophy.setAlpha(0)
+    trophy.setScale(0.6)
+    this.tweens.add({
+      targets: trophy,
+      alpha: 1,
+      scale: 0.8,
+      duration: 1000,
+      ease: 'Back.easeOut',
+      delay: 2200
+    })
+    
+    // ========== FIREWORKS PARTICLES - SLOWER & CENTERED ==========
+    for (let i = 0; i < 8; i++) {
+      this.time.delayedCall(1800 + i * 600, () => {
+        const fireworkX = Phaser.Math.Between(centerX - 250, centerX + 250)
+        const fireworkY = Phaser.Math.Between(centerY - 200, centerY - 50)
+        
+        const firework = this.add.particles(fireworkX, fireworkY, 'white', {
+          speed: { min: 100, max: 300 },
+          scale: { start: 1, end: 0 },
+          alpha: { start: 1, end: 0 },
+          lifespan: 1500,
+          tint: [0xffd700, 0xff6b35, 0x8b5cf6, 0x00ff00, 0xff1493],
+          quantity: 50,
+          blendMode: Phaser.BlendModes.ADD,
+          gravityY: 200
+        })
+        firework.setScrollFactor(0, 0)
+        firework.setDepth(1002)
+        firework.explode()
+        
+        this.time.delayedCall(2000, () => firework.destroy())
+      })
+    }
+    
+    // ========== VICTORY TEXT - CENTERED & SLOWER ==========
+    const victoryText = this.add.text(centerX, centerY + 60, '🎃 VICTORY! 🎃', {
+      fontSize: '56px',
+      fontFamily: 'Impact, Arial Black',
       color: '#ffd700',
       stroke: '#000000',
-      strokeThickness: 6,
-      align: 'center'
-    }).setOrigin(0.5).setScrollFactor(0)
+      strokeThickness: 8
+    })
+    victoryText.setOrigin(0.5)
+    victoryText.setScrollFactor(0, 0)
+    victoryText.setDepth(1006)
+    victoryText.setAlpha(0)
     
     this.tweens.add({
-      targets: victory,
-      scaleX: 1.1,
-      scaleY: 1.1,
-      duration: 1000,
+      targets: victoryText,
+      alpha: 1,
+      scale: 1.1,
+      duration: 800,
+      ease: 'Back.easeOut',
+      delay: 2800,
       yoyo: true,
       repeat: -1
     })
     
-    const scoreText = this.add.text(W, H + 40, `Final Score: ${store.score}`, {
-      fontSize: '28px',
+    // Subtitle
+    const subtitle = this.add.text(centerX, centerY + 115, 'You found the Golden Bug!', {
+      fontSize: '22px',
+      fontFamily: 'Arial, sans-serif',
+      color: '#ffed4e',
+      stroke: '#000000',
+      strokeThickness: 3
+    })
+    subtitle.setOrigin(0.5)
+    subtitle.setScrollFactor(0, 0)
+    subtitle.setDepth(1006)
+    subtitle.setAlpha(0)
+    
+    this.tweens.add({
+      targets: subtitle,
+      alpha: 1,
+      duration: 800,
+      ease: 'Power2',
+      delay: 3400
+    })
+    
+    // ========== SCORE DISPLAY ==========
+    const scoreText = this.add.text(centerX, centerY + 155, `Final Score: ${store.score} 🏆`, {
+      fontSize: '26px',
       color: '#ffffff',
       stroke: '#000000',
-      strokeThickness: 4
-    }).setOrigin(0.5).setScrollFactor(0)
+      strokeThickness: 4,
+      fontFamily: 'Arial Black'
+    })
+    scoreText.setOrigin(0.5)
+    scoreText.setScrollFactor(0, 0)
+    scoreText.setDepth(1006)
+    scoreText.setAlpha(0)
     
-    const menuButton = this.add.text(W, H + 100, '🏠 BACK TO MENU', {
-      fontSize: '24px',
+    this.tweens.add({
+      targets: scoreText,
+      alpha: 1,
+      duration: 800,
+      ease: 'Power2',
+      delay: 3800
+    })
+    
+    // ========== BUTTONS - CENTERED & SLOWER ==========
+    const retryButton = this.add.text(centerX - 90, centerY + 210, '🔄 PLAY AGAIN', {
+      fontSize: '20px',
+      color: '#000000',
+      backgroundColor: '#ffd700',
+      padding: { x: 18, y: 10 },
+      fontFamily: 'Arial Black'
+    })
+    retryButton.setOrigin(0.5)
+    retryButton.setScrollFactor(0, 0)
+    retryButton.setDepth(1006)
+    retryButton.setAlpha(0)
+    retryButton.setInteractive()
+    
+    const menuButton = this.add.text(centerX + 90, centerY + 210, '🏠 MENU', {
+      fontSize: '20px',
       color: '#ffffff',
       backgroundColor: '#8b5a3c',
-      padding: { x: 20, y: 12 }
-    }).setOrigin(0.5).setScrollFactor(0).setInteractive()
+      padding: { x: 18, y: 10 },
+      fontFamily: 'Arial Black'
+    })
+    menuButton.setOrigin(0.5)
+    menuButton.setScrollFactor(0, 0)
+    menuButton.setDepth(1006)
+    menuButton.setAlpha(0)
+    menuButton.setInteractive()
+    
+    // Fade in buttons - SLOWER
+    this.tweens.add({
+      targets: [retryButton, menuButton],
+      alpha: 1,
+      duration: 800,
+      ease: 'Power2',
+      delay: 4200
+    })
+    
+    // Button interactions
+    retryButton.on('pointerover', () => retryButton.setScale(1.1))
+    retryButton.on('pointerout', () => retryButton.setScale(1))
+    retryButton.on('pointerdown', () => {
+      console.log('Restarting game...')
+      this.scene.restart()
+    })
     
     menuButton.on('pointerover', () => menuButton.setScale(1.1))
     menuButton.on('pointerout', () => menuButton.setScale(1))
     menuButton.on('pointerdown', () => {
+      console.log('Returning to menu...')
       this.scene.stop('HalloweenClimbScene')
       this.scene.start('MainMenuScene')
     })
@@ -1387,51 +1458,90 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     
     const store = useGameStore.getState()
     
-    // Game Over screen
-    const gameOver = this.add.text(W, H - 60, '💀 GAME OVER 💀\nOut of lives!', {
-      fontSize: '40px',
-      fontFamily: 'Arial Black',
-      color: '#ff0000',
-      stroke: '#000000',
-      strokeThickness: 6,
-      align: 'center'
-    }).setOrigin(0.5).setScrollFactor(0)
+    // ========== EXPLOSION EFFECT + OVERLAY ==========
+    const explosion = this.add.image(W, H, 'explosion')
+    explosion.setOrigin(0.5)
+    explosion.setScrollFactor(0)
+    explosion.setScale(0)
+    explosion.setDepth(1000)
     
-    const scoreText = this.add.text(W, H + 20, `Final Score: ${store.score}\nMax Height: ${Math.floor(this.currentHeightMeters)}m`, {
-      fontSize: '22px',
-      color: '#ffd700',
-      stroke: '#000000',
-      strokeThickness: 3,
-      align: 'center'
-    }).setOrigin(0.5).setScrollFactor(0)
+    const overlay = this.add.rectangle(W, H, this.scale.width * 2, this.scale.height * 2, 0x000000, 0)
+    overlay.setScrollFactor(0)
+    overlay.setDepth(999)
     
-    const retryButton = this.add.text(W - 90, H + 100, '🔄 RETRY', {
-      fontSize: '22px',
-      color: '#ffffff',
-      backgroundColor: '#00aa00',
-      padding: { x: 18, y: 10 }
-    }).setOrigin(0.5).setScrollFactor(0).setInteractive()
+    // Screen shake + explosion animation
+    this.cameras.main.shake(800, 0.02)
     
-    retryButton.on('pointerover', () => retryButton.setScale(1.1))
-    retryButton.on('pointerout', () => retryButton.setScale(1))
-    retryButton.on('pointerdown', () => {
-      console.log('Restarting game...')
-      this.scene.restart()
+    this.tweens.add({
+      targets: explosion,
+      scale: 2,
+      duration: 600,
+      ease: 'Power2'
     })
     
-    const menuButton = this.add.text(W + 90, H + 100, '🏠 MENU', {
-      fontSize: '22px',
-      color: '#ffffff',
-      backgroundColor: '#8b5a3c',
-      padding: { x: 18, y: 10 }
-    }).setOrigin(0.5).setScrollFactor(0).setInteractive()
+    this.tweens.add({
+      targets: overlay,
+      alpha: 0.7,
+      duration: 800
+    })
     
-    menuButton.on('pointerover', () => menuButton.setScale(1.1))
-    menuButton.on('pointerout', () => menuButton.setScale(1))
-    menuButton.on('pointerdown', () => {
-      console.log('Returning to menu...')
-      this.scene.stop('HalloweenClimbScene')
-      this.scene.start('MainMenuScene')
+    // After flash, show game over UI
+    this.time.delayedCall(900, () => {
+      const gameOver = this.add.text(W, H - 60, '💀 GAME OVER 💀\nOut of lives!', {
+        fontSize: '40px',
+        fontFamily: 'Arial Black',
+        color: '#ff0000',
+        stroke: '#000000',
+        strokeThickness: 6,
+        align: 'center'
+      }).setOrigin(0.5).setScrollFactor(0)
+      
+      const scoreText = this.add.text(W, H + 20, `Final Score: ${store.score}\nMax Height: ${Math.floor(this.currentHeightMeters)}m`, {
+        fontSize: '22px',
+        color: '#ffd700',
+        stroke: '#000000',
+        strokeThickness: 3,
+        align: 'center'
+      }).setOrigin(0.5).setScrollFactor(0)
+      
+      const retryButton = this.add.text(W - 90, H + 100, '🔄 RETRY', {
+        fontSize: '22px',
+        color: '#ffffff',
+        backgroundColor: '#00aa00',
+        padding: { x: 18, y: 10 }
+      }).setOrigin(0.5).setScrollFactor(0).setInteractive()
+      
+      retryButton.on('pointerover', () => retryButton.setScale(1.1))
+      retryButton.on('pointerout', () => retryButton.setScale(1))
+      retryButton.on('pointerdown', () => {
+        console.log('Restarting game...')
+        this.scene.restart()
+      })
+      
+      const menuButton = this.add.text(W + 90, H + 100, '🏠 MENU', {
+        fontSize: '22px',
+        color: '#ffffff',
+        backgroundColor: '#8b5a3c',
+        padding: { x: 18, y: 10 }
+      }).setOrigin(0.5).setScrollFactor(0).setInteractive()
+      
+      menuButton.on('pointerover', () => menuButton.setScale(1.1))
+      menuButton.on('pointerout', () => menuButton.setScale(1))
+      menuButton.on('pointerdown', () => {
+        console.log('Returning to menu...')
+        this.scene.stop('HalloweenClimbScene')
+        this.scene.start('MainMenuScene')
+      })
+      
+      // Fade out explosion
+      this.time.delayedCall(2000, () => {
+        this.tweens.add({
+          targets: explosion,
+          alpha: 0,
+          duration: 1000,
+          onComplete: () => explosion.destroy()
+        })
+      })
     })
   }
 }

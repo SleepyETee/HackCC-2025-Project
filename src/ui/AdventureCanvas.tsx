@@ -22,7 +22,8 @@ export function AdventureCanvas() {
         arcade: {
           debug: false
         }
-      }
+      },
+      dom: { createContainer: true }
     }
     
     gameRef.current = new Phaser.Game(config)
@@ -37,13 +38,8 @@ export function AdventureCanvas() {
   
   return (
     <div 
-      ref={containerRef} 
-      style={{ 
-        width: '100%', 
-        height: '100%',
-        borderRadius: 12,
-        overflow: 'hidden'
-      }}
+      ref={containerRef}
+      className="adventure-canvas-container"
     />
   )
 }

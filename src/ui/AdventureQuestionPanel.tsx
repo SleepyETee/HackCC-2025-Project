@@ -1,9 +1,29 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useGameStore } from '../state/store'
 
 export function AdventureQuestionPanel() {
   const currentQuestion = useGameStore(s => s.currentAdventureQuestion)
   const setAdventureAction = useGameStore(s => s.setAdventureAction)
+  
+  // Shuffle options every time a new question is loaded
+  const shuffledOptions = useMemo(() => {
+    if (!currentQuestion) return []
+    
+    // Create a copy of options with their original index
+    const optionsWithIndex = currentQuestion.options.map((opt, idx) => ({ 
+      ...opt, 
+      originalIndex: idx 
+    }))
+    
+    // Fisher-Yates shuffle algorithm
+    const shuffled = [...optionsWithIndex]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    
+    return shuffled
+  }, [currentQuestion])
   
   if (!currentQuestion) {
     return (
@@ -63,11 +83,11 @@ export function AdventureQuestionPanel() {
         {currentQuestion.text}
       </div>
       
-      {/* Answer options */}
+      {/* Answer options (shuffled each question) */}
       <div className="stack" style={{ gap: 8 }}>
-        {currentQuestion.options.map((option, i) => {
-          const isCorrect = option.correct
-          const borderColor = isCorrect ? '#00ff00' : '#8b5cf6'
+        {shuffledOptions.map((option, i) => {
+          // Use consistent purple border for all options (don't show correct answer)
+          const borderColor = '#8b5cf6'
           
           return (
             <button 
