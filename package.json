@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev:story": "VITE_DEFAULT_MODE=adventure VITE_DEFAULT_ADVENTURE_MODE=story vite",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -b && vite build && node scripts/copy-assets.js",
     "preview": "vite preview"
   },
   "dependencies": {

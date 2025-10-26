@@ -95,10 +95,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 100,
     question: 'What is lim(x→2) [3x + 1]?',
     options: [
-      { text: 'A) 7', correct: true, explanation: 'Direct substitution: 3(2) + 1 = 7' },
-      { text: 'B) 6', correct: false },
-      { text: 'C) 5', correct: false },
-      { text: 'D) 3', correct: false }
+      { text: '7', correct: true, explanation: 'Direct substitution: 3(2) + 1 = 7' },
+      { text: '6', correct: false },
+      { text: '5', correct: false },
+      { text: '3', correct: false }
     ],
     hint: 'For polynomial limits, you can substitute directly',
     solution: 'lim(x→2) [3x + 1] = 3(2) + 1 = 6 + 1 = 7',
@@ -112,10 +112,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 200,
     question: 'Is f(x) = x² continuous at x = 3?',
     options: [
-      { text: 'A) Yes', correct: true, explanation: 'Polynomials are continuous everywhere' },
-      { text: 'B) No', correct: false },
-      { text: 'C) Cannot be determined', correct: false },
-      { text: 'D) Only from the left', correct: false }
+      { text: 'Yes', correct: true, explanation: 'Polynomials are continuous everywhere' },
+      { text: 'No', correct: false },
+      { text: 'Cannot be determined', correct: false },
+      { text: 'Only from the left', correct: false }
     ],
     hint: 'Polynomial functions are continuous at all points',
     solution: 'All polynomial functions are continuous everywhere, so f(x) = x² is continuous at x = 3',
@@ -130,10 +130,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 400,
     question: 'What is lim(x→0) [sin(x)/x]?',
     options: [
-      { text: 'A) 1', correct: true, explanation: 'Fundamental trigonometric limit' },
-      { text: 'B) 0', correct: false },
-      { text: 'C) ∞', correct: false },
-      { text: 'D) Does not exist', correct: false }
+      { text: '1', correct: true, explanation: 'Fundamental trigonometric limit' },
+      { text: '0', correct: false },
+      { text: '∞', correct: false },
+      { text: 'Does not exist', correct: false }
     ],
     hint: 'This is one of the fundamental limits in calculus',
     solution: 'lim(x→0) [sin(x)/x] = 1 (fundamental trigonometric limit)',
@@ -147,10 +147,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 500,
     question: 'What is lim(x→3) [(x² - 9)/(x - 3)]?',
     options: [
-      { text: 'A) 6', correct: true, explanation: 'Factor and cancel: (x+3)(x-3)/(x-3) = x+3, then substitute' },
-      { text: 'B) 3', correct: false },
-      { text: 'C) 0', correct: false },
-      { text: 'D) Undefined', correct: false }
+      { text: '6', correct: true, explanation: 'Factor and cancel: (x+3)(x-3)/(x-3) = x+3, then substitute' },
+      { text: '3', correct: false },
+      { text: '0', correct: false },
+      { text: 'Undefined', correct: false }
     ],
     hint: 'Factor the numerator first: x² - 9 = (x+3)(x-3)',
     solution: 'Factor: (x² - 9)/(x - 3) = (x+3)(x-3)/(x-3) = x+3. Then lim(x→3) [x+3] = 6',
@@ -165,10 +165,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 700,
     question: 'What is d/dx [x³]?',
     options: [
-      { text: 'A) 3x²', correct: true, explanation: 'Power rule: d/dx [xⁿ] = n·xⁿ⁻¹' },
-      { text: 'B) x²', correct: false },
-      { text: 'C) 3x', correct: false },
-      { text: 'D) x³/3', correct: false }
+      { text: '3x²', correct: true, explanation: 'Power rule: d/dx [xⁿ] = n·xⁿ⁻¹' },
+      { text: 'x²', correct: false },
+      { text: '3x', correct: false },
+      { text: 'x³/3', correct: false }
     ],
     hint: 'Use the power rule: bring down the exponent and subtract 1',
     solution: 'd/dx [x³] = 3x³⁻¹ = 3x²',
@@ -182,10 +182,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 850,
     question: 'What is d/dx [sin(x)]?',
     options: [
-      { text: 'A) cos(x)', correct: true, explanation: 'Standard derivative of sine' },
-      { text: 'B) -cos(x)', correct: false },
-      { text: 'C) sin(x)', correct: false },
-      { text: 'D) -sin(x)', correct: false }
+      { text: 'cos(x)', correct: true, explanation: 'Standard derivative of sine' },
+      { text: '-cos(x)', correct: false },
+      { text: 'sin(x)', correct: false },
+      { text: '-sin(x)', correct: false }
     ],
     hint: 'This is one of the basic trigonometric derivatives',
     solution: 'd/dx [sin(x)] = cos(x)',
@@ -199,10 +199,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 1000,
     question: 'Using the product rule, what is d/dx [x·sin(x)]?',
     options: [
-      { text: 'A) sin(x) + x·cos(x)', correct: true, explanation: 'Product rule: (fg)\' = f\'g + fg\'' },
-      { text: 'B) cos(x)', correct: false },
-      { text: 'C) x·cos(x)', correct: false },
-      { text: 'D) sin(x)', correct: false }
+      { text: 'sin(x) + x·cos(x)', correct: true, explanation: 'Product rule: (fg)\' = f\'g + fg\'' },
+      { text: 'cos(x)', correct: false },
+      { text: 'x·cos(x)', correct: false },
+      { text: 'sin(x)', correct: false }
     ],
     hint: 'Product rule: (uv)\' = u\'v + uv\'',
     solution: 'd/dx [x·sin(x)] = (1)·sin(x) + x·cos(x) = sin(x) + x·cos(x)',
@@ -217,10 +217,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 1300,
     question: 'What is d/dx [sin(2x)]?',
     options: [
-      { text: 'A) 2cos(2x)', correct: true, explanation: 'Chain rule: outer derivative × inner derivative' },
-      { text: 'B) cos(2x)', correct: false },
-      { text: 'C) 2sin(2x)', correct: false },
-      { text: 'D) sin(x)', correct: false }
+      { text: '2cos(2x)', correct: true, explanation: 'Chain rule: outer derivative × inner derivative' },
+      { text: 'cos(2x)', correct: false },
+      { text: '2sin(2x)', correct: false },
+      { text: 'sin(x)', correct: false }
     ],
     hint: 'Use chain rule: derivative of outer function times derivative of inner',
     solution: 'd/dx [sin(2x)] = cos(2x)·d/dx[2x] = cos(2x)·2 = 2cos(2x)',
@@ -234,10 +234,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 1500,
     question: 'What is d/dx [(x² + 1)³]?',
     options: [
-      { text: 'A) 6x(x² + 1)²', correct: true, explanation: 'Chain rule with power rule' },
-      { text: 'B) 3(x² + 1)²', correct: false },
-      { text: 'C) 6x²(x² + 1)²', correct: false },
-      { text: 'D) 3x²(x² + 1)²', correct: false }
+      { text: '6x(x² + 1)²', correct: true, explanation: 'Chain rule with power rule' },
+      { text: '3(x² + 1)²', correct: false },
+      { text: '6x²(x² + 1)²', correct: false },
+      { text: '3x²(x² + 1)²', correct: false }
     ],
     hint: 'Chain rule: bring down the 3, reduce power, multiply by derivative of inside',
     solution: 'd/dx [(x² + 1)³] = 3(x² + 1)²·d/dx[x² + 1] = 3(x² + 1)²·2x = 6x(x² + 1)²',
@@ -251,10 +251,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 1700,
     question: 'To maximize f(x) = -x² + 4x, find the critical point:',
     options: [
-      { text: 'A) x = 2', correct: true, explanation: 'Set f\'(x) = 0: -2x + 4 = 0 → x = 2' },
-      { text: 'B) x = 0', correct: false },
-      { text: 'C) x = 4', correct: false },
-      { text: 'D) x = -2', correct: false }
+      { text: 'x = 2', correct: true, explanation: 'Set f\'(x) = 0: -2x + 4 = 0 → x = 2' },
+      { text: 'x = 0', correct: false },
+      { text: 'x = 4', correct: false },
+      { text: 'x = -2', correct: false }
     ],
     hint: 'Find where the derivative equals zero',
     solution: 'f\'(x) = -2x + 4. Set equal to zero: -2x + 4 = 0 → x = 2',
@@ -269,10 +269,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 1900,
     question: 'What is ∫ 2x dx?',
     options: [
-      { text: 'A) x² + C', correct: true, explanation: 'Power rule for integrals: ∫xⁿdx = xⁿ⁺¹/(n+1) + C' },
-      { text: 'B) 2x² + C', correct: false },
-      { text: 'C) x²/2 + C', correct: false },
-      { text: 'D) 2x + C', correct: false }
+      { text: 'x² + C', correct: true, explanation: 'Power rule for integrals: ∫xⁿdx = xⁿ⁺¹/(n+1) + C' },
+      { text: '2x² + C', correct: false },
+      { text: 'x²/2 + C', correct: false },
+      { text: '2x + C', correct: false }
     ],
     hint: 'Use the power rule for integration, don\'t forget the constant!',
     solution: '∫ 2x dx = 2·∫ x dx = 2·(x²/2) + C = x² + C',
@@ -286,10 +286,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 2000,
     question: 'What is ∫ cos(x) dx?',
     options: [
-      { text: 'A) sin(x) + C', correct: true, explanation: 'Antiderivative of cosine is sine' },
-      { text: 'B) -sin(x) + C', correct: false },
-      { text: 'C) cos(x) + C', correct: false },
-      { text: 'D) -cos(x) + C', correct: false }
+      { text: 'sin(x) + C', correct: true, explanation: 'Antiderivative of cosine is sine' },
+      { text: '-sin(x) + C', correct: false },
+      { text: 'cos(x) + C', correct: false },
+      { text: '-cos(x) + C', correct: false }
     ],
     hint: 'What function has derivative equal to cos(x)?',
     solution: '∫ cos(x) dx = sin(x) + C',
@@ -303,10 +303,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 2200,
     question: 'What is ∫₀² 2x dx?',
     options: [
-      { text: 'A) 4', correct: true, explanation: 'FTC: [x²]₀² = 4 - 0 = 4' },
-      { text: 'B) 2', correct: false },
-      { text: 'C) 8', correct: false },
-      { text: 'D) 0', correct: false }
+      { text: '4', correct: true, explanation: 'FTC: [x²]₀² = 4 - 0 = 4' },
+      { text: '2', correct: false },
+      { text: '8', correct: false },
+      { text: '0', correct: false }
     ],
     hint: 'Find the antiderivative, then evaluate at bounds',
     solution: '∫₀² 2x dx = [x²]₀² = (2)² - (0)² = 4',
@@ -321,10 +321,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 2500,
     question: 'Using u-substitution, ∫ 2x·cos(x²) dx requires u = ?',
     options: [
-      { text: 'A) u = x²', correct: true, explanation: 'Let u = x², then du = 2x dx' },
-      { text: 'B) u = 2x', correct: false },
-      { text: 'C) u = cos(x²)', correct: false },
-      { text: 'D) u = x', correct: false }
+      { text: 'u = x²', correct: true, explanation: 'Let u = x², then du = 2x dx' },
+      { text: 'u = 2x', correct: false },
+      { text: 'u = cos(x²)', correct: false },
+      { text: 'u = x', correct: false }
     ],
     hint: 'Look for a function whose derivative appears in the integral',
     solution: 'Let u = x², then du = 2x dx. The integral becomes ∫ cos(u) du = sin(u) + C = sin(x²) + C',
@@ -338,10 +338,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 2700,
     question: 'For ∫ x·eˣ dx using integration by parts, choose u = ?',
     options: [
-      { text: 'A) u = x', correct: true, explanation: 'Choose u as the polynomial (gets simpler when differentiated)' },
-      { text: 'B) u = eˣ', correct: false },
-      { text: 'C) u = x·eˣ', correct: false },
-      { text: 'D) u = 1', correct: false }
+      { text: 'u = x', correct: true, explanation: 'Choose u as the polynomial (gets simpler when differentiated)' },
+      { text: 'u = eˣ', correct: false },
+      { text: 'u = x·eˣ', correct: false },
+      { text: 'u = 1', correct: false }
     ],
     hint: 'Use LIATE: Logarithmic, Inverse trig, Algebraic, Trig, Exponential',
     solution: 'Let u = x (algebraic), dv = eˣ dx. Then ∫ x·eˣ dx = x·eˣ - ∫ eˣ dx = x·eˣ - eˣ + C',
@@ -355,10 +355,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 2900,
     question: 'What is d/dx [ln(sin(x))]?',
     options: [
-      { text: 'A) cot(x)', correct: true, explanation: 'Chain rule twice: (1/sin(x))·cos(x) = cot(x)' },
-      { text: 'B) tan(x)', correct: false },
-      { text: 'C) 1/sin(x)', correct: false },
-      { text: 'D) cos(x)', correct: false }
+      { text: 'cot(x)', correct: true, explanation: 'Chain rule twice: (1/sin(x))·cos(x) = cot(x)' },
+      { text: 'tan(x)', correct: false },
+      { text: '1/sin(x)', correct: false },
+      { text: 'cos(x)', correct: false }
     ],
     hint: 'Use chain rule: derivative of ln(u) is 1/u times derivative of u',
     solution: 'd/dx [ln(sin(x))] = (1/sin(x))·cos(x) = cos(x)/sin(x) = cot(x)',
@@ -373,10 +373,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 150,
     question: 'What is lim(x→1) [x² + 2x - 3]?',
     options: [
-      { text: 'A) 0', correct: true, explanation: 'Direct substitution: 1² + 2(1) - 3 = 0' },
-      { text: 'B) 1', correct: false },
-      { text: 'C) 2', correct: false },
-      { text: 'D) 3', correct: false }
+      { text: '0', correct: true, explanation: 'Direct substitution: 1² + 2(1) - 3 = 0' },
+      { text: '1', correct: false },
+      { text: '2', correct: false },
+      { text: '3', correct: false }
     ],
     hint: 'For polynomial limits, substitute directly',
     solution: 'lim(x→1) [x² + 2x - 3] = 1² + 2(1) - 3 = 1 + 2 - 3 = 0',
@@ -390,10 +390,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 250,
     question: 'What value makes f(x) = (x²-4)/(x-2) continuous at x = 2?',
     options: [
-      { text: 'A) 4', correct: true, explanation: 'Factor and cancel: (x+2)(x-2)/(x-2) = x+2, so f(2) = 4' },
-      { text: 'B) 2', correct: false },
-      { text: 'C) 0', correct: false },
-      { text: 'D) Undefined', correct: false }
+      { text: '4', correct: true, explanation: 'Factor and cancel: (x+2)(x-2)/(x-2) = x+2, so f(2) = 4' },
+      { text: '2', correct: false },
+      { text: '0', correct: false },
+      { text: 'Undefined', correct: false }
     ],
     hint: 'Factor the numerator and cancel common factors',
     solution: 'f(x) = (x²-4)/(x-2) = (x+2)(x-2)/(x-2) = x+2. So f(2) = 2+2 = 4',
@@ -408,10 +408,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 350,
     question: 'What is lim(x→0) [cos(x)]?',
     options: [
-      { text: 'A) 1', correct: true, explanation: 'cos(0) = 1' },
-      { text: 'B) 0', correct: false },
-      { text: 'C) -1', correct: false },
-      { text: 'D) ∞', correct: false }
+      { text: '1', correct: true, explanation: 'cos(0) = 1' },
+      { text: '0', correct: false },
+      { text: '-1', correct: false },
+      { text: '∞', correct: false }
     ],
     hint: 'Direct substitution works for continuous functions',
     solution: 'lim(x→0) [cos(x)] = cos(0) = 1',
@@ -425,10 +425,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 550,
     question: 'What is lim(x→2) [(x²-4)/(x-2)]?',
     options: [
-      { text: 'A) 4', correct: true, explanation: 'Factor: (x+2)(x-2)/(x-2) = x+2, then substitute x=2' },
-      { text: 'B) 2', correct: false },
-      { text: 'C) 0', correct: false },
-      { text: 'D) Undefined', correct: false }
+      { text: '4', correct: true, explanation: 'Factor: (x+2)(x-2)/(x-2) = x+2, then substitute x=2' },
+      { text: '2', correct: false },
+      { text: '0', correct: false },
+      { text: 'Undefined', correct: false }
     ],
     hint: 'Factor the numerator first',
     solution: 'Factor: (x²-4)/(x-2) = (x+2)(x-2)/(x-2) = x+2. Then lim(x→2) [x+2] = 4',
@@ -443,10 +443,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 650,
     question: 'What is d/dx [5x²]?',
     options: [
-      { text: 'A) 10x', correct: true, explanation: 'Power rule: d/dx[5x²] = 5·2x = 10x' },
-      { text: 'B) 5x', correct: false },
-      { text: 'C) 10x²', correct: false },
-      { text: 'D) 5x²', correct: false }
+      { text: '10x', correct: true, explanation: 'Power rule: d/dx[5x²] = 5·2x = 10x' },
+      { text: '5x', correct: false },
+      { text: '10x²', correct: false },
+      { text: '5x²', correct: false }
     ],
     hint: 'Use the power rule: bring down the exponent and multiply by coefficient',
     solution: 'd/dx [5x²] = 5·2x¹ = 10x',
@@ -460,10 +460,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 900,
     question: 'What is d/dx [cos(x)]?',
     options: [
-      { text: 'A) -sin(x)', correct: true, explanation: 'Standard derivative of cosine' },
-      { text: 'B) sin(x)', correct: false },
-      { text: 'C) -cos(x)', correct: false },
-      { text: 'D) cos(x)', correct: false }
+      { text: '-sin(x)', correct: true, explanation: 'Standard derivative of cosine' },
+      { text: 'sin(x)', correct: false },
+      { text: '-cos(x)', correct: false },
+      { text: 'cos(x)', correct: false }
     ],
     hint: 'This is one of the basic trigonometric derivatives',
     solution: 'd/dx [cos(x)] = -sin(x)',
@@ -477,10 +477,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 1100,
     question: 'Using the quotient rule, what is d/dx [x/(x+1)]?',
     options: [
-      { text: 'A) 1/(x+1)²', correct: true, explanation: 'Quotient rule: (low·d(high) - high·d(low))/low²' },
-      { text: 'B) 1/(x+1)', correct: false },
-      { text: 'C) x/(x+1)²', correct: false },
-      { text: 'D) 1', correct: false }
+      { text: '1/(x+1)²', correct: true, explanation: 'Quotient rule: (low·d(high) - high·d(low))/low²' },
+      { text: '1/(x+1)', correct: false },
+      { text: 'x/(x+1)²', correct: false },
+      { text: '1', correct: false }
     ],
     hint: 'Quotient rule: (low·d(high) - high·d(low))/low²',
     solution: 'd/dx [x/(x+1)] = [(x+1)·1 - x·1]/(x+1)² = 1/(x+1)²',
@@ -495,10 +495,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 1400,
     question: 'What is d/dx [cos(3x)]?',
     options: [
-      { text: 'A) -3sin(3x)', correct: true, explanation: 'Chain rule: outer derivative × inner derivative' },
-      { text: 'B) -sin(3x)', correct: false },
-      { text: 'C) 3sin(3x)', correct: false },
-      { text: 'D) sin(3x)', correct: false }
+      { text: '-3sin(3x)', correct: true, explanation: 'Chain rule: outer derivative × inner derivative' },
+      { text: '-sin(3x)', correct: false },
+      { text: '3sin(3x)', correct: false },
+      { text: 'sin(3x)', correct: false }
     ],
     hint: 'Use chain rule: derivative of outer function times derivative of inner',
     solution: 'd/dx [cos(3x)] = -sin(3x)·d/dx[3x] = -sin(3x)·3 = -3sin(3x)',
@@ -512,10 +512,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 1600,
     question: 'What is d/dx [e^(2x)]?',
     options: [
-      { text: 'A) 2e^(2x)', correct: true, explanation: 'Chain rule: e^(2x) × derivative of 2x' },
-      { text: 'B) e^(2x)', correct: false },
-      { text: 'C) 2e^x', correct: false },
-      { text: 'D) e^(2x)/2', correct: false }
+      { text: '2e^(2x)', correct: true, explanation: 'Chain rule: e^(2x) × derivative of 2x' },
+      { text: 'e^(2x)', correct: false },
+      { text: '2e^x', correct: false },
+      { text: 'e^(2x)/2', correct: false }
     ],
     hint: 'Chain rule: derivative of e^u is e^u times derivative of u',
     solution: 'd/dx [e^(2x)] = e^(2x)·d/dx[2x] = e^(2x)·2 = 2e^(2x)',
@@ -530,10 +530,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 1950,
     question: 'What is ∫ 3x² dx?',
     options: [
-      { text: 'A) x³ + C', correct: true, explanation: 'Power rule: ∫xⁿdx = xⁿ⁺¹/(n+1) + C' },
-      { text: 'B) 3x³ + C', correct: false },
-      { text: 'C) x³/3 + C', correct: false },
-      { text: 'D) 6x + C', correct: false }
+      { text: 'x³ + C', correct: true, explanation: 'Power rule: ∫xⁿdx = xⁿ⁺¹/(n+1) + C' },
+      { text: '3x³ + C', correct: false },
+      { text: 'x³/3 + C', correct: false },
+      { text: '6x + C', correct: false }
     ],
     hint: 'Use the power rule for integration, don\'t forget the constant!',
     solution: '∫ 3x² dx = 3·∫ x² dx = 3·(x³/3) + C = x³ + C',
@@ -547,10 +547,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 2100,
     question: 'What is ∫ sin(x) dx?',
     options: [
-      { text: 'A) -cos(x) + C', correct: true, explanation: 'Antiderivative of sine is negative cosine' },
-      { text: 'B) cos(x) + C', correct: false },
-      { text: 'C) sin(x) + C', correct: false },
-      { text: 'D) -sin(x) + C', correct: false }
+      { text: '-cos(x) + C', correct: true, explanation: 'Antiderivative of sine is negative cosine' },
+      { text: 'cos(x) + C', correct: false },
+      { text: 'sin(x) + C', correct: false },
+      { text: '-sin(x) + C', correct: false }
     ],
     hint: 'What function has derivative equal to sin(x)?',
     solution: '∫ sin(x) dx = -cos(x) + C',
@@ -565,10 +565,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 2600,
     question: 'For ∫ x·e^(x²) dx, what substitution should you use?',
     options: [
-      { text: 'A) u = x²', correct: true, explanation: 'Let u = x², then du = 2x dx, so x dx = du/2' },
-      { text: 'B) u = x', correct: false },
-      { text: 'C) u = e^x', correct: false },
-      { text: 'D) u = e^(x²)', correct: false }
+      { text: 'u = x²', correct: true, explanation: 'Let u = x², then du = 2x dx, so x dx = du/2' },
+      { text: 'u = x', correct: false },
+      { text: 'u = e^x', correct: false },
+      { text: 'u = e^(x²)', correct: false }
     ],
     hint: 'Look for a function whose derivative appears in the integral',
     solution: 'Let u = x², then du = 2x dx. The integral becomes ∫ (1/2)e^u du = (1/2)e^u + C = (1/2)e^(x²) + C',
@@ -582,10 +582,10 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     recommendedHeight: 2800,
     question: 'For ∫ x·sin(x) dx using integration by parts, what should u and dv be?',
     options: [
-      { text: 'A) u = x, dv = sin(x) dx', correct: true, explanation: 'Choose u as the polynomial (gets simpler when differentiated)' },
-      { text: 'B) u = sin(x), dv = x dx', correct: false },
-      { text: 'C) u = x·sin(x), dv = dx', correct: false },
-      { text: 'D) u = 1, dv = x·sin(x) dx', correct: false }
+      { text: 'u = x, dv = sin(x) dx', correct: true, explanation: 'Choose u as the polynomial (gets simpler when differentiated)' },
+      { text: 'u = sin(x), dv = x dx', correct: false },
+      { text: 'u = x·sin(x), dv = dx', correct: false },
+      { text: 'u = 1, dv = x·sin(x) dx', correct: false }
     ],
     hint: 'Use LIATE: Logarithmic, Inverse trig, Algebraic, Trig, Exponential',
     solution: 'Let u = x (algebraic), dv = sin(x) dx. Then ∫ x·sin(x) dx = x·(-cos(x)) - ∫ (-cos(x)) dx = -x·cos(x) + sin(x) + C',

@@ -15,7 +15,7 @@ export function HUD(){
     <div style={{ 
       position: 'absolute',
       left: 12,
-      top: 12,
+      bottom: 30,
       pointerEvents: 'auto',
       zIndex: 100
     }}>

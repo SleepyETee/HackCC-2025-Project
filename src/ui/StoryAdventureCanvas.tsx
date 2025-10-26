@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Phaser from 'phaser';
 import { StoryPanel } from './StoryPanel';
+import { useGameStore } from '../state/store';
+import { audioManager } from '../game/AudioManager';
 
 // ============================================================================
 // TYPE DEFINITIONS
 // ============================================================================
 
+import { ADVENTURE_CHAPTERS, ADVENTURE_SCENES, getSceneById, getQuestionByScene, getNextScene, type AdventureScene } from '../game/adventure'
 type WebTarget = {
   id: string;
   x: number;
@@ -29,27 +32,6 @@ const WEB_SHOT_SCALE = 6;
 const ROPE_STIFF_CORRECTION = 1.0;
 const ROPE_DAMPING = 0.25;
 
-type Platform = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
-
-type WebPoint = {
-  x: number;
-  y: number;
-  id: string;
-};
-
-type Obstacle = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  type: 'spike' | 'fire' | 'ice' | 'electric' | 'void';
-};
-
 type CalcQuestion = {
   id: string;
   question: string;
@@ -60,33 +42,19 @@ type CalcQuestion = {
   hint: string;
   storyContext: string;
 };
-
-type AdventureScene = {
-  id: string;
-  name: string;
-  chapter: number;
-  description: string;
-  storyContext: string;
-  background: string;
-  platforms: Platform[];
-  webPoints: WebPoint[];
-  obstacles: Obstacle[];
-  goal: { x: number; y: number };
-  question: CalcQuestion;
-};
-
 // ============================================================================
-// GAME DATA
+// GAME DATA – Now sourced from src/game/adventure.ts
 // ============================================================================
 
-const SCENE_DATA: AdventureScene[] = [
+const SCENE_ORDER: string[] = ADVENTURE_CHAPTERS.flatMap(c => c.scenes)
+/*
   {
     id: 'ch1-s1',
     name: 'The Great Gap',
     chapter: 1,
     description: 'Cross the entrance gap',
     storyContext: 'You arrive at the Haunted Mansion. A vast gap blocks your path to the crown.',
-    background: '/scene-ch1-s1-background.png',
+    background: '/images/scene-ch1-s1-background.png',
     platforms: [
       { x: 50, y: 550, width: 200, height: 20 },
       { x: 550, y: 550, width: 200, height: 20 }
@@ -116,7 +84,7 @@ const SCENE_DATA: AdventureScene[] = [
     chapter: 1,
     description: 'Swing across the grand hall',
     storyContext: 'A magnificent chandelier hangs above. Use your web to swing across!',
-    background: '/scene-ch1-s2-background.png',
+    background: '/images/scene-ch1-s2-background.png',
     platforms: [
       { x: 50, y: 550, width: 150, height: 20 },
       { x: 650, y: 450, width: 150, height: 20 }
@@ -147,7 +115,7 @@ const SCENE_DATA: AdventureScene[] = [
     chapter: 1,
     description: 'Solve derivative puzzles to open the door',
     storyContext: 'A massive door of calculus runes blocks the path. Solve derivative challenges to unlock it.',
-    background: '/scene-ch1-s3-background.png',
+    background: '/images/scene-ch1-s3-background.png',
     platforms: [
       { x: 120, y: 520, width: 140, height: 20 },
       { x: 320, y: 460, width: 120, height: 20 },
@@ -180,7 +148,7 @@ const SCENE_DATA: AdventureScene[] = [
     chapter: 2,
     description: 'Climb the library shelves',
     storyContext: 'Ancient books tower above. Calculate to reach the top shelf!',
-    background: '/scene-ch2-s1-background.png',
+    background: '/images/scene-ch2-s1-background.png',
     platforms: [
       { x: 50, y: 550, width: 150, height: 20 },
       { x: 300, y: 450, width: 150, height: 20 },
@@ -211,7 +179,7 @@ const SCENE_DATA: AdventureScene[] = [
     chapter: 2,
     description: 'Integration web puzzle to reach the scroll',
     storyContext: 'An ancient scroll floats behind shifting equations. Integrate your way across!',
-    background: '/scene-ch2-s2-background.png',
+    background: '/images/scene-ch2-s2-background.png',
     platforms: [
       { x: 160, y: 520, width: 120, height: 20 },
       { x: 360, y: 440, width: 120, height: 20 },
@@ -243,7 +211,7 @@ const SCENE_DATA: AdventureScene[] = [
     chapter: 3,
     description: 'Navigate the narrow ledge',
     storyContext: 'A treacherous ledge with a deep abyss below. Precision is key!',
-    background: '/scene-ch3-s1-background.png',
+    background: '/images/scene-ch3-s1-background.png',
     platforms: [
       { x: 50, y: 550, width: 100, height: 20 },
       { x: 350, y: 500, width: 100, height: 20 },
@@ -275,7 +243,7 @@ const SCENE_DATA: AdventureScene[] = [
     chapter: 4,
     description: 'Claim the Derivative Crown',
     storyContext: 'The Derivative Crown awaits! One final challenge stands before you!',
-    background: '/scene-ch4-s1-background.png',
+    background: '/images/scene-ch4-s1-background.png',
     platforms: [
       { x: 50, y: 550, width: 150, height: 20 },
       { x: 300, y: 450, width: 150, height: 20 },
@@ -301,7 +269,7 @@ const SCENE_DATA: AdventureScene[] = [
       storyContext: 'Master this final derivative to claim victory!'
     }
   }
-];
+*/
 
 // ============================================================================
 // PHASER SCENE
@@ -322,6 +290,7 @@ class WebSwingingScene extends Phaser.Scene {
   private score = 0;
   private currentGravity = 800;
   private sceneData!: AdventureScene;
+  private sceneId: string = 'ch1-s1';
   private sceneIndex = 0;
   private uiText!: Phaser.GameObjects.Text;
   private goalSprite!: Phaser.GameObjects.Sprite;
@@ -331,13 +300,17 @@ class WebSwingingScene extends Phaser.Scene {
     super({ key: 'WebSwingingScene' });
   }
 
-  init(data: { sceneIndex?: number }) {
-    this.sceneIndex = data.sceneIndex || 0;
-    this.sceneData = SCENE_DATA[this.sceneIndex];
+  init(data: { sceneIndex?: number, sceneId?: string }) {
+    const inputId = data.sceneId || (typeof data.sceneIndex === 'number' ? SCENE_ORDER[Math.max(0, Math.min(SCENE_ORDER.length - 1, data.sceneIndex))] : undefined)
+    this.sceneId = inputId || this.sceneId
+    this.sceneIndex = SCENE_ORDER.indexOf(this.sceneId)
+    this.sceneData = getSceneById(this.sceneId)!
+    // Sync current scene ID with global store for StoryPanel
+    try { useGameStore.getState().setCurrentSceneId(this.sceneData.id) } catch {}
   }
 
   create() {
-    // Create background image
+    // Create background
     this.createBackground();
 
     this.trajectoryGraphics = this.add.graphics();
@@ -371,6 +344,19 @@ class WebSwingingScene extends Phaser.Scene {
     this.createObstacles();
     this.createGoal();
 
+    // Provide a question to the React side for this scene
+    const q = getQuestionByScene(this.sceneId)
+    window.dispatchEvent(new CustomEvent('request-question', { detail: { question: {
+      id: q.id,
+      question: q.text,
+      options: q.options.map(o => o.text),
+      correctIndex: q.options.findIndex(o => o.correct),
+      actionType: q.options.find(o => o.correct)?.action || 'jump',
+      concept: q.concept,
+      hint: q.hint,
+      storyContext: q.storyContext
+    }}}))
+
     // Add obstacle collision detection
     this.sceneData.obstacles.forEach((obstacle, index) => {
       const obstacleSprite = this.children.list.find(child => 
@@ -401,29 +387,34 @@ class WebSwingingScene extends Phaser.Scene {
     this.input.on('pointerup', this.onPointerUp, this);
     this.input.on('pointerout', this.onPointerOut, this);
 
-    window.addEventListener('spidercalc-answer', this.handleAnswer as EventListener);
+    window.addEventListener('spidercalc-action', this.handleAction as EventListener);
     window.addEventListener('web-swinging-set-scene', this.handleExternalSetScene as EventListener);
 
-    window.dispatchEvent(new CustomEvent('request-question', {
-      detail: { question: this.sceneData.question }
-    }));
   }
 
   private handleExternalSetScene = (e: CustomEvent) => {
-    const idx = e.detail?.sceneIndex;
-    if (typeof idx === 'number' && idx >= 0 && idx < SCENE_DATA.length) {
-      this.scene.restart({ sceneIndex: idx });
+    const idx = e.detail?.sceneIndex as number | undefined
+    const id = e.detail?.sceneId as string | undefined
+    if (id && ADVENTURE_SCENES[id]) {
+      this.scene.restart({ sceneId: id })
+      return
+    }
+    if (typeof idx === 'number' && idx >= 0 && idx < SCENE_ORDER.length) {
+      this.scene.restart({ sceneIndex: idx })
     }
   };
 
   private createBackground() {
-    // Create background image
-    const bgImage = this.add.image(400, 300, this.sceneData.background);
-    bgImage.setDisplaySize(800, 600);
-    bgImage.setDepth(-100);
-    
-    // Add overlay for better contrast
-    const overlay = this.add.rectangle(400, 300, 800, 600, 0x000000, 0.2);
+    // Draw a stylized gradient background (avoids missing asset issues)
+    const bg = this.add.graphics();
+    bg.fillGradientStyle(0x1a1a2e, 0x1a1a2e, 0x2d1b69, 0x2d1b69, 1);
+    bg.fillRect(0, 0, 800, 600);
+    bg.setDepth(-100);
+
+    // Subtle vignette overlay for contrast
+    const overlay = this.add.graphics();
+    overlay.fillStyle(0x000000, 0.2);
+    overlay.fillRect(0, 0, 800, 600);
     overlay.setDepth(-99);
   }
 
@@ -519,7 +510,7 @@ class WebSwingingScene extends Phaser.Scene {
       });
 
       this.targets.push({
-        id: wp.id,
+        id: `anchor-${i}`,
         x: wp.x,
         y: wp.y,
         type: 'anchor',
@@ -733,9 +724,10 @@ class WebSwingingScene extends Phaser.Scene {
     });
   }
 
-  private handleAnswer = (event: CustomEvent) => {
-    const { correct, actionType } = event.detail;
-    
+  private handleAction = (event: CustomEvent) => {
+    const { correct, action } = event.detail || {};
+    if (typeof correct !== 'boolean') return;
+
     this.currentGravity = correct ? 600 : 1000;
     this.physics.world.gravity.y = this.currentGravity;
 
@@ -1027,6 +1019,7 @@ class WebSwingingScene extends Phaser.Scene {
   }
 
   private updateUI() {
+    const totalScenes = SCENE_ORDER.length
     this.uiText.setText(
       `Webs: ${this.webs} | Cuts: ${this.cuts} | Score: ${this.score}\nScene: ${this.sceneData.name}`
     );
@@ -1035,13 +1028,18 @@ class WebSwingingScene extends Phaser.Scene {
       detail: {
         webs: this.webs,
         cuts: this.cuts,
+        score: this.score,
         currentScene: this.sceneData.name,
-        sceneIndex: this.sceneIndex
+        sceneIndex: this.sceneIndex,
+        totalScenes
       }
     }));
   }
 
   private completeLevel() {
+    // Play victory sound
+    audioManager.playVictorySound()
+    
     const overlay = this.add.rectangle(400, 300, 800, 600, 0x000000, 0.7);
     overlay.setDepth(999);
 
@@ -1057,9 +1055,9 @@ class WebSwingingScene extends Phaser.Scene {
     }).setOrigin(0.5).setDepth(1000);
 
     this.time.delayedCall(3000, () => {
-      const nextIndex = this.sceneIndex + 1;
-      if (nextIndex < SCENE_DATA.length) {
-        this.scene.restart({ sceneIndex: nextIndex });
+      const nextId = getNextScene(this.sceneId)
+      if (nextId) {
+        this.scene.restart({ sceneId: nextId });
       } else {
         const finalText = this.add.text(400, 400, 'Game Complete!', {
           fontSize: '36px',
@@ -1149,7 +1147,7 @@ class WebSwingingScene extends Phaser.Scene {
   }
 
   destroy() {
-    window.removeEventListener('spidercalc-answer', this.handleAnswer as EventListener);
+    window.removeEventListener('spidercalc-action', this.handleAction as EventListener);
     window.removeEventListener('web-swinging-set-scene', this.handleExternalSetScene as EventListener);
   }
 }
@@ -1167,7 +1165,8 @@ export function StoryAdventureCanvas() {
     webs: 5,
     cuts: 3,
     currentScene: '',
-    sceneIndex: 0
+    sceneIndex: 0,
+    totalScenes: ADVENTURE_CHAPTERS.flatMap(c => c.scenes).length
   });
   
   useEffect(() => {
@@ -1198,6 +1197,7 @@ export function StoryAdventureCanvas() {
       const event = e as CustomEvent;
       if (event.detail) {
         setGameStats(event.detail);
+        if (typeof event.detail.score === 'number') setScore(event.detail.score);
       }
     };
 
@@ -1217,10 +1217,10 @@ export function StoryAdventureCanvas() {
     const correct = index === currentQuestion.correctIndex;
     setSelectedAnswer(index);
 
-    window.dispatchEvent(new CustomEvent('spidercalc-answer', {
+    window.dispatchEvent(new CustomEvent('spidercalc-action', {
       detail: {
         correct,
-        actionType: currentQuestion.actionType
+        action: currentQuestion.actionType
       }
     }));
 
@@ -1237,7 +1237,7 @@ export function StoryAdventureCanvas() {
       backgroundColor: '#0f0f23',
       minHeight: '100vh',
       color: '#ffffff',
-      fontFamily: 'Arial, sans-serif'
+      fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif'
     }}>
       {/* Game Canvas */}
       <div style={{ flex: 1 }}>
@@ -1342,8 +1342,8 @@ export function StoryAdventureCanvas() {
               ⬅️ Prev
             </button>
 
-            <div style={{ fontSize: '12px', color: '#aaa' }}>
-              Scene {((gameStats.sceneIndex || 0) + 1)} / 7
+          <div style={{ fontSize: '12px', color: '#aaa' }}>
+              Scene {((gameStats.sceneIndex || 0) + 1)} / {gameStats.totalScenes || 7}
             </div>
 
             <button

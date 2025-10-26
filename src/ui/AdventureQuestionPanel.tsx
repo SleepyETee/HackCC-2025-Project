@@ -42,13 +42,9 @@ export function AdventureQuestionPanel() {
   
   const handleAnswer = (option: any, index: number) => {
     setAdventureAction(option.action, option.correct)
-    // Add score feedback
-    const store = useGameStore.getState()
-    if (option.correct) {
-      store.addScore(100)
-    } else {
-      store.addScore(-50)
-    }
+    
+    // Score handling is done in the game scene (HalloweenClimbScene)
+    // No need to duplicate score logic here
   }
   
   return (
@@ -168,25 +164,7 @@ export function AdventureQuestionPanel() {
         📚 Concept: {currentQuestion.concept}
       </div>
       
-      {/* Timing legend */}
-      <div style={{ 
-        fontSize: 10, 
-        marginTop: 10,
-        padding: 8,
-        background: 'rgba(0, 0, 0, 0.3)',
-        borderRadius: 6,
-        color: '#999'
-      }}>
-        <div style={{ marginBottom: 4 }}>
-          ⏱️ Your answer affects web release timing!
-        </div>
-        <div>
-          ✅ Correct = Perfect timing (1.5s) + STRONG boost (18) ⬆️
-        </div>
-        <div>
-          ❌ Wrong = Early release (0.8s) + Weak boost (10) ⬆️
-        </div>
-      </div>
+      
     </div>
   )
 }

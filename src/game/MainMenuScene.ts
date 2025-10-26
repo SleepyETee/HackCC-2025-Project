@@ -11,6 +11,15 @@ export default class MainMenuScene extends Phaser.Scene {
     super({ key: 'MainMenuScene' })
   }
   
+  preload() {
+    // Load spider web images
+    this.load.image('spider-web-left', '/images/spider web.jpg')
+    this.load.image('spider-web-right', '/images/web 2.jpg')
+    
+    // Load claw mark image
+    this.load.image('claw-marks', '/images/claw mark-Photoroom.png')
+  }
+  
   create() {
     const W = this.scale.width
     const H = this.scale.height
@@ -352,42 +361,42 @@ export default class MainMenuScene extends Phaser.Scene {
   private createTitle() {
     const W = this.scale.width
     
-    // Dark, ominous background panel with blood red border
+    // Dark, ominous background panel with consistent orange border
     const titlePanel = this.add.graphics()
-    titlePanel.fillStyle(0x000000, 0.75)
+    titlePanel.fillStyle(0x000000, 0.95) // More opaque background
     titlePanel.fillRoundedRect(W / 2 - 380, 45, 760, 120, 12)
-    titlePanel.lineStyle(4, 0x8B0000, 1) // Blood red border
+    titlePanel.lineStyle(4, 0xff4400, 1) // Consistent orange border
     titlePanel.strokeRoundedRect(W / 2 - 380, 45, 760, 120, 12)
     
-    // Inner dark red glow
-    titlePanel.lineStyle(2, 0xff3300, 0.5)
+    // Inner orange glow
+    titlePanel.lineStyle(2, 0xff6600, 0.6) // Consistent inner glow
     titlePanel.strokeRoundedRect(W / 2 - 375, 50, 750, 110, 10)
     
     titlePanel.setScrollFactor(0, 0)
     titlePanel.setDepth(10)
     
-    // Spider webs in corners (more detailed)
-    const webLeft = this.add.graphics()
-    webLeft.lineStyle(2, 0xaaaaaa, 0.4)
-    for (let i = 0; i < 8; i++) {
-      webLeft.beginPath()
-      webLeft.moveTo(W / 2 - 380, 45)
-      webLeft.lineTo(W / 2 - 380 + i * 12, 45 + 40)
-      webLeft.strokePath()
-    }
-    webLeft.setScrollFactor(0, 0)
-    webLeft.setDepth(11)
+    // // Spider webs in corners (more detailed)
+    // const webLeft = this.add.graphics()
+    // webLeft.lineStyle(2, 0xaaaaaa, 0.4)
+    // for (let i = 0; i < 8; i++) {
+    //   webLeft.beginPath()
+    //   webLeft.moveTo(W / 2 - 380, 45)
+    //   webLeft.lineTo(W / 2 - 380 + i * 12, 45 + 40)
+    //   webLeft.strokePath()
+    // }
+    // webLeft.setScrollFactor(0, 0)
+    // webLeft.setDepth(11)
     
-    const webRight = this.add.graphics()
-    webRight.lineStyle(2, 0xaaaaaa, 0.4)
-    for (let i = 0; i < 8; i++) {
-      webRight.beginPath()
-      webRight.moveTo(W / 2 + 380, 45)
-      webRight.lineTo(W / 2 + 380 - i * 12, 45 + 40)
-      webRight.strokePath()
-    }
-    webRight.setScrollFactor(0, 0)
-    webRight.setDepth(11)
+    // const webRight = this.add.graphics()
+    // webRight.lineStyle(2, 0xaaaaaa, 0.4)
+    // for (let i = 0; i < 8; i++) {
+    //   webRight.beginPath()
+    //   webRight.moveTo(W / 2 + 380, 45)
+    //   webRight.lineTo(W / 2 + 380 - i * 12, 45 + 40)
+    //   webRight.strokePath()
+    // }
+    // webRight.setScrollFactor(0, 0)
+    // webRight.setDepth(11)
     
     // Blood drip effect under title
     const bloodDrip = this.add.graphics()
@@ -402,7 +411,7 @@ export default class MainMenuScene extends Phaser.Scene {
     bloodDrip.setDepth(11)
     
     // Large shadow for depth (blood red tint)
-    const titleShadow = this.add.text(W / 2 + 5, 92, '🕷️ SPIDER-CALC 🎃', {
+    const titleShadow = this.add.text(W / 2 + 5, 92, ' SPIDER-CALC 🎃', {
       fontSize: '64px',
       fontFamily: 'Impact, Arial Black, sans-serif',
       color: '#330000'
@@ -410,12 +419,12 @@ export default class MainMenuScene extends Phaser.Scene {
     titleShadow.setOrigin(0.5)
     titleShadow.setAlpha(0.7)
     titleShadow.setScrollFactor(0, 0)
-    titleShadow.setDepth(11)
+    titleShadow.setDepth(9.5)
     
     // Main title text with blood red to orange gradient effect
-    const title = this.add.text(W / 2, 87, '🕷️ SPIDER-CALC 🎃', {
+    const title = this.add.text(W / 2, 87, '🎃 SPIDER-CALC 🎃', {
       fontSize: '64px',
-      fontFamily: 'Impact, Arial Black, sans-serif',
+      fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
       color: '#ff4400',
       stroke: '#000000',
       strokeThickness: 6
@@ -437,7 +446,7 @@ export default class MainMenuScene extends Phaser.Scene {
     // Subtitle with sinister styling
     const subtitle = this.add.text(W / 2, 138, '⚠️ Climb 3000m... If You Dare! ☠️', {
       fontSize: '18px',
-      fontFamily: 'Georgia, serif',
+      fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
       color: '#ff6600',
       stroke: '#000000',
       strokeThickness: 4,
@@ -479,20 +488,26 @@ export default class MainMenuScene extends Phaser.Scene {
     const H = this.scale.height
     
     // Create spider container (properly centered with slight offset for visual balance)
-    this.spider = this.add.container(W * 0.7, H * 0.45)
+    this.spider = this.add.container(W * 0.16, H * 0.7)
     this.spider.setScrollFactor(0, 0) // Keep fixed
+    this.spider.setDepth(20) // Above title box (title uses depth 12)
     
-    // Spider body (larger for mascot)
-    const body = this.add.ellipse(0, 0, 80, 60, 0x000000)
-    this.spider.add(body)
+    // ========== BOLD OUTLINE AROUND SPIDER MASCOT ==========
+    // Create a bold outline around the entire spider body
+    const spiderOutline = this.add.graphics()
+    spiderOutline.lineStyle(6, 0x000000, 1) // Bold black outline
+    spiderOutline.strokeEllipse(0, 0, 60, 45) // Slightly larger than body
+    spiderOutline.setScrollFactor(0, 0)
+    spiderOutline.setDepth(19) // Behind body but visible
+    this.spider.add(spiderOutline)
     
-    // Eyes (big cartoon eyes)
-    const eyeWhiteL = this.add.circle(-15, -5, 18, 0xffffff)
-    const eyeWhiteR = this.add.circle(15, -5, 18, 0xffffff)
-    const eyePupilL = this.add.circle(-12, -3, 10, 0x000000)
-    const eyePupilR = this.add.circle(18, -3, 10, 0x000000)
-    
-    this.spider.add([eyeWhiteL, eyeWhiteR, eyePupilL, eyePupilR])
+    // Add a subtle glow effect
+    const spiderGlow = this.add.graphics()
+    spiderGlow.lineStyle(8, 0x444444, 0.3) // Subtle glow
+    spiderGlow.strokeEllipse(0, 0, 65, 50) // Even larger for glow
+    spiderGlow.setScrollFactor(0, 0)
+    spiderGlow.setDepth(18) // Behind everything
+    this.spider.add(spiderGlow)
     
     // Legs (8 legs, cartoon style)
     for (let i = 0; i < 8; i++) {
@@ -501,13 +516,22 @@ export default class MainMenuScene extends Phaser.Scene {
       const angle = (Math.PI / 5) * index - Math.PI / 3
       
       const leg = this.add.graphics()
-      leg.lineStyle(4, 0x000000, 1)
       
       // Draw curved leg using arc
       const startX = side * 30
       const startY = -10 + index * 8
       const endX = side * 70
       const endY = 10 + index * 5
+      
+      // Leg outline (bold)
+      leg.lineStyle(6, 0x000000, 1)
+      leg.beginPath()
+      leg.moveTo(startX + 1, startY + 1)
+      leg.lineTo(side * 50 + 1, startY - 5 + 1)
+      leg.lineTo(endX + 1, endY + 1)
+      leg.strokePath()
+      
+      leg.lineStyle(4, 0x000009, 1)
       
       leg.beginPath()
       leg.moveTo(startX, startY)
@@ -517,6 +541,32 @@ export default class MainMenuScene extends Phaser.Scene {
       
       this.spider.add(leg)
     }
+    // Spider body (larger for mascot)
+    const body = this.add.ellipse(0, 0, 80, 60, 0x000000)
+    this.spider.add(body)
+    
+    // Eyes (big cartoon eyes)
+    // Eye outlines (bold)
+    const eyeOutlineL = this.add.graphics()
+    eyeOutlineL.lineStyle(5, 0x000000, 1)
+    eyeOutlineL.strokeCircle(-15, -5, 20) // Slightly larger than eye
+    eyeOutlineL.setScrollFactor(0, 0)
+    this.spider.add(eyeOutlineL)
+    
+    const eyeOutlineR = this.add.graphics()
+    eyeOutlineR.lineStyle(5, 0x000000, 1)
+    eyeOutlineR.strokeCircle(15, -5, 20) // Slightly larger than eye
+    eyeOutlineR.setScrollFactor(0, 0)
+    this.spider.add(eyeOutlineR)
+    
+    const eyeWhiteL = this.add.circle(-15, -5, 18, 0xffffff)
+    const eyeWhiteR = this.add.circle(15, -5, 18, 0xffffff)
+    const eyePupilL = this.add.circle(-12, -3, 10, 0x000000)
+    const eyePupilR = this.add.circle(18, -3, 10, 0x000000)
+    
+    this.spider.add([eyeWhiteL, eyeWhiteR, eyePupilL, eyePupilR])
+    
+    
     
     // Bounce animation
     this.tweens.add({
@@ -579,21 +629,17 @@ export default class MainMenuScene extends Phaser.Scene {
     
     this.playButton.add(buttonBg)
     
-    // Claw marks on button
-    const clawMarks = this.add.graphics()
-    clawMarks.lineStyle(4, 0x000000, 0.3)
-    for (let i = 0; i < 3; i++) {
-      clawMarks.beginPath()
-      clawMarks.moveTo(-80 + i * 15, -40)
-      clawMarks.lineTo(-75 + i * 15, 30)
-      clawMarks.strokePath()
-    }
+    // Claw marks on button using image
+    const clawMarks = this.add.image(0, 0, 'claw-marks')
+    clawMarks.setScale(0.7) // Scale down to fit button
+    clawMarks.setAlpha(0.8) // Semi-transparent for subtle effect
+    clawMarks.setBlendMode(Phaser.BlendModes.MULTIPLY) // Blend with button background
     this.playButton.add(clawMarks)
     
-    // Button text with impact font - black on white button
+    // Button text with Halloween font - black on white button
     const playText = this.add.text(0, -5, '▶ ENTER ◀', {
       fontSize: '58px',
-      fontFamily: 'Impact, Arial Black, sans-serif',
+      fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
       color: '#000000',
       stroke: '#ffffff',
       strokeThickness: 3
@@ -605,7 +651,7 @@ export default class MainMenuScene extends Phaser.Scene {
     // Warning subtext - dark gray
     const warningText = this.add.text(0, 38, 'IF YOU DARE', {
       fontSize: '14px',
-      fontFamily: 'Georgia, serif',
+      fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
       color: '#333333',
       stroke: '#ffffff',
       strokeThickness: 2,
@@ -618,18 +664,24 @@ export default class MainMenuScene extends Phaser.Scene {
     const hitArea = new Phaser.Geom.Rectangle(-120, -50, 240, 100)
     this.playButton.setInteractive(hitArea, Phaser.Geom.Rectangle.Contains)
     
-    // Hover effects - white default, bloody red on hover
+    // Store original button graphics for hover effects
+    const originalButtonBg = buttonBg
+    
+    // Hover effects - smooth transitions
     this.playButton.on('pointerover', () => {
-      // Scale up button
+      // Stop any existing tweens to prevent conflicts
+      this.tweens.killTweensOf(this.playButton)
+      
+      // Smooth scale up
       this.tweens.add({
         targets: this.playButton,
-        scaleX: 1.08,
-        scaleY: 1.08,
-        duration: 200,
-        ease: 'Back.easeOut'
+        scaleX: 1.05,
+        scaleY: 1.05,
+        duration: 150,
+        ease: 'Power2.easeOut'
       })
       
-      // Change to blood red
+      // Change to blood red with smooth transition
       buttonBg.clear()
       buttonBg.fillStyle(0xcc0000, 1) // Bright blood red
       buttonBg.fillRoundedRect(-150, -60, 300, 110, 25)
@@ -640,17 +692,32 @@ export default class MainMenuScene extends Phaser.Scene {
       buttonBg.lineStyle(3, 0xff6666, 0.8)
       buttonBg.strokeRoundedRect(-145, -55, 290, 100, 23)
       
-      playText.setColor('#ffff00') // Yellow text on hover
-      warningText.setColor('#ffff00')
+      // Smooth text color transition
+      this.tweens.add({
+        targets: playText,
+        color: '#ffff00',
+        duration: 150
+      })
+      this.tweens.add({
+        targets: warningText,
+        color: '#ffff00',
+        duration: 150
+      })
     })
     
     this.playButton.on('pointerout', () => {
-      // Scale back
+      // Stop any existing tweens to prevent conflicts
+      this.tweens.killTweensOf(this.playButton)
+      this.tweens.killTweensOf(playText)
+      this.tweens.killTweensOf(warningText)
+      
+      // Smooth scale back
       this.tweens.add({
         targets: this.playButton,
         scaleX: 1,
         scaleY: 1,
-        duration: 200
+        duration: 150,
+        ease: 'Power2.easeOut'
       })
       
       // Back to white/light gray
@@ -664,8 +731,17 @@ export default class MainMenuScene extends Phaser.Scene {
       buttonBg.lineStyle(3, 0xcccccc, 0.6)
       buttonBg.strokeRoundedRect(-145, -55, 290, 100, 23)
       
-      playText.setColor('#000000') // Black text
-      warningText.setColor('#333333')
+      // Smooth text color transition back
+      this.tweens.add({
+        targets: playText,
+        color: '#000000',
+        duration: 150
+      })
+      this.tweens.add({
+        targets: warningText,
+        color: '#333333',
+        duration: 150
+      })
     })
     
     // Click to start game
@@ -699,45 +775,43 @@ export default class MainMenuScene extends Phaser.Scene {
     const W = this.scale.width
     const H = this.scale.height
     
-    // Top-left web
-    this.drawWebCorner(80, 80, 1)
+    // Top-left web using spider web.jpg - better positioned and scaled
+    const webLeft = this.add.image(60, 60, 'spider-web-left')
+    webLeft.setOrigin(0, 0) // Anchor to top-left corner
+    webLeft.setScale(0.25) // Smaller, more subtle scale
+    webLeft.setScrollFactor(0, 0) // Keep fixed
+    webLeft.setDepth(5) // Behind title elements
+    webLeft.setAlpha(0.5) // More subtle transparency
+    webLeft.setBlendMode(Phaser.BlendModes.MULTIPLY) // Blend better with background
     
-    // Top-right web
-    this.drawWebCorner(W - 80, 80, -1)
+    // Top-right web using web 2.jpg - better positioned and scaled
+    const webRight = this.add.image(W - 60, 60, 'spider-web-right')
+    webRight.setOrigin(1, 0) // Anchor to top-right corner
+    webRight.setScale(0.25) // Smaller, more subtle scale
+    webRight.setScrollFactor(0, 0) // Keep fixed
+    webRight.setDepth(5) // Behind title elements
+    webRight.setAlpha(0.5) // More subtle transparency
+    webRight.setBlendMode(Phaser.BlendModes.MULTIPLY) // Blend better with background
     
-    // Bottom-left web
-    this.drawWebCorner(80, H - 80, 1)
+    // Bottom-left web (mirrored spider web.jpg)
+    const webBottomLeft = this.add.image(60, H - 60, 'spider-web-left')
+    webBottomLeft.setOrigin(0, 1) // Anchor to bottom-left corner
+    webBottomLeft.setScale(0.25) // Smaller, more subtle scale
+    webBottomLeft.setScrollFactor(0, 0) // Keep fixed
+    webBottomLeft.setDepth(5) // Behind instruction elements
+    webBottomLeft.setAlpha(0.5) // More subtle transparency
+    webBottomLeft.setFlipY(true) // Flip vertically for bottom corner
+    webBottomLeft.setBlendMode(Phaser.BlendModes.MULTIPLY) // Blend better with background
     
-    // Bottom-right web
-    this.drawWebCorner(W - 80, H - 80, -1)
-  }
-  
-  private drawWebCorner(x: number, y: number, direction: number) {
-    const web = this.add.graphics()
-    web.lineStyle(2, 0x000000, 0.6)
-    web.setScrollFactor(0, 0) // Keep fixed
-    
-    // Draw web lines radiating from corner
-    const numLines = 8
-    const radius = 100
-    
-    for (let i = 0; i < numLines; i++) {
-      const angle = (i / numLines) * Math.PI / 2 * direction
-      web.beginPath()
-      web.moveTo(x, y)
-      web.lineTo(
-        x + Math.cos(angle) * radius,
-        y + Math.sin(angle) * radius
-      )
-      web.strokePath()
-    }
-    
-    // Draw concentric arcs
-    for (let r = 20; r <= radius; r += 20) {
-      web.beginPath()
-      web.arc(x, y, r, 0, Math.PI / 2 * direction)
-      web.strokePath()
-    }
+    // Bottom-right web (mirrored web 2.jpg)
+    const webBottomRight = this.add.image(W - 60, H - 60, 'spider-web-right')
+    webBottomRight.setOrigin(1, 1) // Anchor to bottom-right corner
+    webBottomRight.setScale(0.25) // Smaller, more subtle scale
+    webBottomRight.setScrollFactor(0, 0) // Keep fixed
+    webBottomRight.setDepth(5) // Behind instruction elements
+    webBottomRight.setAlpha(0.5) // More subtle transparency
+    webBottomRight.setFlipY(true) // Flip vertically for bottom corner
+    webBottomRight.setBlendMode(Phaser.BlendModes.MULTIPLY) // Blend better with background
   }
   
   private createInstructions() {
@@ -746,13 +820,13 @@ export default class MainMenuScene extends Phaser.Scene {
     
     // Dark, ominous instructions panel with blood red accent
     const instructionsBg = this.add.graphics()
-    instructionsBg.fillStyle(0x000000, 0.8)
+    instructionsBg.fillStyle(0x000000, 0.95) // More opaque background
     instructionsBg.fillRoundedRect(W / 2 - 385, H - 112, 770, 105, 12)
-    instructionsBg.lineStyle(3, 0x8B0000, 1) // Blood red
+    instructionsBg.lineStyle(4, 0xff4400, 1) // Brighter orange border
     instructionsBg.strokeRoundedRect(W / 2 - 385, H - 112, 770, 105, 12)
     
     // Inner warning glow
-    instructionsBg.lineStyle(2, 0xff3300, 0.4)
+    instructionsBg.lineStyle(2, 0xff6600, 0.6) // Brighter inner glow
     instructionsBg.strokeRoundedRect(W / 2 - 380, H - 107, 760, 95, 10)
     
     instructionsBg.setScrollFactor(0, 0)
@@ -777,11 +851,11 @@ export default class MainMenuScene extends Phaser.Scene {
     const instructions = this.add.text(W / 2, H - 77, 
       '⚠️ Answer Calculus to Climb... Or Perish! ⚠️',
       {
-        fontSize: '20px',
-        fontFamily: 'Impact, Arial Black, sans-serif',
-        color: '#ff4400',
-        stroke: '#000000',
-        strokeThickness: 5,
+        fontSize: '22px',
+        fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
+        color: '#ff6600',
+        stroke: '#ffffff',
+        strokeThickness: 8,
         align: 'center'
       }
     )
@@ -793,11 +867,11 @@ export default class MainMenuScene extends Phaser.Scene {
     const rules = this.add.text(W / 2, H - 50, 
       '✅ Correct = Survive & Climb  •  ❌ Wrong = Fall to Doom  •  💀 3 Lives  •  ⛰️ Summit: 3000m',
       {
-        fontSize: '13px',
-        fontFamily: 'Courier New, monospace',
-        color: '#ffccaa',
+        fontSize: '12px',
+        fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
+        color: '#ffffff',
         stroke: '#000000',
-        strokeThickness: 3,
+        strokeThickness: 6,
         align: 'center'
       }
     )
@@ -810,8 +884,8 @@ export default class MainMenuScene extends Phaser.Scene {
       '🐛 Legend Speaks of a Golden Bug at the Peak... Will You Find It? ✨',
       {
         fontSize: '12px',
-        fontFamily: 'Georgia, serif',
-        color: '#ffd700',
+        fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
+        color: '#ffff00',
         stroke: '#000000',
         strokeThickness: 3,
         align: 'center',
@@ -849,12 +923,31 @@ export default class MainMenuScene extends Phaser.Scene {
     this.spiderCursor = this.add.container(0, 0)
     this.spiderCursor.setDepth(10000) // Always on top
     
+    // ========== BOLD OUTLINE AROUND SPIDER CURSOR ==========
+    // Create a bold outline around the entire spider body
+    const spiderOutline = this.add.graphics()
+    spiderOutline.lineStyle(3, 0x000000, 1) // Bold black outline
+    spiderOutline.strokeEllipse(0, 0, 35, 27) // Slightly larger than body
+    spiderOutline.setDepth(10001) // Behind body but visible
+    this.spiderCursor.add(spiderOutline)
+    
     // Spider body (smaller for cursor)
     const body = this.add.ellipse(0, 0, 30, 22, 0x000000)
     const bodyHighlight = this.add.ellipse(-4, -3, 10, 8, 0x333333, 0.7)
     this.spiderCursor.add([body, bodyHighlight])
     
     // Eyes (big and cute)
+    // Eye outlines (bold)
+    const eyeOutlineL = this.add.graphics()
+    eyeOutlineL.lineStyle(2, 0x000000, 1)
+    eyeOutlineL.strokeCircle(-6, -2, 8) // Slightly larger than eye
+    this.spiderCursor.add(eyeOutlineL)
+    
+    const eyeOutlineR = this.add.graphics()
+    eyeOutlineR.lineStyle(2, 0x000000, 1)
+    eyeOutlineR.strokeCircle(6, -2, 8) // Slightly larger than eye
+    this.spiderCursor.add(eyeOutlineR)
+    
     const eyeWhiteL = this.add.circle(-6, -2, 6, 0xffffff)
     const eyeWhiteR = this.add.circle(6, -2, 6, 0xffffff)
     const eyePupilL = this.add.circle(-5, -1, 3, 0xff0000) // Red pupils for spooky effect
@@ -870,7 +963,6 @@ export default class MainMenuScene extends Phaser.Scene {
       const index = i % 4
       
       const leg = this.add.graphics()
-      leg.lineStyle(2, 0x000000, 1)
       
       // Draw curved leg
       const startX = side * 12
@@ -879,6 +971,16 @@ export default class MainMenuScene extends Phaser.Scene {
       const midY = -4 + index * 2
       const endX = side * 24
       const endY = 2 + index * 2
+      
+      // Leg outline (bold)
+      leg.lineStyle(3, 0x000000, 1)
+      leg.beginPath()
+      leg.moveTo(startX + 1, startY + 1)
+      leg.lineTo(midX + 1, midY + 1)
+      leg.lineTo(endX + 1, endY + 1)
+      leg.strokePath()
+      
+      leg.lineStyle(2, 0x000000, 1)
       
       leg.beginPath()
       leg.moveTo(startX, startY)

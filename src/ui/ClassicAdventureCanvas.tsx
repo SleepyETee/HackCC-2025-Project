@@ -10,6 +10,8 @@ export function ClassicAdventureCanvas() {
   useEffect(() => {
     if (!containerRef.current || gameRef.current) return
     
+    console.log('🎮 ClassicAdventureCanvas: Creating Phaser game...')
+    
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
       width: 800,
@@ -27,9 +29,11 @@ export function ClassicAdventureCanvas() {
     }
     
     gameRef.current = new Phaser.Game(config)
+    console.log('✅ ClassicAdventureCanvas: Phaser game created successfully')
     
     return () => {
       if (gameRef.current) {
+        console.log('🧹 ClassicAdventureCanvas: Destroying Phaser game...')
         gameRef.current.destroy(true)
         gameRef.current = null
       }
@@ -40,6 +44,14 @@ export function ClassicAdventureCanvas() {
     <div 
       ref={containerRef}
       className="classic-adventure-canvas-container"
+      style={{
+        width: '800px',
+        height: '600px',
+        border: '2px solid #ffd700',
+        borderRadius: '8px',
+        backgroundColor: '#2a3f54',
+        position: 'relative'
+      }}
     />
   )
 }

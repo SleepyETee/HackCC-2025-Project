@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
 import { useGameStore } from '../state/store'
+import { audioManager } from './AudioManager'
 import { getQuestionByHeight, getChapterByHeight } from '../math/calculusAPI'
 import type { AdventureQuestion } from './gameTypes'
-import { audioManager } from './AudioManager'
 
 /**
  * HALLOWEEN PUMPKIN CLIMBING SCENE
@@ -24,14 +24,18 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   
   preload() {
     // Load explosion gif for game over
-    this.load.image('explosion', '/explosion.gif')
+    this.load.image('explosion', '/images/explosion.gif')
+    
+    // Load golden bug image for victory
+    this.load.image('goldenbug', '/images/goldenbug.png')
     
     // Load sound effects
-    this.load.audio('punch-sound', '/punch-gaming-sound-effect-hd_RzlG1GE.mp3')
-    this.load.audio('fart-sound', '/dry-fart.mp3')
-    this.load.audio('jump-sound', '/punch-gaming-sound-effect-hd_RzlG1GE.mp3')
-    this.load.audio('fall-sound', '/punch-gaming-sound-effect-hd_RzlG1GE.mp3')
-    this.load.audio('lose-sound', '/dry-fart.mp3')
+    this.load.audio('punch-sound', '/sounds/punch-gaming-sound-effect-hd_RzlG1GE.mp3')
+    this.load.audio('fart-sound', '/sounds/dry-fart.mp3')
+    this.load.audio('jump-sound', '/sounds/punch-gaming-sound-effect-hd_RzlG1GE.mp3')
+    this.load.audio('fall-sound', '/sounds/punch-gaming-sound-effect-hd_RzlG1GE.mp3')
+    this.load.audio('lose-sound', '/sounds/dry-fart.mp3')
+    this.load.audio('victory-sound', '/sounds/winners_W9Cpenj.mp3')
   }
   
   // Spider
@@ -481,7 +485,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       const label = this.add.text(0, -60, `${heightMeters}m`, {
         fontSize: '16px',
         color: '#ffd700',
-        fontFamily: 'Arial Black',
+        fontFamily: 'Creepster, cursive, Arial Black, sans-serif',
         stroke: '#000000',
         strokeThickness: 3
       })
@@ -536,6 +540,55 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     spiderShadow.setDepth(-2)
     this.spider.add(spiderShadow)
     
+    // ========== BOLD OUTLINE AROUND SPIDER ==========
+    // Create a bold outline around the entire spider body
+    const spiderOutline = this.add.graphics()
+    spiderOutline.lineStyle(6, 0x000000, 1) // Bold black outline
+    spiderOutline.strokeEllipse(0, 0, 55, 40) // Slightly larger than body
+    spiderOutline.setDepth(-1) // Behind body but above shadow
+    this.spider.add(spiderOutline)
+    
+    // Add a subtle glow effect
+    const spiderGlow = this.add.graphics()
+    spiderGlow.lineStyle(8, 0x444444, 0.3) // Subtle glow
+    spiderGlow.strokeEllipse(0, 0, 60, 45) // Even larger for glow
+    spiderGlow.setDepth(-3) // Behind everything
+    this.spider.add(spiderGlow)
+    
+    // ========== 8 LEGS WITH DEPTH (BEHIND BODY) ==========
+    for (let i = 0; i < 8; i++) {
+      const side = i < 4 ? -1 : 1
+      const index = i % 4
+      
+      const leg = this.add.graphics()
+      
+      // Leg shadow (3D depth)
+      leg.lineStyle(4, 0x666666, 0.4)
+      leg.beginPath()
+      leg.moveTo(side * 20 + 2, -5 + index * 4 + 2)
+      leg.lineTo(side * 30 + 2, -8 + index * 4 + 2)
+      leg.lineTo(side * 40 + 2, 5 + index * 3 + 2)
+      leg.strokePath()
+      
+      // Leg outline (bold)
+      leg.lineStyle(5, 0x000000, 1)
+      leg.beginPath()
+      leg.moveTo(side * 20 + 1, -5 + index * 4 + 1)
+      leg.lineTo(side * 30 + 1, -8 + index * 4 + 1)
+      leg.lineTo(side * 40 + 1, 5 + index * 3 + 1)
+      leg.strokePath()
+      
+      // Leg main
+      leg.lineStyle(3, 0x000000, 1)
+      leg.beginPath()
+      leg.moveTo(side * 20, -5 + index * 4)
+      leg.lineTo(side * 30, -8 + index * 4)
+      leg.lineTo(side * 40, 5 + index * 3)
+      leg.strokePath()
+      
+      this.spider.add(leg)
+    }
+    
     // ========== 3D SPIDER BODY ==========
     // Main body
     const body = this.add.ellipse(0, 0, 50, 35, 0x000000)
@@ -546,6 +599,17 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     this.spider.add(bodyHighlight)
     
     // ========== BIG CARTOON EYES ==========
+    // Eye outlines (bold)
+    const eyeOutlineL = this.add.graphics()
+    eyeOutlineL.lineStyle(4, 0x000000, 1)
+    eyeOutlineL.strokeCircle(-10, -3, 14) // Slightly larger than eye
+    this.spider.add(eyeOutlineL)
+    
+    const eyeOutlineR = this.add.graphics()
+    eyeOutlineR.lineStyle(4, 0x000000, 1)
+    eyeOutlineR.strokeCircle(10, -3, 14) // Slightly larger than eye
+    this.spider.add(eyeOutlineR)
+    
     const eyeWhiteL = this.add.circle(-10, -3, 12, 0xffffff)
     const eyeWhiteR = this.add.circle(10, -3, 12, 0xffffff)
     
@@ -561,32 +625,6 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     const pupilShineR = this.add.circle(10, -3, 2, 0xffffff, 0.9)
     
     this.spider.add([eyeWhiteL, eyeWhiteR, eyeShineL, eyeShineR, eyePupilL, eyePupilR, pupilShineL, pupilShineR])
-    
-    // ========== 8 LEGS WITH DEPTH ==========
-    for (let i = 0; i < 8; i++) {
-      const side = i < 4 ? -1 : 1
-      const index = i % 4
-      
-      const leg = this.add.graphics()
-      
-      // Leg shadow (3D depth)
-      leg.lineStyle(4, 0x666666, 0.4)
-      leg.beginPath()
-      leg.moveTo(side * 20 + 2, -5 + index * 4 + 2)
-      leg.lineTo(side * 30 + 2, -8 + index * 4 + 2)
-      leg.lineTo(side * 40 + 2, 5 + index * 3 + 2)
-      leg.strokePath()
-      
-      // Leg main
-      leg.lineStyle(3, 0x000000, 1)
-      leg.beginPath()
-      leg.moveTo(side * 20, -5 + index * 4)
-      leg.lineTo(side * 30, -8 + index * 4)
-      leg.lineTo(side * 40, 5 + index * 3)
-      leg.strokePath()
-      
-      this.spider.add(leg)
-    }
     
     // ========== ENSURE SPIDER STARTS WITH NO ROTATION ==========
     this.spider.rotation = 0
@@ -620,7 +658,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     
     // Create hearts with spider icons
     for (let i = 0; i < this.lives; i++) {
-      const heartContainer = this.add.container(i * 60, 0)
+      const heartContainer = this.add.container(i * 60 + 30, 0)
       
       // Heart shape
       const heart = this.add.graphics()
@@ -657,7 +695,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     // Height/Progress text - top center, fixed to screen
     this.heightText = this.add.text(W / 2, 20, '', {
       fontSize: '24px',
-      fontFamily: 'Impact, Arial Black',
+      fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
       color: '#ffd700',
       stroke: '#000000',
       strokeThickness: 5
@@ -669,7 +707,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     // Feedback text - center of screen, fixed
     this.feedbackText = this.add.text(W / 2, H / 2 - 100, '', {
       fontSize: '72px',
-      fontFamily: 'Impact, Arial Black',
+      fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
       color: '#00ff00',
       stroke: '#000000',
       strokeThickness: 8
@@ -723,10 +761,10 @@ export default class HalloweenClimbScene extends Phaser.Scene {
         id: 'fallback',
         text: 'What is 2 + 2?',
         options: [
-          { text: 'A) 4', correct: true, action: 'web' },
-          { text: 'B) 3', correct: false, action: 'web' },
-          { text: 'C) 5', correct: false, action: 'web' },
-          { text: 'D) 6', correct: false, action: 'web' }
+          { text: '4', correct: true, action: 'web' },
+          { text: '3', correct: false, action: 'web' },
+          { text: '5', correct: false, action: 'web' },
+          { text: '6', correct: false, action: 'web' }
         ],
         hint: 'Basic arithmetic',
         concept: 'Addition',
@@ -795,7 +833,12 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   private onWrongAnswer() {
     this.isAnimating = true
     const store = useGameStore.getState()
-    store.addScore(-50)
+    
+    // Prevent score from going below 0
+    const currentScore = store.score
+    const deduction = Math.min(50, currentScore) // Take the smaller of 50 or current score
+    store.addScore(-deduction)
+    
     this.lives--
     this.updateLivesDisplay()
     
@@ -1092,7 +1135,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   private showMessage(text: string, color: number, y: number) {
     const msg = this.add.text(this.scale.width / 2, y, text, {
       fontSize: '20px',
-      fontFamily: 'Arial Black',
+      fontFamily: 'Creepster, cursive, Arial Black, sans-serif',
       color: `#${color.toString(16).padStart(6, '0')}`,
       stroke: '#000000',
       strokeThickness: 4
@@ -1152,6 +1195,9 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     
     console.log('👑 VICTORY! Reached target height!')
     
+    // Play victory sound
+    audioManager.playVictorySound()
+    
     // FIXED: Use actual screen center coordinates
     const centerX = this.scale.width / 2
     const centerY = this.scale.height / 2
@@ -1173,7 +1219,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
 
     // ========== CONFETTI GIF OVERLAY (DOM) - DELAYED ==========
     const confetti = this.add.dom(centerX, centerY).createFromHTML(
-      '<img src="/confetti.gif" style="width:800px;height:600px;object-fit:cover;opacity:0.7;pointer-events:none;" />'
+      '<img src="/images/confetti.gif" style="width:800px;height:600px;object-fit:cover;opacity:0.7;pointer-events:none;" />'
     )
     confetti.setScrollFactor(0, 0)
     confetti.setDepth(1001)
@@ -1186,75 +1232,24 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       ease: 'Sine.easeInOut'
     })
 
-    // ========== GOLDEN SPIDER BUG (Spooky Halloween Trophy) ==========
-    const goldenBug = this.add.container(centerX, centerY - 120)
+    // ========== GOLDEN BUG IMAGE (Using goldenbug.png) ==========
+    const goldenBug = this.add.image(centerX, centerY - 120, 'goldenbug')
     goldenBug.setScrollFactor(0, 0)
     goldenBug.setDepth(1005)
     goldenBug.setAlpha(0)
-    goldenBug.setScale(0.5)
+    goldenBug.setScale(0.3) // Scale down the image to appropriate size
     
-    // Bug body (golden metallic)
-    const bugBody = this.add.ellipse(0, 0, 70, 50, 0xffd700)
-    const bugShine = this.add.ellipse(-12, -8, 25, 18, 0xffed4e, 0.9)
-    const bugShadow = this.add.ellipse(15, 10, 30, 20, 0xcc9900, 0.6)
-    
-    // Golden wings (beetle style)
-    const wingL = this.add.graphics()
-    wingL.fillStyle(0xffa500, 1)
-    wingL.fillEllipse(-25, -5, 30, 50)
-    wingL.lineStyle(2, 0xff8c00, 1)
-    wingL.strokeEllipse(-25, -5, 30, 50)
-    
-    const wingR = this.add.graphics()
-    wingR.fillStyle(0xffa500, 1)
-    wingR.fillEllipse(25, -5, 30, 50)
-    wingR.lineStyle(2, 0xff8c00, 1)
-    wingR.strokeEllipse(25, -5, 30, 50)
-    
-    // 6 legs (beetle style)
-    const legs = this.add.graphics()
-    legs.lineStyle(4, 0x000000, 1)
-    for (let i = 0; i < 6; i++) {
-      const side = i < 3 ? -1 : 1
-      const index = i % 3
-      const legY = -15 + index * 15
-      
-      legs.beginPath()
-      legs.moveTo(side * 25, legY)
-      legs.lineTo(side * 40, legY - 5)
-      legs.lineTo(side * 55, legY + 10)
-      legs.strokePath()
-    }
-    
-    // Antennae
-    const antennae = this.add.graphics()
-    antennae.lineStyle(3, 0x8b7355, 1)
-    antennae.beginPath()
-    antennae.moveTo(-8, -20)
-    antennae.lineTo(-15, -40)
-    antennae.strokePath()
-    antennae.beginPath()
-    antennae.moveTo(8, -20)
-    antennae.lineTo(15, -40)
-    antennae.strokePath()
-    
-    // Eyes (spooky red)
-    const eyeL = this.add.circle(-12, -8, 6, 0xff0000)
-    const eyeR = this.add.circle(12, -8, 6, 0xff0000)
-    const pupilL = this.add.circle(-12, -8, 3, 0x000000)
-    const pupilR = this.add.circle(12, -8, 3, 0x000000)
-    
-    // Glow effect
-    const glow = this.add.circle(0, 0, 80, 0xffd700, 0.3)
+    // Glow effect around the golden bug
+    const glow = this.add.circle(centerX, centerY - 120, 80, 0xffd700, 0.3)
     glow.setBlendMode(Phaser.BlendModes.ADD)
-    
-    goldenBug.add([glow, legs, antennae, wingL, wingR, bugShadow, bugBody, bugShine, eyeL, eyeR, pupilL, pupilR])
+    glow.setScrollFactor(0, 0)
+    glow.setDepth(1004)
     
     // Animate golden bug entrance - SLOWER AND MORE DELAYED
     this.tweens.add({
       targets: goldenBug,
       alpha: 1,
-      scale: 1.2,
+      scale: 0.4,
       duration: 1500,
       ease: 'Back.easeOut',
       delay: 1600
@@ -1282,19 +1277,18 @@ export default class HalloweenClimbScene extends Phaser.Scene {
       ease: 'Sine.easeInOut'
     })
     
-    // Wing flap animation
+    // Gentle rotation animation for the golden bug
     this.tweens.add({
-      targets: [wingL, wingR],
-      scaleY: 1.2,
-      duration: 300,
-      yoyo: true,
+      targets: goldenBug,
+      angle: 360,
+      duration: 8000,
       repeat: -1,
-      ease: 'Sine.easeInOut'
+      ease: 'Linear'
     })
     
     // ========== TROPHY GIF (secondary decoration) - SLOWER ==========
     const trophy = this.add.dom(centerX + 180, centerY - 60).createFromHTML(
-      '<img src="/trophy.gif" style="width:120px;height:120px;filter: drop-shadow(0 5px 10px rgba(0,0,0,0.4));" />'
+      '<img src="/images/trophy.gif" style="width:120px;height:120px;filter: drop-shadow(0 5px 10px rgba(0,0,0,0.4));" />'
     )
     trophy.setScrollFactor(0, 0)
     trophy.setDepth(1003)

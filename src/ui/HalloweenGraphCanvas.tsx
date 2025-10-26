@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useLayoutEffect } from 'react'
 import { useGameStore } from '../state/store'
+import { audioManager } from '../game/AudioManager'
 import { getLevel } from '../game/questions'
 import { ViewState, toSx, toSy, toX, toY, zoomAround, panByPixels, resetView, fitToData, getRect } from '../game/view'
 import { softmax, sampleCategorical } from '../math/probability'
@@ -574,6 +575,7 @@ export function HalloweenGraphCanvas() {
     }
     
     // Draw trajectory arc if preparing to jump
+    /* COMMENTED OUT - Green trajectory line
     if (jumpPreparing && trajectoryPoints.length > 0) {
       ctx.strokeStyle = THEME.green
       ctx.lineWidth = 3
@@ -608,6 +610,7 @@ export function HalloweenGraphCanvas() {
         ctx.shadowBlur = 0
       }
     }
+    */
     
     // Draw probability beams if answer selected
     if (showBeams && beamProbabilities.length > 0 && !jumpPreparing) {
@@ -925,7 +928,7 @@ export function HalloweenGraphCanvas() {
           }
           setTrajectoryPoints(trajectory)
         }
-      }, 800)
+      }, 1400)
       
       return () => clearTimeout(timer)
     }
@@ -965,6 +968,9 @@ export function HalloweenGraphCanvas() {
     const handleFire = () => {
       const store = useGameStore.getState()
       const { answerCorrect } = store
+      
+      // Play projectile beam sound
+      audioManager.playProjectileSound()
       
       if (points.length === 0) return
       
@@ -1082,6 +1088,9 @@ export function HalloweenGraphCanvas() {
             if (target.isPumpkin && finalScore >= 0) {
               // VICTORY with bonus (clean win)
               setTimeout(() => {
+                // Play victory sound
+                audioManager.playVictorySound()
+                
                 setModalScore(finalScore)
                 setShowVictoryModal(true)
               }, 600)

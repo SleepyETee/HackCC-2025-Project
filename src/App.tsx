@@ -4,11 +4,11 @@ import { EquationPanel } from './ui/EquationPanel'
 import { QuestionPanel } from './ui/QuestionPanel'
 import { LevelSelector } from './ui/LevelSelector'
 import { HalloweenGraphCanvas } from './ui/HalloweenGraphCanvas'
-import { ClassicAdventureCanvas } from './ui/ClassicAdventureCanvas'
-import { StoryAdventureCanvas } from './ui/StoryAdventureCanvas'
+import { Suspense, lazy } from 'react'
+const ClassicAdventureCanvas = lazy(() => import('./ui/ClassicAdventureCanvas').then(m => ({ default: m.ClassicAdventureCanvas })))
+const StoryAdventureCanvas = lazy(() => import('./ui/StoryAdventureCanvas').then(m => ({ default: m.StoryAdventureCanvas })))
 import { AdventureQuestionPanel } from './ui/AdventureQuestionPanel'
 import { StoryPanel } from './ui/StoryPanel'
-import { TestWebSwingCanvas } from './ui/TestWebSwingCanvas'
 import { useGameStore } from './state/store'
 import { audioManager } from './game/AudioManager'
 
@@ -19,7 +19,6 @@ export default function App() {
   const setAdventureMode = useGameStore(s => s.setAdventureMode)
   const score = useGameStore(s => s.score)
   const [audioEnabled, setAudioEnabled] = useState(audioManager.getAudioEnabled())
-  const [showTest, setShowTest] = useState(import.meta.env.DEV ? false : false)
   
   // Audio toggle handler
   const handleAudioToggle = () => {
@@ -60,54 +59,10 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyPress)
   }, [gameMode])
 
-  // Show test mode if enabled
-  if (import.meta.env.DEV && showTest) {
-    return (
-      <div className="app-root">
-        <div className="header">
-          <h1 className="title">🧪 Web Swinging Test Mode</h1>
-          <button
-            onClick={() => setShowTest(false)}
-            className="btn"
-            style={{ position: 'absolute', right: '20px', top: '20px' }}
-          >
-            ← Back to Game
-          </button>
-        </div>
-        <TestWebSwingCanvas />
-        <div style={{ textAlign: 'center', padding: '20px', color: '#aaa' }}>
-          <p><strong>How to test:</strong></p>
-          <p>1. Click and drag to shoot web</p>
-          <p>2. Right-click to cut web</p>
-          <p>3. Click test buttons to see physics change</p>
-        </div>
-      </div>
-    )
-  }
-  
   return (
     <div className="app-root">
       {/* Header with mode switcher */}
       <div className="header">
-        {/* Test Mode Button (DEV only) */}
-        {import.meta.env.DEV && (
-          <button
-            onClick={() => setShowTest(true)}
-            className="btn"
-            style={{ 
-              position: 'absolute', 
-              right: '20px', 
-              top: '20px',
-              fontSize: '12px',
-              padding: '8px 12px',
-              background: '#8b5cf6',
-              zIndex: 1000
-            }}
-          >
-            🧪 Test
-          </button>
-        )}
-        
         <h1 className="title">
           🕷️ SpiderCalc: {gameMode === 'adventure' ? 'Halloween Adventure' : 'Halloween Calculus'} 🎃
         </h1>
@@ -137,22 +92,64 @@ export default function App() {
           </button>
         </div>
         
-        {/* Adventure Mode Selector */}
+        {/* Adventure Mode Selector - Integrated Navbar */}
         {gameMode === 'adventure' && (
-          <div className="switcher" style={{ marginTop: '10px', gap: '8px' }}>
+          <div className="adventure-navbar" style={{ 
+            marginTop: '10px', 
+            display: 'flex', 
+            gap: '8px', 
+            justifyContent: 'center',
+            alignItems: 'center',
+            background: 'linear-gradient(135deg, #2d1b4e, #1a0f2e)',
+            padding: '12px 20px',
+            borderRadius: '12px',
+            border: '2px solid #ffd700',
+            boxShadow: '0 0 20px rgba(255, 215, 0, 0.3)'
+          }}>
+            <span style={{ color: '#ffd700', fontSize: '14px', fontWeight: 'bold', marginRight: '10px' }}>
+              Choose Adventure:
+            </span>
             <button
               onClick={() => setAdventureMode('classic')}
               className={`btn ${adventureMode === 'classic' ? 'btn--classic-active' : ''}`}
-              style={{ fontSize: '14px', padding: '8px 16px' }}
+              style={{ 
+                fontSize: '14px', 
+                padding: '8px 16px',
+                background: adventureMode === 'classic' 
+                  ? 'linear-gradient(135deg, #ff6b35, #e55a2b)' 
+                  : 'linear-gradient(135deg, #374151, #1f2937)',
+                color: '#fff',
+                border: adventureMode === 'classic' 
+                  ? '2px solid #ffd700' 
+                  : '2px solid #4b5563',
+                fontWeight: adventureMode === 'classic' ? 700 : 500,
+                boxShadow: adventureMode === 'classic' 
+                  ? '0 0 15px rgba(255, 107, 53, 0.6)' 
+                  : 'none'
+              }}
             >
               🎃 Classic Adventure
             </button>
             <button
               onClick={() => setAdventureMode('story')}
               className={`btn ${adventureMode === 'story' ? 'btn--adventure-active' : ''}`}
-              style={{ fontSize: '14px', padding: '8px 16px' }}
+              style={{ 
+                fontSize: '14px', 
+                padding: '8px 16px',
+                background: adventureMode === 'story' 
+                  ? 'linear-gradient(135deg, #8b5cf6, #7c3aed)' 
+                  : 'linear-gradient(135deg, #374151, #1f2937)',
+                color: '#fff',
+                border: adventureMode === 'story' 
+                  ? '2px solid #ffd700' 
+                  : '2px solid #4b5563',
+                fontWeight: adventureMode === 'story' ? 700 : 500,
+                boxShadow: adventureMode === 'story' 
+                  ? '0 0 15px rgba(139, 92, 246, 0.6)' 
+                  : 'none'
+              }}
             >
-              🕷️ Web-Swinging Adventure (Spider-Man Physics!)
+              🕷️ Web-Swinging Adventure
             </button>
           </div>
         )}
@@ -163,20 +160,45 @@ export default function App() {
         <>
           {/* Story Adventure - Full Screen Physics Puzzle! */}
           {adventureMode === 'story' ? (
-            <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-              <StoryAdventureCanvas />
+            <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+              <Suspense fallback={<div style={{color:'#aaa',padding:20}}>Loading story mode…</div>}>
+                <StoryAdventureCanvas />
+              </Suspense>
+              <StoryPanel />
             </div>
           ) : (
             // Classic Adventure - with question panel
             <>
+              {/* Story Panel for Classic Adventure - Quest/Mission Box - MOVED ABOVE */}
+              <StoryPanel />
+              
               <div className="grid-two">
                 {/* Game canvas */}
                 <div className="canvas-card">
-                  <ClassicAdventureCanvas />
+                  <Suspense fallback={<div style={{color:'#aaa',padding:20}}>Loading adventure…</div>}>
+                    <ClassicAdventureCanvas />
+                  </Suspense>
                 </div>
                 
-                {/* Question panel */}
+                {/* Question panel with score above */}
                 <div>
+                  {/* Score Display Above Question Box */}
+                  <div style={{
+                    padding: 12,
+                    background: 'rgba(255, 107, 53, 0.2)',
+                    borderRadius: 8,
+                    border: '2px solid rgba(255, 107, 53, 0.5)',
+                    marginBottom: 12,
+                    textAlign: 'center'
+                  }}>
+                    <div style={{ fontSize: 12, color: '#ff6b35', fontWeight: 600, marginBottom: 4 }}>
+                      SCORE
+                    </div>
+                    <div style={{ fontSize: 24, color: '#ffd700', fontWeight: 700 }}>
+                      {score}
+                    </div>
+                  </div>
+                  
                   <AdventureQuestionPanel />
                 </div>
               </div>
@@ -189,9 +211,6 @@ export default function App() {
               <>
                 <div className="instructions-title">🎮 HOW TO PLAY - CLASSIC ADVENTURE</div>
                 <div className="instructions-body">
-                  <div className="instructions-item">
-                    🎯 <strong>Hover & Click</strong> pumpkins above to target your jump
-                  </div>
                   <div className="instructions-item">
                     ⏱️ <strong>Answer questions</strong> to power your jump
                   </div>

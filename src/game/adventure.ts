@@ -314,10 +314,10 @@ export const ADVENTURE_QUESTIONS: AdventureQuestion[] = [
     id: "ch1-q1",
     text: "To calculate the jump trajectory across the mansion entrance, what is the derivative of position s(t) = 5t²?",
     options: [
-      { text: "A) 10t", correct: true, action: "jump" },
-      { text: "B) 5t", correct: false, action: "jump" },
-      { text: "C) 10t²", correct: false, action: "jump" },
-      { text: "D) 5t²", correct: false, action: "jump" }
+      { text: "10t", correct: true, action: "jump" },
+      { text: "5t", correct: false, action: "jump" },
+      { text: "10t²", correct: false, action: "jump" },
+      { text: "5t²", correct: false, action: "jump" }
     ],
     hint: "Use the power rule: d/dt[tⁿ] = n·tⁿ⁻¹",
     concept: "Power Rule for Derivatives",
@@ -327,10 +327,10 @@ export const ADVENTURE_QUESTIONS: AdventureQuestion[] = [
     id: "ch1-q2",
     text: "To swing between chandeliers, calculate the angle for optimal web trajectory: sin(30°)?",
     options: [
-      { text: "A) 0.5", correct: true, action: "web" },
-      { text: "B) 0.866", correct: false, action: "web" },
-      { text: "C) 1.0", correct: false, action: "web" },
-      { text: "D) 0.707", correct: false, action: "web" }
+      { text: "0.5", correct: true, action: "web" },
+      { text: "0.866", correct: false, action: "web" },
+      { text: "1.0", correct: false, action: "web" },
+      { text: "0.707", correct: false, action: "web" }
     ],
     hint: "Remember the unit circle: sin(30°) = 1/2 = 0.5",
     concept: "Trigonometric Values",
@@ -340,10 +340,10 @@ export const ADVENTURE_QUESTIONS: AdventureQuestion[] = [
     id: "ch1-q3",
     text: "To unlock the door, find the derivative of f(x) = x³ + 2x² using the power rule:",
     options: [
-      { text: "A) 3x² + 4x", correct: true, action: "jump" },
-      { text: "B) 3x² + 2x", correct: false, action: "jump" },
-      { text: "C) x² + 4x", correct: false, action: "jump" },
-      { text: "D) 3x + 4x", correct: false, action: "jump" }
+      { text: "3x² + 4x", correct: true, action: "jump" },
+      { text: "3x² + 2x", correct: false, action: "jump" },
+      { text: "x² + 4x", correct: false, action: "jump" },
+      { text: "3x + 4x", correct: false, action: "jump" }
     ],
     hint: "Apply power rule to each term: d/dx[x³] = 3x², d/dx[2x²] = 4x",
     concept: "Power Rule with Multiple Terms",
@@ -355,10 +355,10 @@ export const ADVENTURE_QUESTIONS: AdventureQuestion[] = [
     id: "ch2-q1",
     text: "To climb the floating shelves, calculate the area under f(x) = 2x from x=0 to x=3:",
     options: [
-      { text: "A) 9", correct: true, action: "jump" },
-      { text: "B) 6", correct: false, action: "jump" },
-      { text: "C) 12", correct: false, action: "jump" },
-      { text: "D) 18", correct: false, action: "jump" }
+      { text: "9", correct: true, action: "jump" },
+      { text: "6", correct: false, action: "jump" },
+      { text: "12", correct: false, action: "jump" },
+      { text: "18", correct: false, action: "jump" }
     ],
     hint: "Use the integral: ∫₀³ 2x dx = [x²]₀³ = 9 - 0 = 9",
     concept: "Definite Integrals",
@@ -368,10 +368,10 @@ export const ADVENTURE_QUESTIONS: AdventureQuestion[] = [
     id: "ch2-q2",
     text: "To reach the Ancient Scroll, calculate the antiderivative of f(x) = 3x²:",
     options: [
-      { text: "A) x³ + C", correct: true, action: "web" },
-      { text: "B) 3x³ + C", correct: false, action: "web" },
-      { text: "C) 6x + C", correct: false, action: "web" },
-      { text: "D) x² + C", correct: false, action: "web" }
+      { text: "x³ + C", correct: true, action: "web" },
+      { text: "3x³ + C", correct: false, action: "web" },
+      { text: "6x + C", correct: false, action: "web" },
+      { text: "x² + C", correct: false, action: "web" }
     ],
     hint: "Use the power rule for integration: ∫xⁿdx = xⁿ⁺¹/(n+1) + C",
     concept: "Antiderivatives",
@@ -383,10 +383,10 @@ export const ADVENTURE_QUESTIONS: AdventureQuestion[] = [
     id: "ch3-q1",
     text: "To navigate the fading platforms, find lim(x→0) [sin(x)/x]:",
     options: [
-      { text: "A) 1", correct: true, action: "jump" },
-      { text: "B) 0", correct: false, action: "jump" },
-      { text: "C) ∞", correct: false, action: "jump" },
-      { text: "D) Does not exist", correct: false, action: "jump" }
+      { text: "1", correct: true, action: "jump" },
+      { text: "0", correct: false, action: "jump" },
+      { text: "∞", correct: false, action: "jump" },
+      { text: "Does not exist", correct: false, action: "jump" }
     ],
     hint: "This is a fundamental trigonometric limit: lim(x→0) [sin(x)/x] = 1",
     concept: "Fundamental Trigonometric Limits",
@@ -398,10 +398,10 @@ export const ADVENTURE_QUESTIONS: AdventureQuestion[] = [
     id: "ch4-q1",
     text: "To claim the Derivative Crown, find d/dx [sin(2x)] using the chain rule:",
     options: [
-      { text: "A) 2cos(2x)", correct: true, action: "web" },
-      { text: "B) cos(2x)", correct: false, action: "web" },
-      { text: "C) 2sin(2x)", correct: false, action: "web" },
-      { text: "D) sin(2x)", correct: false, action: "web" }
+      { text: "2cos(2x)", correct: true, action: "web" },
+      { text: "cos(2x)", correct: false, action: "web" },
+      { text: "2sin(2x)", correct: false, action: "web" },
+      { text: "sin(2x)", correct: false, action: "web" }
     ],
     hint: "Chain rule: derivative of outer function × derivative of inner function",
     concept: "Chain Rule",
@@ -411,10 +411,10 @@ export const ADVENTURE_QUESTIONS: AdventureQuestion[] = [
     id: "ch4-q2",
     text: "The crown's final test: What is ∫ cos(x) dx?",
     options: [
-      { text: "A) sin(x) + C", correct: true, action: "jump" },
-      { text: "B) -sin(x) + C", correct: false, action: "jump" },
-      { text: "C) cos(x) + C", correct: false, action: "jump" },
-      { text: "D) -cos(x) + C", correct: false, action: "jump" }
+      { text: "sin(x) + C", correct: true, action: "jump" },
+      { text: "-sin(x) + C", correct: false, action: "jump" },
+      { text: "cos(x) + C", correct: false, action: "jump" },
+      { text: "-cos(x) + C", correct: false, action: "jump" }
     ],
     hint: "The antiderivative of cosine is sine",
     concept: "Integrals of Trigonometric Functions",

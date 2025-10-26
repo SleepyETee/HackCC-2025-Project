@@ -53,9 +53,12 @@ type UIState = {
   addAdventureScore: (points: number) => void
 }
 
+const DEFAULT_MODE = (import.meta as unknown as any)?.env?.VITE_DEFAULT_MODE as 'classic' | 'adventure' | undefined
+const DEFAULT_ADVENTURE_MODE = (import.meta as unknown as any)?.env?.VITE_DEFAULT_ADVENTURE_MODE as 'classic' | 'story' | undefined
+
 export const useGameStore = create<UIState>((set) => ({
   // Game mode
-  gameMode: 'adventure',
+  gameMode: DEFAULT_MODE === 'classic' ? 'classic' : 'adventure',
   setGameMode: (mode) => set({ gameMode: mode }),
   
   // Classic mode state
@@ -97,7 +100,7 @@ export const useGameStore = create<UIState>((set) => ({
   resetUsedQuestions: ()=> set({ usedQuestionIds: [] }),
   
   // Adventure mode state
-  adventureMode: 'classic',
+  adventureMode: DEFAULT_ADVENTURE_MODE === 'story' ? 'story' : 'classic',
   currentSceneId: 'ch1-s1',
   currentAdventureQuestion: null,
   adventureAction: null,

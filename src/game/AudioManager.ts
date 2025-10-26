@@ -8,6 +8,10 @@ class AudioManager {
   private sfxVolume = 0.5
   private isAudioEnabled = true
   
+  // Sound effect instances
+  private victorySound: HTMLAudioElement | null = null
+  private projectileSound: HTMLAudioElement | null = null
+  
   /**
    * Initialize and play background music
    */
@@ -16,17 +20,18 @@ class AudioManager {
     
     try {
       if (!this.bgMusic) {
-        this.bgMusic = new Audio('/horror-halloween-dark-piano-film-video-background-cinematic-257663.mp3')
+        this.bgMusic = new Audio('/sounds/horror-halloween-dark-piano-film-video-background-cinematic-257663.mp3')
         this.bgMusic.loop = true
         this.bgMusic.volume = this.musicVolume
       }
       
-      // Play music
-      this.bgMusic.play().catch(err => {
-        console.log('Audio autoplay blocked. User interaction needed:', err)
-      })
-      
-      console.log('🎵 Halloween music playing')
+      // Only play if not already playing
+      if (this.bgMusic.paused) {
+        this.bgMusic.play().catch(err => {
+          console.log('Audio autoplay blocked. User interaction needed:', err)
+        })
+        console.log('🎵 Halloween piano story music playing')
+      }
     } catch (error) {
       console.error('Error loading background music:', error)
     }
@@ -73,6 +78,48 @@ class AudioManager {
    */
   getAudioEnabled() {
     return this.isAudioEnabled
+  }
+
+  /**
+   * Play victory sound
+   */
+  playVictorySound() {
+    if (!this.isAudioEnabled) return
+    
+    try {
+      if (!this.victorySound) {
+        this.victorySound = new Audio('/sounds/winners_W9Cpenj.mp3')
+        this.victorySound.volume = 0.8
+      }
+      
+      // Stop any currently playing victory sound and restart
+      this.victorySound.pause()
+      this.victorySound.currentTime = 0
+      this.victorySound.play().catch(console.error)
+    } catch (error) {
+      console.error('Error playing victory sound:', error)
+    }
+  }
+  
+  /**
+   * Play projectile sound
+   */
+  playProjectileSound() {
+    if (!this.isAudioEnabled) return
+    
+    try {
+      if (!this.projectileSound) {
+        this.projectileSound = new Audio('/sounds/umgah-backzip.mp3')
+        this.projectileSound.volume = 0.6
+      }
+      
+      // Stop any currently playing projectile sound and restart
+      this.projectileSound.pause()
+      this.projectileSound.currentTime = 0
+      this.projectileSound.play().catch(console.error)
+    } catch (error) {
+      console.error('Error playing projectile sound:', error)
+    }
   }
 
   /**
