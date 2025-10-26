@@ -100,8 +100,7 @@ export default function App() {
           <div className="instructions">
             <div className="instructions-title">🎮 HOW TO PLAY - VERTICAL CLIMBING</div>
             <div className="instructions-body">
-              <div className="instructions-item">
-                🎯 <strong>Hover & Click</strong> pumpkins above to target your jump
+              <div className="instructions-item"> 
               </div>
               <div className="instructions-item">
                 ⏱️ <strong>Answer questions</strong> to power your jump
@@ -113,7 +112,7 @@ export default function App() {
                 ❌ <strong>Wrong</strong> = Fall down one pumpkin
               </div>
               <div>
-                💾 <strong>Checkpoints</strong> every 500m | ❤️ <strong>3 Lives</strong> | 🎯 <strong>Goal: 3000m</strong>
+              ❤️ <strong>3 Lives</strong> | 🎯 <strong>Goal: 3000m</strong>
               </div>
             </div>
           </div>

@@ -35,25 +35,22 @@ export function StoryPanel() {
         WebkitTextFillColor: 'transparent',
         textShadow: '0 0 20px rgba(136, 204, 255, 0.3)'
       }}>
-        🌱 Jack & the Beanstalk
+        🦇Quest for the Golden BUG!
       </h2>
       
       {/* Narration */}
-      <p style={{ 
-        color: '#e0e7ff',
-        fontSize: 15,
-        lineHeight: 1.6,
-        margin: 0,
-        fontStyle: 'italic',
-        textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
-      }}>
-        You are a mathematical spider climbing the <strong>Magical Beanstalk</strong>. 
-        The legendary <strong>Golden Goose</strong> awaits at the top, 3000 meters in the sky! 
-        Jump from leaf to leaf, climbing higher and higher! Answer calculus questions 
-        correctly to leap between leaves. Wrong answers make you fall down the beanstalk. 
-        Can you reach the clouds and find the golden treasure?
-      </p>
-      
+     <p style={{ 
+  color: '#e0e7ff',
+  fontSize: 15,
+  lineHeight: 1.6,
+  margin: 0,
+  fontStyle: 'italic',
+  textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+}}>
+  You are a clever spider who must pick the right math answers to jump from pumpkin to pumpkin — all to find the legendary 
+  <strong style={{ color: 'gold', textShadow: '0 0 6px #ffd700' }}> Golden Bug</strong>!
+</p>
+
       {/* Mission box */}
       <div style={{
         marginTop: 16,
@@ -65,13 +62,22 @@ export function StoryPanel() {
         alignItems: 'center',
         gap: 10
       }}>
-        <span style={{ fontSize: 24 }}>🦆</span>
+        <img
+  src="/goldenbug.png"
+  alt="golden bug"
+  style={{
+    width: '2em',
+    height: '2em',
+    verticalAlign: 'middle',
+  }}
+/>
+
         <div>
           <div style={{ fontSize: 12, color: '#00ff00', fontWeight: 600 }}>
             MISSION
           </div>
           <div style={{ fontSize: 13, color: '#b3ffb3' }}>
-            Climb 3000m up the beanstalk to reach the golden goose!
+            Climb 3000m up the beanstalk to reach the Golden BUG!
           </div>
         </div>
       </div>
@@ -94,19 +100,6 @@ export function StoryPanel() {
           </div>
           <div style={{ fontSize: 18, color: '#ffd700', fontWeight: 700 }}>
             {score}
-          </div>
-        </div>
-        <div style={{
-          padding: 8,
-          background: 'rgba(139, 92, 246, 0.2)',
-          borderRadius: 6,
-          border: '1px solid rgba(139, 92, 246, 0.5)'
-        }}>
-          <div style={{ fontSize: 10, color: '#8b5cf6', fontWeight: 600 }}>
-            MECHANICS
-          </div>
-          <div style={{ fontSize: 11, color: '#c4b5fd' }}>
-            Leaf Jump Physics
           </div>
         </div>
       </div>
