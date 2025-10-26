@@ -7,6 +7,7 @@ import { LevelSelector } from './ui/LevelSelector'
 import { HalloweenGraphCanvas } from './ui/HalloweenGraphCanvas'
 import { AdventureCanvas } from './ui/AdventureCanvas'
 import { EnhancedAdventureCanvas } from './ui/EnhancedAdventureCanvas'
+import { SimpleEnhancedCanvas } from './ui/SimpleEnhancedCanvas'
 import { AdventureQuestionPanel } from './ui/AdventureQuestionPanel'
 import { StoryPanel } from './ui/StoryPanel'
 import { EnhancedDemo } from './ui/EnhancedDemo' // Demo component
@@ -18,6 +19,7 @@ export default function App() {
   const setGameMode = useGameStore(s => s.setGameMode)
   const score = useGameStore(s => s.score)
   const [audioEnabled, setAudioEnabled] = useState(audioManager.getAudioEnabled())
+  const [sceneType, setSceneType] = useState<'regular' | 'simple-enhanced' | 'full-enhanced'>('regular')
   
   // Audio toggle handler
   const handleAudioToggle = () => {
@@ -104,6 +106,63 @@ export default function App() {
           </button>
         </div>
         
+        {/* Scene Switcher (only in Adventure Mode) */}
+        {gameMode === 'adventure' && (
+          <div style={{ marginTop: 8, display: 'flex', justifyContent: 'center', gap: 6, flexWrap: 'wrap' }}>
+            <button
+              onClick={() => setSceneType('regular')}
+              style={{
+                padding: '6px 12px',
+                borderRadius: 6,
+                border: '2px solid',
+                borderColor: sceneType === 'regular' ? '#00ff00' : '#444',
+                background: sceneType === 'regular' ? 'linear-gradient(135deg, #00ff00, #00cc00)' : '#1a1a2e',
+                color: sceneType === 'regular' ? '#000' : '#888',
+                fontWeight: 600,
+                fontSize: 11,
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+            >
+              🎮 Regular
+            </button>
+            <button
+              onClick={() => setSceneType('simple-enhanced')}
+              style={{
+                padding: '6px 12px',
+                borderRadius: 6,
+                border: '2px solid',
+                borderColor: sceneType === 'simple-enhanced' ? '#ffa500' : '#444',
+                background: sceneType === 'simple-enhanced' ? 'linear-gradient(135deg, #ffa500, #ff8c00)' : '#1a1a2e',
+                color: sceneType === 'simple-enhanced' ? '#000' : '#888',
+                fontWeight: 600,
+                fontSize: 11,
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+            >
+              ⚡ Simple Enhanced
+            </button>
+            <button
+              onClick={() => setSceneType('full-enhanced')}
+              style={{
+                padding: '6px 12px',
+                borderRadius: 6,
+                border: '2px solid',
+                borderColor: sceneType === 'full-enhanced' ? '#ff6b35' : '#444',
+                background: sceneType === 'full-enhanced' ? 'linear-gradient(135deg, #ff6b35, #ff4500)' : '#1a1a2e',
+                color: sceneType === 'full-enhanced' ? '#fff' : '#888',
+                fontWeight: 600,
+                fontSize: 11,
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+            >
+              ✨ Full Enhanced
+            </button>
+          </div>
+        )}
+        
         {/* Score display */}
         <div style={{ 
           marginTop: 12,
@@ -140,7 +199,9 @@ export default function App() {
               boxShadow: '0 0 40px rgba(255, 215, 0, 0.4)',
               background: '#000'
             }}>
-              <EnhancedAdventureCanvas />
+              {sceneType === 'regular' ? <AdventureCanvas /> : 
+               sceneType === 'simple-enhanced' ? <SimpleEnhancedCanvas /> : 
+               <EnhancedAdventureCanvas />}
             </div>
             
             {/* Question panel */}
