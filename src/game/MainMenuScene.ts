@@ -361,17 +361,14 @@ export default class MainMenuScene extends Phaser.Scene {
   private createTitle() {
     const W = this.scale.width
     
-    // Dark, ominous background panel with consistent orange border
+    // Dark, ominous background panel with consistent orange border - increased height for better spacing
     const titlePanel = this.add.graphics()
     titlePanel.fillStyle(0x000000, 0.95) // More opaque background
-    titlePanel.fillRoundedRect(W / 2 - 390, 45, 760, 120, 12)
+    titlePanel.fillRoundedRect(W / 2 - 390, 35, 760, 140, 12)  // Height: 120 → 140, Y: 45 → 35
     titlePanel.lineStyle(4, 0xff4400, 1) // Consistent orange border
-    titlePanel.strokeRoundedRect(W / 2 - 390, 45, 760, 120, 12)
+    titlePanel.strokeRoundedRect(W / 2 - 390, 35, 760, 140, 12)  // Height: 120 → 140, Y: 45 → 35
     
-    // Inner orange glow - properly centered accounting for stroke width
-    titlePanel.lineStyle(2, 0xff6600, 0.6) // Consistent inner glow
-    titlePanel.strokeRoundedRect(W / 2 - 385, 50, 750, 110, 10)
-    
+       
     titlePanel.setScrollFactor(0, 0)
     titlePanel.setDepth(10)
     
@@ -410,7 +407,7 @@ export default class MainMenuScene extends Phaser.Scene {
     bloodDrip.setScrollFactor(0, 0)
     bloodDrip.setDepth(11)
     
-    // Large shadow for depth (blood red tint)
+    // Large shadow for depth (blood red tint) - moved up for better spacing
     const titleShadow = this.add.text(W / 2 + 5, 93, '🎃 SPIDER-CALC 🎃', {
       fontSize: '64px',
       fontFamily: 'Impact, Arial Black, sans-serif',
@@ -421,7 +418,7 @@ export default class MainMenuScene extends Phaser.Scene {
     titleShadow.setScrollFactor(0, 0)
     titleShadow.setDepth(9.5)
     
-    // Main title text with blood red to orange gradient effect
+    // Main title text with blood red to orange gradient effect - moved up for better spacing
     const title = this.add.text(W / 2, 85, '🎃 SPIDER-CALC 🎃', {
       fontSize: '64px',
       fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
@@ -443,9 +440,9 @@ export default class MainMenuScene extends Phaser.Scene {
       ease: 'Sine.easeInOut'
     })
     
-    // Subtitle with sinister styling
-    const subtitle = this.add.text(W / 2, 138, '⚠️ Climb 3000m... If You Dare! ☠️', {
-      fontSize: '20px',
+    // Subtitle with sinister styling - moved up for better spacing
+    const subtitle = this.add.text(W / 2, 130, '⚠️ Climb 3000m... If You Dare! ☠️', {
+      fontSize: '19px',
       fontFamily: 'Creepster, cursive, Impact, Arial Black, sans-serif',
       color: '#ff6600',
       stroke: '#000000',
@@ -949,37 +946,35 @@ export default class MainMenuScene extends Phaser.Scene {
     const W = this.scale.width
     const H = this.scale.height
     
-    // Dark, ominous instructions panel with blood red accent
+    // Dark, ominous instructions panel with blood red accent - increased height for better spacing
     const instructionsBg = this.add.graphics()
     instructionsBg.fillStyle(0x000000, 0.95) // More opaque background
-    instructionsBg.fillRoundedRect(W / 2 - 395, H - 112, 770, 105, 12)
+    instructionsBg.fillRoundedRect(W / 2 - 395, H - 125, 770, 120, 12)  // Height: 105 → 120, Y: H-112 → H-125
     instructionsBg.lineStyle(4, 0xff4400, 1) // Brighter orange border
-    instructionsBg.strokeRoundedRect(W / 2 - 395, H - 112, 770, 105, 12)
+    instructionsBg.strokeRoundedRect(W / 2 - 395, H - 125, 770, 120, 12)  // Height: 105 → 120, Y: H-112 → H-125
     
-    // Inner warning glow - properly centered accounting for stroke width
-    instructionsBg.lineStyle(2, 0xff6600, 0.6) // Brighter inner glow
-    instructionsBg.strokeRoundedRect(W / 2 - 390, H - 107, 760, 95, 10)
+    // Inner warning glow removed to eliminate yellow line
     
     instructionsBg.setScrollFactor(0, 0)
     instructionsBg.setDepth(50)
     
-    // Warning skull icons in corners
-    const skullLeft = this.add.text(W / 2 - 370, H - 80, '☠️', {
+    // Warning skull icons in corners - moved inward for better spacing
+    const skullLeft = this.add.text(W / 2 - 350, H - 80, '☠️', {
       fontSize: '28px'
     })
     skullLeft.setOrigin(0.5)
     skullLeft.setScrollFactor(0, 0)
     skullLeft.setDepth(51)
     
-    const skullRight = this.add.text(W / 2 + 355, H - 80, '☠️', {
+    const skullRight = this.add.text(W / 2 + 335, H - 80, '☠️', {
       fontSize: '28px'
     })
     skullRight.setOrigin(0.6)
     skullRight.setScrollFactor(0, 0)
     skullRight.setDepth(51)
     
-    // Main instructions with scary emphasis
-    const instructions = this.add.text(W / 2, H - 77, 
+    // Main instructions with scary emphasis - moved up for better spacing
+    const instructions = this.add.text(W / 2, H - 87, 
       '⚠️ Answer Calculus to Climb... Or Perish! ⚠️',
       {
         fontSize: '24px',
@@ -994,8 +989,8 @@ export default class MainMenuScene extends Phaser.Scene {
     instructions.setScrollFactor(0, 0)
     instructions.setDepth(51)
     
-    // Game rules with danger emphasis
-    const rules = this.add.text(W / 2, H - 50, 
+    // Game rules with danger emphasis - moved up for better spacing
+    const rules = this.add.text(W / 2, H - 60, 
       '✅ Correct = Survive & Climb  •  ❌ Wrong = Fall to Doom  •  💀 3 Lives  •  ⛰️ Summit: 3000m',
       {
         fontSize: '14px',
@@ -1010,8 +1005,8 @@ export default class MainMenuScene extends Phaser.Scene {
     rules.setScrollFactor(0, 0)
     rules.setDepth(51)
     
-    // Golden bug teaser with ominous tone
-    const teaser = this.add.text(W / 2, H - 24, 
+    // Golden bug teaser with ominous tone - moved up for better spacing
+    const teaser = this.add.text(W / 2, H - 34, 
       '🐛 Legend Speaks of a Golden Bug at the Peak... Will You Find It? ✨',
       {
         fontSize: '18px',

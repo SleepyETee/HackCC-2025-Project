@@ -62,9 +62,9 @@ export function AdventureQuestionPanel() {
         color: '#ffd700', 
         marginBottom: 8,
         padding: 8,
-        background: 'rgba(255, 215, 0, 0.1)',
+        background: 'rgba(255, 68, 0, 0.1)',
         borderRadius: 6,
-        border: '1px solid rgba(255, 215, 0, 0.3)'
+        border: '1px solid rgba(255, 68, 0, 0.3)'
       }}>
         📖 {currentQuestion.storyContext}
       </div>

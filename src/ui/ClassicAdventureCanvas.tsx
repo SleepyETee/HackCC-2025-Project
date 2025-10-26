@@ -47,7 +47,6 @@ export function ClassicAdventureCanvas() {
       style={{
         width: '800px',
         height: '600px',
-        border: '2px solid #ffd700',
         borderRadius: '8px',
         backgroundColor: '#2a3f54',
         position: 'relative'

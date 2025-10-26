@@ -32,7 +32,7 @@ export function StoryPanel() {
   return (
     <div style={{ 
       background: 'linear-gradient(135deg, #2d1b4e, #1a0f2e)', 
-      border: '3px solid #ffd700',
+      border: '3px solid #ff6b35',
       borderRadius: 12,
       padding: 20,
       marginBottom: 16,
@@ -90,7 +90,7 @@ export function StoryPanel() {
         margin: '0 0 12px 0',
         fontSize: 28,
         fontWeight: 800,
-        background: 'linear-gradient(135deg, #88ccff, #4466aa)',
+        background: 'linear-gradient(135deg, #ffd700, #ffed4e)',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
         textShadow: '0 0 20px rgba(136, 204, 255, 0.3)'

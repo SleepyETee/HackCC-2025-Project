@@ -64,7 +64,7 @@ export default function App() {
       {/* Header with mode switcher */}
       <div className="header">
         <h1 className="title">
-          🕷️ SpiderCalc: {gameMode === 'adventure' ? 'Halloween Adventure' : 'Halloween Calculus'} 🎃
+          🕷️ SpiderCalc: {gameMode === 'adventure' ? 'Halloween Adventure' : 'Web Solver'} 🎃
         </h1>
         <p className="subtitle">
           {gameMode === 'adventure' 
@@ -103,7 +103,7 @@ export default function App() {
             background: 'linear-gradient(135deg, #2d1b4e, #1a0f2e)',
             padding: '12px 20px',
             borderRadius: '12px',
-            border: '2px solid #ffd700',
+            border: '2px solid #ff6b35',
             boxShadow: '0 0 20px rgba(255, 215, 0, 0.3)'
           }}>
             <span style={{ color: '#ffd700', fontSize: '14px', fontWeight: 'bold', marginRight: '10px' }}>
