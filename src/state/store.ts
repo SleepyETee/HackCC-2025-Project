@@ -26,6 +26,7 @@ type UIState = {
   setLine: (m:number, b:number)=>void
   setCurveMode: (mode: 'line' | 'quadratic' | 'sin' | 'exp')=>void
   setAnswer: (i:number, correct:boolean)=>void
+  resetAnswer: ()=>void
   setAnchors: (a:Anchor[])=>void
   addScore: (n:number)=>void
   incrementCombo: ()=>void
@@ -38,12 +39,18 @@ type UIState = {
   resetUsedQuestions: ()=>void
   
   // Adventure mode state
+  adventureMode: 'classic' | 'story'
   currentSceneId: string
   currentAdventureQuestion: AdventureQuestion | null
   adventureAction: 'jump' | 'web' | null
+  adventureLives: number
+  adventureScore: number
+  setAdventureMode: (mode: 'classic' | 'story') => void
   setCurrentSceneId: (id: string) => void
   setCurrentAdventureQuestion: (q: AdventureQuestion | null) => void
   setAdventureAction: (action: 'jump' | 'web', correct: boolean) => void
+  setAdventureLives: (lives: number) => void
+  addAdventureScore: (points: number) => void
 }
 
 export const useGameStore = create<UIState>((set) => ({
@@ -77,6 +84,7 @@ export const useGameStore = create<UIState>((set) => ({
     window.dispatchEvent(new CustomEvent('spidercalc-update-preview'))
   },
   setAnswer: (i,correct)=> set({ selectedAnswer:i, answerCorrect:correct }),
+  resetAnswer: () => set({ selectedAnswer: null, answerCorrect: null }),
   setAnchors: (a)=> set({ anchors:a }),
   addScore: (n)=> set(s => ({ score: s.score + n })),
   incrementCombo: ()=> set(s => ({ combo: s.combo + 1 })),
@@ -89,9 +97,13 @@ export const useGameStore = create<UIState>((set) => ({
   resetUsedQuestions: ()=> set({ usedQuestionIds: [] }),
   
   // Adventure mode state
+  adventureMode: 'classic',
   currentSceneId: 'ch1-s1',
   currentAdventureQuestion: null,
   adventureAction: null,
+  adventureLives: 3,
+  adventureScore: 0,
+  setAdventureMode: (mode) => set({ adventureMode: mode }),
   setCurrentSceneId: (id) => set({ currentSceneId: id, currentAdventureQuestion: null }),
   setCurrentAdventureQuestion: (q) => set({ currentAdventureQuestion: q }),
   setAdventureAction: (action, correct) => {
@@ -104,5 +116,7 @@ export const useGameStore = create<UIState>((set) => ({
     setTimeout(() => {
       set({ currentAdventureQuestion: null, adventureAction: null })
     }, 100)
-  }
+  },
+  setAdventureLives: (lives) => set({ adventureLives: lives }),
+  addAdventureScore: (points) => set(s => ({ adventureScore: s.adventureScore + points }))
 }))

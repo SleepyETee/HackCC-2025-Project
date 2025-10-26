@@ -29,46 +29,95 @@ export function LevelSelector() {
   const currentLevelData = getLevel(currentLevel)
   
   return (
-    <div style={{ marginBottom: 12 }}>
-      <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
+    <div style={{ marginBottom: 16 }}>
+      <div style={{ 
+        textAlign: 'center',
+        marginBottom: 10,
+        color: '#ff6b35',
+        fontWeight: 700,
+        fontSize: 18
+      }}>
+        🎯 Select Your Round
+      </div>
+      
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+        gap: 10, 
+        marginBottom: 12
+      }}>
         {LEVELS.map(level => (
           <button
             key={level.id}
             onClick={() => handleLevelSelect(level.id)}
             style={{
-              background: currentLevel === level.id ? 'linear-gradient(135deg, #00e5ff, #7c4dff)' : '#22263b',
-              color: currentLevel === level.id ? '#000' : '#fff',
-              border: currentLevel === level.id ? 'none' : '1px solid #323855',
-              padding: '8px 16px',
-              borderRadius: 8,
-              fontWeight: currentLevel === level.id ? 700 : 400,
-              fontSize: 13,
+              background: currentLevel === level.id 
+                ? 'linear-gradient(135deg, #8b5cf6, #7c4dff)' 
+                : 'linear-gradient(135deg, #22263b, #15182b)',
+              color: '#fff',
+              border: currentLevel === level.id 
+                ? '3px solid #ffd700' 
+                : '2px solid #323855',
+              padding: '12px 16px',
+              borderRadius: 10,
+              fontWeight: currentLevel === level.id ? 700 : 500,
+              fontSize: 12,
               cursor: 'pointer',
-              transition: 'all 0.2s'
+              transition: 'all 0.3s',
+              boxShadow: currentLevel === level.id 
+                ? '0 0 20px rgba(139, 92, 246, 0.6)' 
+                : 'none',
+              textAlign: 'left'
+            }}
+            onMouseEnter={(e) => {
+              if (currentLevel !== level.id) {
+                e.currentTarget.style.background = 'linear-gradient(135deg, #2d3a4a, #1a2535)'
+                e.currentTarget.style.borderColor = '#5a8cff'
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (currentLevel !== level.id) {
+                e.currentTarget.style.background = 'linear-gradient(135deg, #22263b, #15182b)'
+                e.currentTarget.style.borderColor = '#323855'
+              }
             }}
           >
-            {level.name}
+            <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 2 }}>
+              {level.name}
+            </div>
+            <div style={{ fontSize: 10, opacity: 0.8 }}>
+              🎯 {level.targetPulls} pulls
+            </div>
           </button>
         ))}
       </div>
       
       {currentLevelData && (
         <div style={{
-          background: '#15151f',
-          padding: 12,
-          borderRadius: 8,
-          marginTop: 8,
+          background: 'linear-gradient(135deg, #1a1a2e, #0f0f1a)',
+          padding: 14,
+          borderRadius: 10,
           textAlign: 'center',
-          border: '1px solid #323855'
+          border: '2px solid #8b5cf6',
+          boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)'
         }}>
-          <div style={{ color: '#00e5ff', fontWeight: 600, fontSize: 14 }}>
-            {currentLevelData.name}
+          <div style={{ color: '#ffd700', fontWeight: 700, fontSize: 16, marginBottom: 4 }}>
+            📚 {currentLevelData.name}
           </div>
-          <div style={{ color: '#cdd3ff', fontSize: 12, marginTop: 4 }}>
+          <div style={{ color: '#e0e7ff', fontSize: 13, marginTop: 6 }}>
             {currentLevelData.description}
           </div>
-          <div style={{ color: '#8892b0', fontSize: 11, marginTop: 4 }}>
-            Target: {currentLevelData.targetPulls} pulls • Mode: {currentLevelData.requiredCurveMode}
+          <div style={{ 
+            color: '#8b5cf6', 
+            fontSize: 12, 
+            marginTop: 8,
+            padding: 6,
+            background: 'rgba(139, 92, 246, 0.1)',
+            borderRadius: 6,
+            display: 'inline-block'
+          }}>
+            🎯 Target: <strong>{currentLevelData.targetPulls} pulls</strong> • 
+            📊 Mode: <strong>{currentLevelData.requiredCurveMode}</strong>
           </div>
         </div>
       )}

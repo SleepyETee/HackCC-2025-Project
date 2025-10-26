@@ -25,6 +25,13 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   preload() {
     // Load explosion gif for game over
     this.load.image('explosion', '/explosion.gif')
+    
+    // Load sound effects
+    this.load.audio('punch-sound', '/punch-gaming-sound-effect-hd_RzlG1GE.mp3')
+    this.load.audio('fart-sound', '/dry-fart.mp3')
+    this.load.audio('jump-sound', '/punch-gaming-sound-effect-hd_RzlG1GE.mp3')
+    this.load.audio('fall-sound', '/punch-gaming-sound-effect-hd_RzlG1GE.mp3')
+    this.load.audio('lose-sound', '/dry-fart.mp3')
   }
   
   // Spider
@@ -950,7 +957,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     console.log('💔 FALLING down!')
     
     // Play fall sound
-    audioManager.playSoundEffect('fall')
+    this.sound.play('fall-sound', { volume: 0.6 })
     
     // ========== DRAMATIC FALL ANIMATION ==========
     // Spider loses control, tumbles down
@@ -1452,6 +1459,9 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     this.isAnimating = false
     
     console.log('💀 GAME OVER triggered - Lives: 0')
+    
+    // Play lose sound
+    this.sound.play('lose-sound', { volume: 0.7 })
     
     const W = this.scale.width / 2
     const H = this.cameras.main.scrollY + this.scale.height / 2

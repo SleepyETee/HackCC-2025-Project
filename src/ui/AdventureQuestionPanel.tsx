@@ -86,8 +86,10 @@ export function AdventureQuestionPanel() {
       {/* Answer options (shuffled each question) */}
       <div className="stack" style={{ gap: 8 }}>
         {shuffledOptions.map((option, i) => {
-          // Use consistent purple border for all options (don't show correct answer)
-          const borderColor = '#8b5cf6'
+          // Color based on action type
+          const borderColor = option.action === 'jump' ? '#00ff00' : '#00e5ff'
+          const actionIcon = option.action === 'jump' ? '🦘' : '🕸️'
+          const actionText = option.action === 'jump' ? 'JUMP' : 'WEB'
           
           return (
             <button 
@@ -106,19 +108,32 @@ export function AdventureQuestionPanel() {
                 fontWeight: 500,
                 display: 'flex',
                 alignItems: 'center',
-                gap: 8
+                gap: 8,
+                position: 'relative'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = `linear-gradient(135deg, ${borderColor}33, ${borderColor}22)`
                 e.currentTarget.style.transform = 'translateX(5px)'
+                e.currentTarget.style.boxShadow = `0 0 15px ${borderColor}50`
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'linear-gradient(135deg, #2a2a4a, #1a1a3a)'
                 e.currentTarget.style.transform = 'translateX(0)'
+                e.currentTarget.style.boxShadow = 'none'
               }}
             >
-              <span style={{ fontSize: 18 }}>⏱️</span>
-              <span>{option.text}</span>
+              <span style={{ fontSize: 18 }}>{actionIcon}</span>
+              <span style={{ flex: 1 }}>{option.text}</span>
+              <span style={{ 
+                fontSize: 10, 
+                color: borderColor, 
+                fontWeight: 700,
+                background: `${borderColor}20`,
+                padding: '2px 6px',
+                borderRadius: 4
+              }}>
+                {actionText}
+              </span>
             </button>
           )
         })}

@@ -308,3 +308,140 @@ select {
 
 /* Helper text styles */
 .teacher-p { font-size: 13px; margin: 0; }
+
+/* Animations for modals */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Classic Mode Reorganized Layout */
+.classic-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.level-selector-top {
+  width: 100%;
+}
+
+.classic-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 16px;
+  min-height: 600px;
+}
+
+.canvasWrap {
+  position: relative;
+  background: #0b0b14;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  height: 540px;
+  overflow: hidden;
+}
+
+.canvasWrap > canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 12px;
+  cursor: grab;
+}
+
+.canvasWrap > canvas:active {
+  cursor: grabbing;
+}
+
+.question-answer-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.how-to-play-bottom {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.how-to-play-bottom .small-legend {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 14px;
+}
+
+.how-to-play-bottom .small-legend h4 {
+  margin: 0 0 12px 0;
+  color: #8b5cf6;
+  font-size: 16px;
+  text-align: center;
+}
+
+.how-to-play-bottom .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: #e0e7ff;
+  font-size: 13px;
+}
+
+.how-to-play-bottom .legend-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+/* Responsive design */
+@media (max-width: 980px) {
+  .classic-main-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .canvasWrap { 
+    height: 50vh;
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 640px) {
+  .classic-layout {
+    padding: 8px;
+  }
+  
+  .canvasWrap {
+    height: 40vh;
+    min-height: 300px;
+  }
+}
