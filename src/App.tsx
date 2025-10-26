@@ -6,6 +6,7 @@ import { QuestionPanel } from './ui/QuestionPanel'
 import { LevelSelector } from './ui/LevelSelector'
 import { HalloweenGraphCanvas } from './ui/HalloweenGraphCanvas'
 import { AdventureCanvas } from './ui/AdventureCanvas'
+import { EnhancedAdventureCanvas } from './ui/EnhancedAdventureCanvas'
 import { AdventureQuestionPanel } from './ui/AdventureQuestionPanel'
 import { StoryPanel } from './ui/StoryPanel'
 import { useGameStore } from './state/store'
@@ -138,7 +139,7 @@ export default function App() {
               boxShadow: '0 0 40px rgba(255, 215, 0, 0.4)',
               background: '#000'
             }}>
-              <AdventureCanvas />
+              <EnhancedAdventureCanvas />
             </div>
             
             {/* Question panel */}
