@@ -47,7 +47,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
   
   // Game state
   currentHeightMeters = 0
-  targetHeight = 200  // Testing limit (Original: 3000m - uncomment for production)
+  targetHeight = 500  // Testing limit (Original: 3000m - uncomment for production)
   // targetHeight = 3000  // Production target - Find the Golden Bug at the peak!
   lives = 3
   score = 0
@@ -362,7 +362,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     const totalPumpkins = 31 // 0m, 100m, 200m ... 3000m
     
     for (let i = 0; i < totalPumpkins; i++) {
-      const x = Phaser.Math.Between(150, W - 150)
+      const x = Phaser.Math.Between(150, 400)
       currentY -= Phaser.Math.Between(120, 180)
       
       const heightMeters = i * 100
@@ -842,6 +842,8 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     this.lives--
     this.updateLivesDisplay()
     
+    console.log(`💔 Lives remaining: ${this.lives}`)
+    
     // Play wrong sound
     audioManager.playSoundEffect('wrong')
     
@@ -851,7 +853,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     // Check if game over IMMEDIATELY
     if (this.lives <= 0) {
       console.log('💀 No lives left - GAME OVER!')
-      this.time.delayedCall(1500, () => {
+      this.time.delayedCall(500, () => {
         this.onGameOver()
       })
       return // Stop here, don't continue
@@ -1219,7 +1221,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
 
     // ========== CONFETTI GIF OVERLAY (DOM) - DELAYED ==========
     const confetti = this.add.dom(centerX, centerY).createFromHTML(
-      '<img src="/images/confetti.gif" style="width:800px;height:600px;object-fit:cover;opacity:0.7;pointer-events:none;" />'
+      `<img src="/images/confetti.gif" style="width:${this.scale.width}px;height:${this.scale.height}px;object-fit:cover;opacity:0.7;pointer-events:none;" />`
     )
     confetti.setScrollFactor(0, 0)
     confetti.setDepth(1001)
@@ -1453,12 +1455,13 @@ export default class HalloweenClimbScene extends Phaser.Scene {
     this.isAnimating = false
     
     console.log('💀 GAME OVER triggered - Lives: 0')
+    console.log('💀 Game over state set - isGameOver:', this.isGameOver)
     
     // Play lose sound
     this.sound.play('lose-sound', { volume: 0.7 })
     
     const W = this.scale.width / 2
-    const H = this.cameras.main.scrollY + this.scale.height / 2
+    const H = this.scale.height / 2
     
     const store = useGameStore.getState()
     
@@ -1508,7 +1511,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
         align: 'center'
       }).setOrigin(0.5).setScrollFactor(0)
       
-      const retryButton = this.add.text(W - 90, H + 100, '🔄 RETRY', {
+      const retryButton = this.add.text(this.scale.width / 2 - 90, H + 100, '🔄 RETRY', {
         fontSize: '22px',
         color: '#ffffff',
         backgroundColor: '#00aa00',
@@ -1522,7 +1525,7 @@ export default class HalloweenClimbScene extends Phaser.Scene {
         this.scene.restart()
       })
       
-      const menuButton = this.add.text(W + 90, H + 100, '🏠 MENU', {
+      const menuButton = this.add.text(this.scale.width / 2 + 90, H + 100, '🏠 MENU', {
         fontSize: '22px',
         color: '#ffffff',
         backgroundColor: '#8b5a3c',

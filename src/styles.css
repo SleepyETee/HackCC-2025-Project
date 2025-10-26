@@ -26,7 +26,7 @@ body {
 button { 
   background: linear-gradient(135deg, #8b5cf6, #ff6b35); 
   color:#fff; 
-  border:2px solid var(--purple); 
+  border: 2px solid #ff6b35; 
   border-radius:10px; 
   padding:10px 14px; 
   cursor:pointer; 
@@ -98,7 +98,7 @@ select {
   padding:14px; 
   border-radius:12px; 
   box-shadow:0 8px 24px rgba(139, 92, 246, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  border: 2px solid var(--purple);
+  border: 2px solid #ff6b35;
   backdrop-filter: blur(10px);
 }
 
@@ -202,9 +202,17 @@ select {
 
 .grid-two {
   display: grid;
-  grid-template-columns: 1fr 350px;
-  gap: 16px;
+  grid-template-columns: 800px 320px;
+  gap: 24px;
   margin-bottom: 16px;
+  justify-content: center;
+  align-items: start;
+}
+
+.grid-two > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .canvas-card {
@@ -214,6 +222,10 @@ select {
   overflow: hidden;
   box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
   background: #000;
+  width: fit-content;
+  height: fit-content;
+  max-width: 800px;
+  max-height: 600px;
 }
 
 .instructions {

@@ -8,7 +8,11 @@ export function ClassicAdventureCanvas() {
   const gameRef = useRef<Phaser.Game | null>(null)
   
   useEffect(() => {
-    if (!containerRef.current || gameRef.current) return
+    console.log('🔄 ClassicAdventureCanvas useEffect triggered')
+    if (!containerRef.current || gameRef.current) {
+      console.log('⚠️ Skipping game creation - container or game already exists')
+      return
+    }
     
     console.log('🎮 ClassicAdventureCanvas: Creating Phaser game...')
     
@@ -32,6 +36,7 @@ export function ClassicAdventureCanvas() {
     console.log('✅ ClassicAdventureCanvas: Phaser game created successfully')
     
     return () => {
+      console.log('🧹 ClassicAdventureCanvas cleanup triggered')
       if (gameRef.current) {
         console.log('🧹 ClassicAdventureCanvas: Destroying Phaser game...')
         gameRef.current.destroy(true)

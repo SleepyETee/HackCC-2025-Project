@@ -140,6 +140,843 @@ export const CALCULUS_QUESTION_BANK: CalculusQuestion[] = [
     concept: 'Fundamental trigonometric limits'
   },
   
+  // Additional questions for 0-500m range (10 per 100m range)
+  
+  // 0-100m range (need 9 more)
+  {
+    id: 'found-4',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 10,
+    question: 'What is lim(x→1) [x² + 2x - 3]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Direct substitution: 1² + 2(1) - 3 = 1 + 2 - 3 = 0' },
+      { text: '1', correct: false },
+      { text: '2', correct: false },
+      { text: '3', correct: false }
+    ],
+    hint: 'Substitute x = 1 directly into the polynomial',
+    solution: 'lim(x→1) [x² + 2x - 3] = 1² + 2(1) - 3 = 1 + 2 - 3 = 0',
+    concept: 'Direct substitution for polynomial limits'
+  },
+  
+  {
+    id: 'found-5',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 20,
+    question: 'What is lim(x→2) [3x - 1]?',
+    options: [
+      { text: '5', correct: true, explanation: 'Direct substitution: 3(2) - 1 = 6 - 1 = 5' },
+      { text: '4', correct: false },
+      { text: '6', correct: false },
+      { text: '7', correct: false }
+    ],
+    hint: 'Substitute x = 2 directly',
+    solution: 'lim(x→2) [3x - 1] = 3(2) - 1 = 6 - 1 = 5',
+    concept: 'Direct substitution for linear functions'
+  },
+  
+  {
+    id: 'found-6',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 30,
+    question: 'What is lim(x→0) [x + 5]?',
+    options: [
+      { text: '5', correct: true, explanation: 'Direct substitution: 0 + 5 = 5' },
+      { text: '0', correct: false },
+      { text: '1', correct: false },
+      { text: '4', correct: false }
+    ],
+    hint: 'Substitute x = 0 directly',
+    solution: 'lim(x→0) [x + 5] = 0 + 5 = 5',
+    concept: 'Direct substitution for linear functions'
+  },
+  
+  {
+    id: 'found-7',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 40,
+    question: 'What is lim(x→1) [x²]?',
+    options: [
+      { text: '1', correct: true, explanation: 'Direct substitution: 1² = 1' },
+      { text: '0', correct: false },
+      { text: '2', correct: false },
+      { text: '4', correct: false }
+    ],
+    hint: 'Substitute x = 1 directly',
+    solution: 'lim(x→1) [x²] = 1² = 1',
+    concept: 'Direct substitution for polynomial functions'
+  },
+  
+  {
+    id: 'found-8',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 50,
+    question: 'What is lim(x→3) [2x + 1]?',
+    options: [
+      { text: '7', correct: true, explanation: 'Direct substitution: 2(3) + 1 = 6 + 1 = 7' },
+      { text: '6', correct: false },
+      { text: '8', correct: false },
+      { text: '5', correct: false }
+    ],
+    hint: 'Substitute x = 3 directly',
+    solution: 'lim(x→3) [2x + 1] = 2(3) + 1 = 6 + 1 = 7',
+    concept: 'Direct substitution for linear functions'
+  },
+  
+  {
+    id: 'found-9',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 60,
+    question: 'What is lim(x→0) [x³]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Direct substitution: 0³ = 0' },
+      { text: '1', correct: false },
+      { text: '∞', correct: false },
+      { text: 'Does not exist', correct: false }
+    ],
+    hint: 'Substitute x = 0 directly',
+    solution: 'lim(x→0) [x³] = 0³ = 0',
+    concept: 'Direct substitution for polynomial functions'
+  },
+  
+  {
+    id: 'found-10',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 70,
+    question: 'What is lim(x→2) [x² + 1]?',
+    options: [
+      { text: '5', correct: true, explanation: 'Direct substitution: 2² + 1 = 4 + 1 = 5' },
+      { text: '4', correct: false },
+      { text: '6', correct: false },
+      { text: '3', correct: false }
+    ],
+    hint: 'Substitute x = 2 directly',
+    solution: 'lim(x→2) [x² + 1] = 2² + 1 = 4 + 1 = 5',
+    concept: 'Direct substitution for polynomial functions'
+  },
+  
+  {
+    id: 'found-11',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 80,
+    question: 'What is lim(x→1) [x + 2]?',
+    options: [
+      { text: '3', correct: true, explanation: 'Direct substitution: 1 + 2 = 3' },
+      { text: '2', correct: false },
+      { text: '4', correct: false },
+      { text: '1', correct: false }
+    ],
+    hint: 'Substitute x = 1 directly',
+    solution: 'lim(x→1) [x + 2] = 1 + 2 = 3',
+    concept: 'Direct substitution for linear functions'
+  },
+  
+  {
+    id: 'found-12',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 90,
+    question: 'What is lim(x→0) [x² + 3x]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Direct substitution: 0² + 3(0) = 0 + 0 = 0' },
+      { text: '1', correct: false },
+      { text: '3', correct: false },
+      { text: '∞', correct: false }
+    ],
+    hint: 'Substitute x = 0 directly',
+    solution: 'lim(x→0) [x² + 3x] = 0² + 3(0) = 0 + 0 = 0',
+    concept: 'Direct substitution for polynomial functions'
+  },
+  
+  // 100-200m range (need 7 more)
+  {
+    id: 'found-13',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 110,
+    question: 'What is lim(x→0) [x³ - 2x² + x]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Direct substitution: 0³ - 2(0)² + 0 = 0' },
+      { text: '1', correct: false },
+      { text: '-1', correct: false },
+      { text: '∞', correct: false }
+    ],
+    hint: 'Substitute x = 0 directly',
+    solution: 'lim(x→0) [x³ - 2x² + x] = 0³ - 2(0)² + 0 = 0',
+    concept: 'Direct substitution for polynomial limits',
+  },
+  
+  {
+    id: 'range-100-120',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 120,
+    question: 'What is lim(x→2) [x² - 4x + 4]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Direct substitution: 2² - 4(2) + 4 = 4 - 8 + 4 = 0' },
+      { text: '1', correct: false },
+      { text: '4', correct: false },
+      { text: '8', correct: false }
+    ],
+    hint: 'Substitute x = 2 directly',
+    solution: 'lim(x→2) [x² - 4x + 4] = 2² - 4(2) + 4 = 4 - 8 + 4 = 0',
+    concept: 'Direct substitution for polynomial functions'
+  },
+  
+  {
+    id: 'range-100-130',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 130,
+    question: 'What is lim(x→1) [x³ + x² - x - 1]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Direct substitution: 1³ + 1² - 1 - 1 = 1 + 1 - 1 - 1 = 0' },
+      { text: '1', correct: false },
+      { text: '2', correct: false },
+      { text: '-1', correct: false }
+    ],
+    hint: 'Substitute x = 1 directly',
+    solution: 'lim(x→1) [x³ + x² - x - 1] = 1³ + 1² - 1 - 1 = 1 + 1 - 1 - 1 = 0',
+    concept: 'Direct substitution for polynomial functions'
+  },
+  
+  {
+    id: 'range-100-140',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 140,
+    question: 'What is lim(x→3) [2x² - 5x + 1]?',
+    options: [
+      { text: '4', correct: true, explanation: 'Direct substitution: 2(3)² - 5(3) + 1 = 18 - 15 + 1 = 4' },
+      { text: '3', correct: false },
+      { text: '5', correct: false },
+      { text: '6', correct: false }
+    ],
+    hint: 'Substitute x = 3 directly',
+    solution: 'lim(x→3) [2x² - 5x + 1] = 2(3)² - 5(3) + 1 = 18 - 15 + 1 = 4',
+    concept: 'Direct substitution for polynomial functions'
+  },
+  
+  {
+    id: 'range-100-150',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 150,
+    question: 'What is lim(x→0) [x⁴ - 2x²]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Direct substitution: 0⁴ - 2(0)² = 0 - 0 = 0' },
+      { text: '1', correct: false },
+      { text: '2', correct: false },
+      { text: '-1', correct: false }
+    ],
+    hint: 'Substitute x = 0 directly',
+    solution: 'lim(x→0) [x⁴ - 2x²] = 0⁴ - 2(0)² = 0 - 0 = 0',
+    concept: 'Direct substitution for polynomial functions'
+  },
+  
+  {
+    id: 'range-100-160',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 160,
+    question: 'What is lim(x→2) [x³ - 8]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Direct substitution: 2³ - 8 = 8 - 8 = 0' },
+      { text: '8', correct: false },
+      { text: '16', correct: false },
+      { text: '1', correct: false }
+    ],
+    hint: 'Substitute x = 2 directly',
+    solution: 'lim(x→2) [x³ - 8] = 2³ - 8 = 8 - 8 = 0',
+    concept: 'Direct substitution for polynomial functions'
+  },
+  
+  {
+    id: 'range-100-170',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 170,
+    question: 'What is lim(x→1) [3x² - 2x + 1]?',
+    options: [
+      { text: '2', correct: true, explanation: 'Direct substitution: 3(1)² - 2(1) + 1 = 3 - 2 + 1 = 2' },
+      { text: '1', correct: false },
+      { text: '3', correct: false },
+      { text: '0', correct: false }
+    ],
+    hint: 'Substitute x = 1 directly',
+    solution: 'lim(x→1) [3x² - 2x + 1] = 3(1)² - 2(1) + 1 = 3 - 2 + 1 = 2',
+    concept: 'Direct substitution for polynomial functions'
+  },
+  
+  {
+    id: 'range-100-190',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 190,
+    question: 'What is lim(x→0) [x⁵ + x³ - x]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Direct substitution: 0⁵ + 0³ - 0 = 0 + 0 - 0 = 0' },
+      { text: '1', correct: false },
+      { text: '-1', correct: false },
+      { text: '∞', correct: false }
+    ],
+    hint: 'Substitute x = 0 directly',
+    solution: 'lim(x→0) [x⁵ + x³ - x] = 0⁵ + 0³ - 0 = 0 + 0 - 0 = 0',
+    concept: 'Direct substitution for polynomial functions'
+  },
+  
+  {
+    id: 'found-6-original',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 250,
+    question: 'What is lim(x→4) [√x]?',
+    options: [
+      { text: '2', correct: true, explanation: '√4 = 2' },
+      { text: '4', correct: false },
+      { text: '16', correct: false },
+      { text: '±2', correct: false }
+    ],
+    hint: 'Square root of 4 is 2',
+    solution: 'lim(x→4) [√x] = √4 = 2',
+    concept: 'Limits of radical functions',
+  },
+  
+  {
+    id: 'range-200-210',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 210,
+    question: 'What is lim(x→9) [√x]?',
+    options: [
+      { text: '3', correct: true, explanation: '√9 = 3' },
+      { text: '9', correct: false },
+      { text: '81', correct: false },
+      { text: '±3', correct: false }
+    ],
+    hint: 'Square root of 9 is 3',
+    solution: 'lim(x→9) [√x] = √9 = 3',
+    concept: 'Limits of radical functions'
+  },
+  
+  {
+    id: 'range-200-220',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 220,
+    question: 'What is lim(x→16) [√x]?',
+    options: [
+      { text: '4', correct: true, explanation: '√16 = 4' },
+      { text: '16', correct: false },
+      { text: '256', correct: false },
+      { text: '±4', correct: false }
+    ],
+    hint: 'Square root of 16 is 4',
+    solution: 'lim(x→16) [√x] = √16 = 4',
+    concept: 'Limits of radical functions'
+  },
+  
+  {
+    id: 'range-200-230',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 230,
+    question: 'What is lim(x→25) [√x]?',
+    options: [
+      { text: '5', correct: true, explanation: '√25 = 5' },
+      { text: '25', correct: false },
+      { text: '625', correct: false },
+      { text: '±5', correct: false }
+    ],
+    hint: 'Square root of 25 is 5',
+    solution: 'lim(x→25) [√x] = √25 = 5',
+    concept: 'Limits of radical functions'
+  },
+  
+  {
+    id: 'range-200-240',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 240,
+    question: 'What is lim(x→36) [√x]?',
+    options: [
+      { text: '6', correct: true, explanation: '√36 = 6' },
+      { text: '36', correct: false },
+      { text: '1296', correct: false },
+      { text: '±6', correct: false }
+    ],
+    hint: 'Square root of 36 is 6',
+    solution: 'lim(x→36) [√x] = √36 = 6',
+    concept: 'Limits of radical functions'
+  },
+  
+  {
+    id: 'range-200-260',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 260,
+    question: 'What is lim(x→49) [√x]?',
+    options: [
+      { text: '7', correct: true, explanation: '√49 = 7' },
+      { text: '49', correct: false },
+      { text: '2401', correct: false },
+      { text: '±7', correct: false }
+    ],
+    hint: 'Square root of 49 is 7',
+    solution: 'lim(x→49) [√x] = √49 = 7',
+    concept: 'Limits of radical functions'
+  },
+  
+  {
+    id: 'range-200-270',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 270,
+    question: 'What is lim(x→64) [√x]?',
+    options: [
+      { text: '8', correct: true, explanation: '√64 = 8' },
+      { text: '64', correct: false },
+      { text: '4096', correct: false },
+      { text: '±8', correct: false }
+    ],
+    hint: 'Square root of 64 is 8',
+    solution: 'lim(x→64) [√x] = √64 = 8',
+    concept: 'Limits of radical functions'
+  },
+  
+  {
+    id: 'range-200-280',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 280,
+    question: 'What is lim(x→81) [√x]?',
+    options: [
+      { text: '9', correct: true, explanation: '√81 = 9' },
+      { text: '81', correct: false },
+      { text: '6561', correct: false },
+      { text: '±9', correct: false }
+    ],
+    hint: 'Square root of 81 is 9',
+    solution: 'lim(x→81) [√x] = √81 = 9',
+    concept: 'Limits of radical functions'
+  },
+  
+  {
+    id: 'range-200-290',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 290,
+    question: 'What is lim(x→100) [√x]?',
+    options: [
+      { text: '10', correct: true, explanation: '√100 = 10' },
+      { text: '100', correct: false },
+      { text: '10000', correct: false },
+      { text: '±10', correct: false }
+    ],
+    hint: 'Square root of 100 is 10',
+    solution: 'lim(x→100) [√x] = √100 = 10',
+    concept: 'Limits of radical functions'
+  },
+  
+  {
+    id: 'found-7-original',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 300,
+    question: 'What is lim(x→2) [(x² - 4)/(x - 2)]?',
+    options: [
+      { text: '4', correct: true, explanation: 'Factor: (x+2)(x-2)/(x-2) = x+2, then substitute x=2' },
+      { text: '2', correct: false },
+      { text: '0', correct: false },
+      { text: 'Undefined', correct: false }
+    ],
+    hint: 'Factor x² - 4 as (x+2)(x-2)',
+    solution: 'lim(x→2) [(x² - 4)/(x - 2)] = lim(x→2) [(x+2)(x-2)/(x-2)] = lim(x→2) [x+2] = 4',
+    concept: 'Limits by factoring',
+  },
+  
+  {
+    id: 'range-300-310',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 310,
+    question: 'What is lim(x→3) [(x² - 9)/(x - 3)]?',
+    options: [
+      { text: '6', correct: true, explanation: 'Factor: (x+3)(x-3)/(x-3) = x+3, then substitute x=3' },
+      { text: '3', correct: false },
+      { text: '0', correct: false },
+      { text: 'Undefined', correct: false }
+    ],
+    hint: 'Factor x² - 9 as (x+3)(x-3)',
+    solution: 'lim(x→3) [(x² - 9)/(x - 3)] = lim(x→3) [(x+3)(x-3)/(x-3)] = lim(x→3) [x+3] = 6',
+    concept: 'Limits by factoring'
+  },
+  
+  {
+    id: 'range-300-330',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 330,
+    question: 'What is lim(x→1) [(x² - 1)/(x - 1)]?',
+    options: [
+      { text: '2', correct: true, explanation: 'Factor: (x+1)(x-1)/(x-1) = x+1, then substitute x=1' },
+      { text: '1', correct: false },
+      { text: '0', correct: false },
+      { text: 'Undefined', correct: false }
+    ],
+    hint: 'Factor x² - 1 as (x+1)(x-1)',
+    solution: 'lim(x→1) [(x² - 1)/(x - 1)] = lim(x→1) [(x+1)(x-1)/(x-1)] = lim(x→1) [x+1] = 2',
+    concept: 'Limits by factoring'
+  },
+  
+  {
+    id: 'range-300-340',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 340,
+    question: 'What is lim(x→4) [(x² - 16)/(x - 4)]?',
+    options: [
+      { text: '8', correct: true, explanation: 'Factor: (x+4)(x-4)/(x-4) = x+4, then substitute x=4' },
+      { text: '4', correct: false },
+      { text: '0', correct: false },
+      { text: 'Undefined', correct: false }
+    ],
+    hint: 'Factor x² - 16 as (x+4)(x-4)',
+    solution: 'lim(x→4) [(x² - 16)/(x - 4)] = lim(x→4) [(x+4)(x-4)/(x-4)] = lim(x→4) [x+4] = 8',
+    concept: 'Limits by factoring'
+  },
+  
+  {
+    id: 'range-300-360',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 360,
+    question: 'What is lim(x→5) [(x² - 25)/(x - 5)]?',
+    options: [
+      { text: '10', correct: true, explanation: 'Factor: (x+5)(x-5)/(x-5) = x+5, then substitute x=5' },
+      { text: '5', correct: false },
+      { text: '0', correct: false },
+      { text: 'Undefined', correct: false }
+    ],
+    hint: 'Factor x² - 25 as (x+5)(x-5)',
+    solution: 'lim(x→5) [(x² - 25)/(x - 5)] = lim(x→5) [(x+5)(x-5)/(x-5)] = lim(x→5) [x+5] = 10',
+    concept: 'Limits by factoring'
+  },
+  
+  {
+    id: 'range-300-370',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 370,
+    question: 'What is lim(x→2) [(x³ - 8)/(x - 2)]?',
+    options: [
+      { text: '12', correct: true, explanation: 'Factor: (x-2)(x²+2x+4)/(x-2) = x²+2x+4, then substitute x=2' },
+      { text: '8', correct: false },
+      { text: '0', correct: false },
+      { text: 'Undefined', correct: false }
+    ],
+    hint: 'Factor x³ - 8 using difference of cubes: (x-2)(x²+2x+4)',
+    solution: 'lim(x→2) [(x³ - 8)/(x - 2)] = lim(x→2) [(x-2)(x²+2x+4)/(x-2)] = lim(x→2) [x²+2x+4] = 4+4+4 = 12',
+    concept: 'Limits by factoring (difference of cubes)'
+  },
+  
+  {
+    id: 'range-300-380',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 380,
+    question: 'What is lim(x→1) [(x³ - 1)/(x - 1)]?',
+    options: [
+      { text: '3', correct: true, explanation: 'Factor: (x-1)(x²+x+1)/(x-1) = x²+x+1, then substitute x=1' },
+      { text: '1', correct: false },
+      { text: '0', correct: false },
+      { text: 'Undefined', correct: false }
+    ],
+    hint: 'Factor x³ - 1 using difference of cubes: (x-1)(x²+x+1)',
+    solution: 'lim(x→1) [(x³ - 1)/(x - 1)] = lim(x→1) [(x-1)(x²+x+1)/(x-1)] = lim(x→1) [x²+x+1] = 1+1+1 = 3',
+    concept: 'Limits by factoring (difference of cubes)'
+  },
+  
+  {
+    id: 'range-300-390',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 390,
+    question: 'What is lim(x→3) [(x³ - 27)/(x - 3)]?',
+    options: [
+      { text: '27', correct: true, explanation: 'Factor: (x-3)(x²+3x+9)/(x-3) = x²+3x+9, then substitute x=3' },
+      { text: '9', correct: false },
+      { text: '0', correct: false },
+      { text: 'Undefined', correct: false }
+    ],
+    hint: 'Factor x³ - 27 using difference of cubes: (x-3)(x²+3x+9)',
+    solution: 'lim(x→3) [(x³ - 27)/(x - 3)] = lim(x→3) [(x-3)(x²+3x+9)/(x-3)] = lim(x→3) [x²+3x+9] = 9+9+9 = 27',
+    concept: 'Limits by factoring (difference of cubes)'
+  },
+  
+  {
+    id: 'range-300-400',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 400,
+    question: 'What is lim(x→0) [(1 - cos(x))/x]?',
+    options: [
+      { text: '0', correct: true, explanation: 'This is a standard limit result' },
+      { text: '1', correct: false },
+      { text: '∞', correct: false },
+      { text: 'Does not exist', correct: false }
+    ],
+    hint: 'This is a fundamental trigonometric limit',
+    solution: 'lim(x→0) [(1 - cos(x))/x] = 0 (fundamental trigonometric limit)',
+    concept: 'Fundamental trigonometric limits'
+  },
+  
+  {
+    id: 'found-8-original',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 350,
+    question: 'What is lim(x→0) [cos(x)]?',
+    options: [
+      { text: '1', correct: true, explanation: 'cos(0) = 1' },
+      { text: '0', correct: false },
+      { text: '-1', correct: false },
+      { text: '∞', correct: false }
+    ],
+    hint: 'What is cos(0)?',
+    solution: 'lim(x→0) [cos(x)] = cos(0) = 1',
+    concept: 'Limits of trigonometric functions',
+  },
+  
+  {
+    id: 'range-400-410',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 410,
+    question: 'What is lim(x→0) [sin(x)/x]?',
+    options: [
+      { text: '1', correct: true, explanation: 'Fundamental trigonometric limit' },
+      { text: '0', correct: false },
+      { text: '∞', correct: false },
+      { text: 'Does not exist', correct: false }
+    ],
+    hint: 'This is one of the fundamental limits in calculus',
+    solution: 'lim(x→0) [sin(x)/x] = 1 (fundamental trigonometric limit)',
+    concept: 'Fundamental trigonometric limits'
+  },
+  
+  {
+    id: 'range-400-430',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 430,
+    question: 'What is lim(x→2) [(x² - 3x + 2)/(x² - 4)]?',
+    options: [
+      { text: '1/4', correct: true, explanation: 'Factor both: (x-1)(x-2)/(x+2)(x-2) = (x-1)/(x+2), then substitute x=2' },
+      { text: '1/2', correct: false },
+      { text: '0', correct: false },
+      { text: '∞', correct: false }
+    ],
+    hint: 'Factor both numerator and denominator',
+    solution: 'lim(x→2) [(x² - 3x + 2)/(x² - 4)] = lim(x→2) [(x-1)(x-2)/(x+2)(x-2)] = lim(x→2) [(x-1)/(x+2)] = (2-1)/(2+2) = 1/4',
+    concept: 'Limits by factoring rational functions'
+  },
+  
+  {
+    id: 'range-400-440',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 440,
+    question: 'What is lim(x→1) [(x² - 2x + 1)/(x² - 1)]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Factor: (x-1)²/(x+1)(x-1) = (x-1)/(x+1), then substitute x=1' },
+      { text: '1/2', correct: false },
+      { text: '1', correct: false },
+      { text: '∞', correct: false }
+    ],
+    hint: 'Factor both numerator and denominator',
+    solution: 'lim(x→1) [(x² - 2x + 1)/(x² - 1)] = lim(x→1) [(x-1)²/(x+1)(x-1)] = lim(x→1) [(x-1)/(x+1)] = (1-1)/(1+1) = 0',
+    concept: 'Limits by factoring rational functions'
+  },
+  
+  {
+    id: 'range-400-460',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 460,
+    question: 'What is lim(x→3) [(x² - 6x + 9)/(x² - 9)]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Factor: (x-3)²/(x+3)(x-3) = (x-3)/(x+3), then substitute x=3' },
+      { text: '1/6', correct: false },
+      { text: '1', correct: false },
+      { text: '∞', correct: false }
+    ],
+    hint: 'Factor both numerator and denominator',
+    solution: 'lim(x→3) [(x² - 6x + 9)/(x² - 9)] = lim(x→3) [(x-3)²/(x+3)(x-3)] = lim(x→3) [(x-3)/(x+3)] = (3-3)/(3+3) = 0',
+    concept: 'Limits by factoring rational functions'
+  },
+  
+  {
+    id: 'range-400-470',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 470,
+    question: 'What is lim(x→4) [(x² - 8x + 16)/(x² - 16)]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Factor: (x-4)²/(x+4)(x-4) = (x-4)/(x+4), then substitute x=4' },
+      { text: '1/8', correct: false },
+      { text: '1', correct: false },
+      { text: '∞', correct: false }
+    ],
+    hint: 'Factor both numerator and denominator',
+    solution: 'lim(x→4) [(x² - 8x + 16)/(x² - 16)] = lim(x→4) [(x-4)²/(x+4)(x-4)] = lim(x→4) [(x-4)/(x+4)] = (4-4)/(4+4) = 0',
+    concept: 'Limits by factoring rational functions'
+  },
+  
+  {
+    id: 'range-400-480',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 480,
+    question: 'What is lim(x→5) [(x² - 10x + 25)/(x² - 25)]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Factor: (x-5)²/(x+5)(x-5) = (x-5)/(x+5), then substitute x=5' },
+      { text: '1/10', correct: false },
+      { text: '1', correct: false },
+      { text: '∞', correct: false }
+    ],
+    hint: 'Factor both numerator and denominator',
+    solution: 'lim(x→5) [(x² - 10x + 25)/(x² - 25)] = lim(x→5) [(x-5)²/(x+5)(x-5)] = lim(x→5) [(x-5)/(x+5)] = (5-5)/(5+5) = 0',
+    concept: 'Limits by factoring rational functions'
+  },
+  
+  {
+    id: 'range-400-490',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 490,
+    question: 'What is lim(x→6) [(x² - 12x + 36)/(x² - 36)]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Factor: (x-6)²/(x+6)(x-6) = (x-6)/(x+6), then substitute x=6' },
+      { text: '1/12', correct: false },
+      { text: '1', correct: false },
+      { text: '∞', correct: false }
+    ],
+    hint: 'Factor both numerator and denominator',
+    solution: 'lim(x→6) [(x² - 12x + 36)/(x² - 36)] = lim(x→6) [(x-6)²/(x+6)(x-6)] = lim(x→6) [(x-6)/(x+6)] = (6-6)/(6+6) = 0',
+    concept: 'Limits by factoring rational functions'
+  },
+  
+  {
+    id: 'range-400-500',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 500,
+    question: 'What is lim(x→7) [(x² - 14x + 49)/(x² - 49)]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Factor: (x-7)²/(x+7)(x-7) = (x-7)/(x+7), then substitute x=7' },
+      { text: '1/14', correct: false },
+      { text: '1', correct: false },
+      { text: '∞', correct: false }
+    ],
+    hint: 'Factor both numerator and denominator',
+    solution: 'lim(x→7) [(x² - 14x + 49)/(x² - 49)] = lim(x→7) [(x-7)²/(x+7)(x-7)] = lim(x→7) [(x-7)/(x+7)] = (7-7)/(7+7) = 0',
+    concept: 'Limits by factoring rational functions'
+  },
+  
+  {
+    id: 'found-9-original',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 450,
+    question: 'What is lim(x→1) [(x³ - 1)/(x - 1)]?',
+    options: [
+      { text: '3', correct: true, explanation: 'Factor: (x-1)(x²+x+1)/(x-1) = x²+x+1, then substitute x=1' },
+      { text: '1', correct: false },
+      { text: '0', correct: false },
+      { text: '∞', correct: false }
+    ],
+    hint: 'Factor x³ - 1 using difference of cubes: (x-1)(x²+x+1)',
+    solution: 'lim(x→1) [(x³ - 1)/(x - 1)] = lim(x→1) [(x-1)(x²+x+1)/(x-1)] = lim(x→1) [x²+x+1] = 1+1+1 = 3',
+    concept: 'Limits by factoring (difference of cubes)'
+  },
+  
+  {
+    id: 'found-10-original',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 80,
+    question: 'What is lim(x→5) [2x + 3]?',
+    options: [
+      { text: '13', correct: true, explanation: 'Direct substitution: 2(5) + 3 = 10 + 3 = 13' },
+      { text: '10', correct: false },
+      { text: '8', correct: false },
+      { text: '15', correct: false }
+    ],
+    hint: 'Substitute x = 5 directly',
+    solution: 'lim(x→5) [2x + 3] = 2(5) + 3 = 10 + 3 = 13',
+    concept: 'Direct substitution for linear functions'
+  },
+  
+  {
+    id: 'found-11-original',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 320,
+    question: 'What is lim(x→0) [(1 - cos(x))/x]?',
+    options: [
+      { text: '0', correct: true, explanation: 'This is a standard limit result' },
+      { text: '1', correct: false },
+      { text: '∞', correct: false },
+      { text: 'Does not exist', correct: false }
+    ],
+    hint: 'This is a fundamental trigonometric limit',
+    solution: 'lim(x→0) [(1 - cos(x))/x] = 0 (fundamental trigonometric limit)',
+    concept: 'Fundamental trigonometric limits'
+  },
+  
+  {
+    id: 'found-12-original',
+    topic: 'limits',
+    difficulty: 'easy',
+    recommendedHeight: 180,
+    question: 'What is lim(x→3) [x² - 5x + 6]?',
+    options: [
+      { text: '0', correct: true, explanation: 'Direct substitution: 3² - 5(3) + 6 = 9 - 15 + 6 = 0' },
+      { text: '6', correct: false },
+      { text: '3', correct: false },
+      { text: '9', correct: false }
+    ],
+    hint: 'Substitute x = 3 directly into the quadratic',
+    solution: 'lim(x→3) [x² - 5x + 6] = 3² - 5(3) + 6 = 9 - 15 + 6 = 0',
+    concept: 'Direct substitution for quadratic functions'
+  },
+  
+  {
+    id: 'found-13-original',
+    topic: 'limits',
+    difficulty: 'medium',
+    recommendedHeight: 420,
+    question: 'What is lim(x→2) [(x² - 3x + 2)/(x² - 4)]?',
+    options: [
+      { text: '1/4', correct: true, explanation: 'Factor both: (x-1)(x-2)/(x+2)(x-2) = (x-1)/(x+2), then substitute x=2' },
+      { text: '1/2', correct: false },
+      { text: '0', correct: false },
+      { text: '∞', correct: false }
+    ],
+    hint: 'Factor both numerator and denominator',
+    solution: 'lim(x→2) [(x² - 3x + 2)/(x² - 4)] = lim(x→2) [(x-1)(x-2)/(x+2)(x-2)] = lim(x→2) [(x-1)/(x+2)] = (2-1)/(2+2) = 1/4',
+    concept: 'Limits by factoring rational functions'
+  },
+  
   {
     id: 'lim-2',
     topic: 'limits',
@@ -625,8 +1462,11 @@ export function getQuestionByHeight(height: number): CalculusQuestion {
     appropriateQuestions = CALCULUS_QUESTION_BANK
   }
   
+  // Add more randomization by shuffling the array first
+  const shuffledQuestions = [...appropriateQuestions].sort(() => Math.random() - 0.5)
+  
   // Weight questions by difficulty - prefer easier questions at lower heights
-  const weightedQuestions = appropriateQuestions.map(q => {
+  const weightedQuestions = shuffledQuestions.map(q => {
     let weight = 1
     
     // Prefer questions closer to current height
@@ -652,9 +1492,9 @@ export function getQuestionByHeight(height: number): CalculusQuestion {
     return { question: q, weight }
   })
   
-  // Select weighted random question
+  // Select weighted random question with better randomization
   const totalWeight = weightedQuestions.reduce((sum, item) => sum + item.weight, 0)
-  let random = Math.random() * totalWeight
+  let random = (Math.random() + Date.now() % 1000 / 1000) * totalWeight
   
   for (const item of weightedQuestions) {
     random -= item.weight
@@ -663,8 +1503,8 @@ export function getQuestionByHeight(height: number): CalculusQuestion {
     }
   }
   
-  // Fallback
-  return appropriateQuestions[Math.floor(Math.random() * appropriateQuestions.length)]
+  // Fallback with additional randomization
+  return shuffledQuestions[Math.floor((Math.random() + Date.now() % 1000 / 1000) * shuffledQuestions.length)]
 }
 
 /**

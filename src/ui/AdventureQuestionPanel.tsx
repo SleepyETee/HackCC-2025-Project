@@ -33,7 +33,7 @@ export function AdventureQuestionPanel() {
         padding: 16,
         borderRadius: 12
       }}>
-        <div style={{ fontWeight: 700, marginBottom: 8, color: '#ff6b35' }}>
+        <div style={{ fontWeight: 700, marginBottom: 8, color: '#ff6b35', textAlign: 'center' }}>
           Loading adventure...
         </div>
       </div>
