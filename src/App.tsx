@@ -9,6 +9,7 @@ import { AdventureCanvas } from './ui/AdventureCanvas'
 import { EnhancedAdventureCanvas } from './ui/EnhancedAdventureCanvas'
 import { AdventureQuestionPanel } from './ui/AdventureQuestionPanel'
 import { StoryPanel } from './ui/StoryPanel'
+import { EnhancedDemo } from './ui/EnhancedDemo' // Demo component
 import { useGameStore } from './state/store'
 import { audioManager } from './game/AudioManager'
 
@@ -184,6 +185,9 @@ export default function App() {
               </div>
             </div>
           </div>
+          
+          {/* Enhanced Demo Component */}
+          <EnhancedDemo />
         </>
       ) : (
         <>
